@@ -12,4 +12,8 @@ node("master") {
     sh 'docker build -t blog .'
   }
 
+  stage("start") {
+    sh 'docker-compose up -d'
+  }
+
 }
