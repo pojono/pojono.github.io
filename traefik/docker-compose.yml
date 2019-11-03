@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v1.7.16
+    container_name: traefik
+    restart: always
+    networks:
+      - default
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8888:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=traefik"
+      - "traefik.frontend.rule=Host:traefik.pojono.ru"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.auth.basic.users=pojono:$$apr1$$HVWMjKYm$$Do6Cboiqs1ipwSchv8yhI/"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./acme:/acme
+
+networks:
+  web:
+    external:
+      name: web
+  default:
+    driver: bridge
