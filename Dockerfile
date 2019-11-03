@@ -1,11 +1,13 @@
 FROM node:lts
 
-# Создать директорию app
 WORKDIR /app
 
-RUN npm install hexo-cli -g
+RUN npm install hexo-cli -g -f
 
-COPY blog /app
+COPY src/ /app
 
-EXPOSE 3000
-CMD [ "hexo", "s" ]
+RUN npm install
+
+EXPOSE 5005
+
+CMD [ "hexo", "s", "-p", "5005" ]
