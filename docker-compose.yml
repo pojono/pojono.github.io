@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  blog:
+    image: nginxdemos/hello
+    container_name: blog
+    networks:
+      - web
+    expose:
+      - 80
+    labels:
+      - traefik.enable=true
+      - traefik.backend=blog
+      - traefik.docker.network=web
+      - traefik.frontend.rule=Host:pojono.ru
+
+networks:
+  web:
+    external:
+      name: web
+  default:
+    driver: bridge
