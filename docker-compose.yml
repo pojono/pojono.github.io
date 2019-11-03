@@ -2,7 +2,7 @@ version: '3'
 
 services:
   blog:
-    image: nginxdemos/hello
+    image: blog:latest
     container_name: blog
     networks:
       - web
