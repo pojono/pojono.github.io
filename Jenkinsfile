@@ -1,4 +1,9 @@
 node("master") {
+
+  stage('checkout') {
+      checkout scm
+  }
+
   stage("ps") {
     sh 'docker ps'
   }
