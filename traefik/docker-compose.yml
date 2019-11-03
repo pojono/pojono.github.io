@@ -17,7 +17,7 @@ services:
       - "traefik.backend=traefik"
       - "traefik.frontend.rule=Host:traefik.pojono.ru"
       - "traefik.docker.network=web"
-      - "traefik.frontend.auth.basic.users=${pojono}:${HTTP_PASSWORD}"
+      - "traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/etc/traefik/traefik.toml
