@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  blog:
+    image: h1kkan/jenkins-docker:2.190.1-alpine
+    container_name: jenkins
+    networks:
+      - web
+    expose:
+      - 8080
+    labels:
+      - traefik.enable=true
+      - traefik.backend=jenkins
+      - traefik.docker.network=web
+      - traefik.frontend.rule=Host:jenkins.pojono.ru
+      - traefik.port=8080
+    networks:
+      - default
+      - web
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:
+
+networks:
+  web:
+    external:
+      name: web
+  default:
+    driver: bridge
