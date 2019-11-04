@@ -2,7 +2,7 @@ version: '3'
 
 services:
   blog:
-    image: h1kkan/jenkins-docker:2.190.1-alpine
+    image: getintodevops/jenkins-withdocker:lts-docker18.06.0
     container_name: jenkins
     networks:
       - web
@@ -19,13 +19,13 @@ services:
       - web
     ports:
       - "8081:8080"
-      - "50000:50000"
+      - "50001:50000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - jenkins_home:/var/jenkins_home
+      - jenkins_data:/var/jenkins_home
 
 volumes:
-  jenkins_home:
+  jenkins_data:
 
 networks:
   web:
