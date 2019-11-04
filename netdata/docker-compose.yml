@@ -3,17 +3,6 @@ services:
   netdata:
     image: netdata/netdata
     hostname: netdata.pojono.ru # set to fqdn of host
-    ports:
-      - 19999:19999
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
     networks:
       - default
       - web
@@ -26,6 +15,17 @@ services:
       - traefik.frontend.rule=Host:netdata.pojono.ru
       - traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
       - traefik.port=19999
+    volumes:
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    ports:
+      - 19999:19999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
 
 networks:
   web:
