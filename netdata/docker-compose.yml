@@ -14,3 +14,13 @@ services:
       - /etc/group:/host/etc/group:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+    networks:
+      - default
+      - web
+
+networks:
+  web:
+    external:
+      name: web
+  default:
+    driver: bridge
