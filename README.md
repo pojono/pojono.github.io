@@ -19,9 +19,6 @@ git clone https://github.com/pojono/blog.git
 cd blog/traefik
 docker-compose up -d
 
-
-
-traefik.frontend.auth.basic.users=EXPR:
-To create user:password pair, it's possible to use this command:
-echo $(htpasswd -nb pojono jklha2@893hAldkj) | sed -e s/\\$/\\$\\$/g
-The result will be user:$$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/, note additional symbol $ makes escaping.
+Blog: pojono.ru
+Jenkins: jenkins.pojono.ru
+Traefik: traefik.pojono.ru
