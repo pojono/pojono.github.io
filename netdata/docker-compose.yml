@@ -17,6 +17,13 @@ services:
     networks:
       - default
       - web
+    labels:
+      - traefik.enable=true
+      - traefik.backend=netdata
+      - traefik.docker.network=web
+      - traefik.frontend.rule=Host:netdata.pojono.ru
+      - traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
+      - traefik.port=19999
 
 networks:
   web:
