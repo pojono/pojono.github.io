@@ -2,7 +2,7 @@ version: '3'
 services:
   netdata:
     image: netdata/netdata
-    hostname: example.com # set to fqdn of host
+    hostname: netdata.pojono.ru # set to fqdn of host
     ports:
       - 19999:19999
     cap_add:
