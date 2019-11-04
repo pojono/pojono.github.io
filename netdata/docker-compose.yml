@@ -20,11 +20,11 @@ services:
       - default
       - web
     volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/passwd:/host/etc/passwd
+      - /etc/group:/host/etc/group
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /var/run/docker.sock:/var/run/docker.sock
     cap_add:
       - SYS_PTRACE
     security_opt:
