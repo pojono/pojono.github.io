@@ -1,4 +1,6 @@
-FROM jenkins:lts
+FROM jenkins/jenkins:lts
+
+USER root
 
 RUN apt-get update && \
     apt-get -y install apt-transport-https \
@@ -14,3 +16,6 @@ RUN apt-get update && \
     apt-get update && \
     apt-get -y install docker-ce
 
+RUN curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+RUN chmod +x /usr/local/bin/docker-compose

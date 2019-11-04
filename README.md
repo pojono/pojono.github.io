@@ -1,6 +1,6 @@
 # How to create a new blog?
 
-##Step 1. Set DNS A records:
+##Step 1. Set a DNS A records:
 pojono.ru 
 *.pojono.ru 
 
@@ -19,6 +19,13 @@ git clone https://github.com/pojono/blog.git
 cd blog/traefik
 docker-compose up -d
 
+##Step 4. Install Jenkins:
+cd ~/blog/jeknins
+docker build -t jenkins .
+docker-compose up -d
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+##Links:
 Blog: pojono.ru
 Jenkins: jenkins.pojono.ru
 Traefik: traefik.pojono.ru
