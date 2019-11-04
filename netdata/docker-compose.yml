@@ -13,7 +13,7 @@ services:
       - traefik.backend=netdata
       - traefik.docker.network=web
       - traefik.frontend.rule=Host:netdata.pojono.ru
-      - traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
+      - traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}
       - traefik.port=19999
     volumes:
       - /etc/passwd:/host/etc/passwd:ro
@@ -24,9 +24,6 @@ services:
       - SYS_PTRACE
     security_opt:
       - apparmor:unconfined
-    environment:
-       PGID: 999 #$(grep docker /etc/group | cut -d ':' -f 3)
-    user: netdata
 
 networks:
   web:
