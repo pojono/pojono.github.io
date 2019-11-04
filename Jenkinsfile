@@ -5,15 +5,15 @@ node("master") {
   }
 
   stage("ps") {
-    sh 'docker ps'
+    sh 'sudo docker ps'
   }
 
   stage("build") {
-    sh 'docker build -t blog .'
+    sh 'sudo docker build -t blog .'
   }
 
   stage("start") {
-    sh 'docker-compose up -d'
+    sh 'sudo docker-compose up -d'
   }
 
 }
