@@ -24,6 +24,32 @@ cd ~/blog/jeknins
 docker-compose up -d --build
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
+##Step 5. Install Netdata:
+> docker run -d --name=netdata \
+  -p 19999:19999 \
+  -v /etc/passwd:/host/etc/passwd:ro \
+  -v /etc/group:/host/etc/group:ro \
+  -v /proc:/host/proc:ro \
+  -v /sys:/host/sys:ro \ 
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  --cap-add SYS_PTRACE \
+  --security-opt apparmor=unconfined \
+  netdata/netdata
+
+Edit notifications parameters:
+> docker exec -it netdata /etc/netdata/edit-config health_alarm_notify.conf 
+
+Set these parameters and save (:wq):      
+> TELEGRAM_BOT_TOKEN="823689878:AAH7Wv6f6mnLr3v9sJtcDwd9g5PohKM_4fg"
+  DEFAULT_RECIPIENT_TELEGRAM="360376015"  
+
+Test notification:
+
+> docker exec -it netdata su -s /bin/bash netdata \
+ export NETDATA_ALARM_NOTIFY_DEBUG=1 \
+ /usr/libexec/netdata/plugins.d/alarm-notify.sh test
+
+
 ##Links:
 Blog: pojono.ru
 Jenkins: jenkins.pojono.ru

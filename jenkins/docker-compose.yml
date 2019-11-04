@@ -5,6 +5,7 @@ services:
     build: .
     image: jenkins:latest
     container_name: jenkins
+    restart: always
     networks:
       - web
     expose:

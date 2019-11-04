@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  blog:
+    image: netdata/netdata
+    container_name: netdata
+    restart: always
+    networks:
+      - web
+    expose:
+      - 19999
+    labels:
+      - traefik.enable=true
+      - traefik.backend=netdata
+      - traefik.docker.network=web
+      - traefik.frontend.rule=Host:netdata.pojono.ru
+      - traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
+      - traefik.port=19999
+    networks:
+      - default
+      - web
+    volumes:
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+
+networks:
+  web:
+    external:
+      name: web
+  default:
+    driver: bridge
