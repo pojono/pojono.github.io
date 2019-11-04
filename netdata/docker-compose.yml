@@ -2,7 +2,7 @@ version: '3'
 services:
   netdata:
     image: netdata/netdata
-    container_name: jenkins
+    container_name: netdata
     hostname: netdata.pojono.ru # set to fqdn of host
     networks:
       - default
