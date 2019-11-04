@@ -21,8 +21,7 @@ docker-compose up -d
 
 ##Step 4. Install Jenkins:
 cd ~/blog/jeknins
-docker build -t jenkins .
-docker-compose up -d
+docker-compose up -d --build
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 ##Links:
