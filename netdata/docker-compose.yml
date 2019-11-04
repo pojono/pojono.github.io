@@ -17,6 +17,8 @@ services:
     networks:
       - default
       - web
+    expose:
+      - 19999
     labels:
       - traefik.enable=true
       - traefik.backend=netdata
