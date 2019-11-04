@@ -25,16 +25,9 @@ docker-compose up -d --build
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 ##Step 5. Install Netdata:
-> docker run -d --name=netdata \
-  -p 19999:19999 \
-  -v /etc/passwd:/host/etc/passwd:ro \
-  -v /etc/group:/host/etc/group:ro \
-  -v /proc:/host/proc:ro \
-  -v /sys:/host/sys:ro \ 
-  -v /var/run/docker.sock:/var/run/docker.sock:ro \
-  --cap-add SYS_PTRACE \
-  --security-opt apparmor=unconfined \
-  netdata/netdata
+
+> cd ~/blog/netdata
+  docker-compose up -d
 
 Edit notifications parameters:
 > docker exec -it netdata /etc/netdata/edit-config health_alarm_notify.conf 
