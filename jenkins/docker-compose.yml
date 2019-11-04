@@ -2,7 +2,7 @@ version: '3'
 
 services:
   blog:
-    image: getintodevops/jenkins-withdocker:lts-docker18.06.0
+    image: jenkins:latest
     container_name: jenkins
     networks:
       - web
