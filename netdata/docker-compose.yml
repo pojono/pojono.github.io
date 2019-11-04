@@ -24,6 +24,9 @@ services:
       - SYS_PTRACE
     security_opt:
       - apparmor:unconfined
+    environment:
+       PGID: 999 #$(grep docker /etc/group | cut -d ':' -f 3)
+    user: netdata
 
 networks:
   web:
