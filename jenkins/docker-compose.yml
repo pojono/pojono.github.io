@@ -8,6 +8,7 @@ services:
     restart: always
     networks:
       - web
+      - default
     expose:
       - 8080
     labels:
@@ -16,9 +17,6 @@ services:
       - traefik.docker.network=web
       - traefik.frontend.rule=Host:jenkins.pojono.ru
       - traefik.port=8080
-    networks:
-      - default
-      - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins_home:/var/jenkins_home
