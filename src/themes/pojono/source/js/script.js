@@ -62,7 +62,7 @@ document.ready(
                     document.getElementsByTagName('body')[0].classList.add('dark-theme');
                 }
                 window.localStorage &&
-                window.localStorage.setItem('theme', window.localStorage.getItem('theme') ? 'dark' : 'light',)
+                window.localStorage.setItem('theme', window.localStorage.getItem('theme') === 'light' ? 'dark' : 'light',)
             });
             // moblie
             document.getElementById('mobile-toggle-theme').addEventListener('click', () => {
@@ -77,7 +77,7 @@ document.ready(
                     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
                 }
                 window.localStorage &&
-                window.localStorage.setItem('theme', window.localStorage.getItem('theme') ? 'dark' : 'light',)
+                window.localStorage.setItem('theme', window.localStorage.getItem('theme') === 'light' ? 'dark' : 'light',)
             })
         };
         _Blog.toggleTheme();
