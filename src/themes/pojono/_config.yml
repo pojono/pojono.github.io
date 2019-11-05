@@ -36,22 +36,22 @@ links:
 #  RSS:
 #  AliPay:
 #  ZhiHu:
-#  LinkedIn:
-#  FaceBook:
-#  Twitter:
+   LinkedIn: https://www.linkedin.com/in/pojono/
+   FaceBook: https://www.facebook.com/ipojono
+#  Twitter: https://twitter.com/pojono
 #  Skype:
 #  CodeSandBox:
 #  CodePen:
 #  Sketch:
 #  Gitlab:
 #  Dribble:
-#  Instagram:
+   Instagram: https://www.instagram.com/pojono/
 #  Reddit:
 #  YouTube:
 #  QQ:
 #  Weibo:
 #  WeChat:
-#  Github: https://github.com/pojono
+   Github: https://github.com/pojono
 
 # how links show: you have 2 choice--text or icon.
 links_text_enable: false
