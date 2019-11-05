@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded",
     // toggleTheme function.
     // this script shouldn't be changed.
     function () {
+        console.log("DOM LOADED!");
         var _Blog = window._Blog || {};
         const currentTheme = window.localStorage && window.localStorage.getItem('theme');
         const isDark = currentTheme === 'dark';
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded",
             document.getElementById("mobile-toggle-theme").innerText = "· Dark"
         }
         _Blog.toggleTheme = function () {
+            console.log("TOGGLE!");
             if (isDark) {
                 document.getElementsByTagName('body')[0].classList.add('dark-theme');
                 // mobile
