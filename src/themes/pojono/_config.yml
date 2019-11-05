@@ -26,32 +26,32 @@ avatar: /image/avatar.jpeg
 ## Unused key can be commented out.
 links:
   Blog: /archives
-#  Category:
-#  Tags: 
-#  Link:
-#  Resume:
-#  Publish:
-#  Trophy:
-#  Gallary:
-#  RSS:
-#  AliPay:
-#  ZhiHu:
-   LinkedIn: https://www.linkedin.com/in/pojono
-   FaceBook: https://www.facebook.com/ipojono
-   Twitter: https://twitter.com/pojono
-#  Skype:
-#  CodeSandBox:
-#  CodePen:
-#  Sketch:
-#  Gitlab:
-#  Dribble:
-   Instagram: https://www.instagram.com/pojono
-#  Reddit:
-#  YouTube:
-#  QQ:
-#  Weibo:
-#  WeChat:
-   Github: https://github.com/pojono
+  #  Category:
+  #  Tags:
+  #  Link:
+  #  Resume:
+  #  Publish:
+  #  Trophy:
+  #  Gallary:
+  #  RSS:
+  #  AliPay:
+  #  ZhiHu:
+  LinkedIn: https://www.linkedin.com/in/pojono
+  FaceBook: https://www.facebook.com/ipojono
+  Twitter: https://twitter.com/pojono
+  #  Skype:
+  #  CodeSandBox:
+  #  CodePen:
+  #  Sketch:
+  #  Gitlab:
+  #  Dribble:
+  Instagram: https://www.instagram.com/pojono
+  #  Reddit:
+  #  YouTube:
+  #  QQ:
+  #  Weibo:
+  #  WeChat:
+  Github: https://github.com/pojono
 
 # how links show: you have 2 choice--text or icon.
 links_text_enable: false
@@ -94,8 +94,8 @@ stylesheets:
 scripts:
   - /js/script.js
   - /js/tocbot.min.js
-    # tscanlin/tocbot: Build a table of contents from headings in an HTML document.
-    # https://github.com/tscanlin/tocbot
+  # tscanlin/tocbot: Build a table of contents from headings in an HTML document.
+  # https://github.com/tscanlin/tocbot
 
 
 # plugin functions
