@@ -1,4 +1,5 @@
 // declaraction of document.ready() function.
+/*
 (function () {
     var ie = !!(window.attachEvent && !window.opera);
     var wk = /webkit\/(\d+)/i.test(navigator.userAgent) && (RegExp.$1 < 525);
@@ -27,9 +28,9 @@
             }, 0);
     };
 })();
+*/
 
-
-document.ready(
+document.addEventListener("DOMContentLoaded",
     // toggleTheme function.
     // this script shouldn't be changed.
     function () {
@@ -83,6 +84,5 @@ document.ready(
         _Blog.toggleTheme();
 
         // ready function.
-
     }
 );
