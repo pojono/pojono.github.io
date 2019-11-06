@@ -14,6 +14,7 @@ services:
       - traefik.backend=blog
       - traefik.docker.network=web
       - traefik.frontend.rule=Host:pojono.ru
+      - traefik.port=80
 
 networks:
   web:
