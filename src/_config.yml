@@ -5,8 +5,8 @@
 # Site
 title: pojono
 subtitle:
-description:
-keywords:
+description: A personal blog about programming.
+keywords: blog, development, typescript, javascript, nodejs
 author: Ivan Chulkov
 language: en
 timezone:
@@ -15,10 +15,10 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://pojono.ru
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :title/
 permalink_defaults:
 pretty_urls:
-  trailing_index: true # Set to false to remove trailing index.html from permalinks
+  trailing_index: false # Set to false to remove trailing index.html from permalinks
 
 # Directory
 source_dir: source
@@ -72,7 +72,7 @@ meta_generator: true
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
 date_format: YYYY-MM-DD
-time_format: HH:mm:ss
+time_format: HH:MM:ss
 ## Use post's date for updated date unless set in front-matter
 use_date_for_updated: false
 
