@@ -15,7 +15,7 @@ favicon: /favicon.ico
 nickname: Ivan Chulkov
 
 ### this variable is MarkDown form.
-description: Russian JavaScript fan with 3 years professional experience as an engineer. I like solving complex problems with efficient code and beautiful design.
+description: Russian JavaScript fan with 3 years professional experience as an engineer. <br>I like solving complex problems with efficient code and beautiful design.
 avatar: /image/avatar.jpeg
 
 # main menu navigation
