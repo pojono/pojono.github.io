@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded",
     // toggleTheme function.
     // this script shouldn't be changed.
     function () {
-        console.log("DOM LOADED!");
         let _Blog = window._Blog || {};
         const defaultTheme = "dark";
         console.log("Current theme: ", window.localStorage.getItem('theme'));
