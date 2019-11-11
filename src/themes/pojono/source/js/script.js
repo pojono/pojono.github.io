@@ -14,23 +14,23 @@ document.addEventListener("DOMContentLoaded",
         if (isDark) {
             document.getElementById("switch_default").checked = true;
             // mobile
-            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            document.getElementById("mobile-toggle-theme").innerText = " · Dark"
         } else {
             document.getElementById("switch_default").checked = false;
             // mobile
-            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            document.getElementById("mobile-toggle-theme").innerText = " · Dark"
         }
         _Blog.toggleTheme = function () {
             if (isDark) {
                 console.log("SET DARK!");
                 document.getElementsByTagName('body')[0].classList.add('dark-theme');
                 // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+                document.getElementById("mobile-toggle-theme").innerText = " · Dark"
             } else {
                 console.log("SET LIGHT!");
                 document.getElementsByTagName('body')[0].classList.remove('dark-theme');
                 // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+                document.getElementById("mobile-toggle-theme").innerText = " · Light"
             }
             document.getElementsByClassName('toggleBtn')[0].addEventListener('click', () => {
                 console.log("TOGGLE DESKTOP!");
@@ -48,11 +48,11 @@ document.addEventListener("DOMContentLoaded",
                 if (document.getElementsByTagName('body')[0].classList.contains('dark-theme')) {
                     document.getElementsByTagName('body')[0].classList.remove('dark-theme');
                     // mobile
-                    document.getElementById("mobile-toggle-theme").innerText = "· Light"
+                    document.getElementById("mobile-toggle-theme").innerText = " · Light"
                 } else {
                     document.getElementsByTagName('body')[0].classList.add('dark-theme');
                     // mobile
-                    document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+                    document.getElementById("mobile-toggle-theme").innerText = " · Dark"
                 }
                 window.localStorage &&
                 window.localStorage.setItem('theme', window.localStorage.getItem('theme') === 'light' ? 'dark' : 'light',)
