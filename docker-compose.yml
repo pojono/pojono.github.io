@@ -16,6 +16,21 @@ services:
       - traefik.frontend.rule=Host:pojono.ru
       - traefik.port=80
 
+  test:
+    image: nginx
+    container_name: nginx
+    restart: always
+    networks:
+      - web
+    expose:
+      - 80
+    labels:
+      - traefik.enable=true
+      - traefik.backend=nginx
+      - traefik.docker.network=web
+      - traefik.frontend.rule=Host:pojono.ru;PathPrefixStrip:/test
+      - traefik.port=80
+
 networks:
   web:
     external:
