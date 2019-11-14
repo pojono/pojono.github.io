@@ -28,7 +28,7 @@ try {
     }
 
     stage("telegram") {
-      sendChangeLogs()
+      sendChangeLogss()
     }
   }
 
