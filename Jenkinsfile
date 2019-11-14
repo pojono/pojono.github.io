@@ -12,9 +12,8 @@ def sendChangeLogs() {
     telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${commitMessages}"
 }
 
-try {
-  node("master") {
-
+node("master") {
+  try {
     stage('checkout') {
         checkout scm
     }
@@ -28,11 +27,11 @@ try {
     }
 
     stage("telegram") {
-      sendChangeLogs()
+      sendChangeLogss()
     }
-  }
 
-} catch (err) {
-  telegramSend "⚠ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL}"
-  throw err
+  } catch (err) {
+    telegramSend "⚠ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL}"
+    throw err
+  }
 }
