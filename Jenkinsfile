@@ -23,11 +23,11 @@ node("master") {
     }
 
     stage("start") {
-      sh 'docker-compose up -d'
+      sh 'docker-compose upp -d'
     }
 
     stage("telegram") {
-      sendChangeLogss()
+      sendChangeLogs()
     }
 
   } catch (err) {
