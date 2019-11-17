@@ -9,7 +9,7 @@ def sendChangeLogs() {
             commitMessages = commitMessages + "\n*${entry.author}*: ${entry.msg}"
         }
     }
-    telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${commitMessages}"
+    return commitMessages
 }
 
 node("master") {
@@ -23,15 +23,15 @@ node("master") {
     }
 
     stage("start") {
-      sh 'docker-compose up -d'
+      sh 'docker-compose upp -d'
     }
 
     stage("telegram") {
-      sendChangeLogs()
+      telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${sendChangeLogs()}"
     }
 
   } catch (err) {
-    telegramSend "⚠ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL}"
+    telegramSend "⚠ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${sendChangeLogs()}"
     throw err
   }
 }
