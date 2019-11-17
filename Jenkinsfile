@@ -23,10 +23,10 @@ node("master") {
     }
 
     stage("start") {
-      sh 'docker-compose upp -d'
+      sh 'docker-compose up -d'
     }
 
-    stage("telegram") {
+    stage("notify") {
       telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${sendChangeLogs()}"
     }
 
