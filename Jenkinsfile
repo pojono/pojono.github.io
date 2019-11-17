@@ -23,7 +23,7 @@ node("master") {
     }
 
     stage("start") {
-      sh 'docker-compose upp -d'
+      sh 'docker-compose up -d'
     }
 
     stage("telegram") {
