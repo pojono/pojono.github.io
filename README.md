@@ -3,3 +3,9 @@
 npm i -g @nestjs/cli
 nest new prostoapp_api
 
+##ENVIRONMENTS
+
+Default - содержит все параметры, подгружается всегда по умолчанию.
+Development - загружается по умолчанию, если NODE_ENV не указана. Используем для локальной разработки.
+Staging - тестовый сервер
+Production
