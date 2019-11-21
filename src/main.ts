@@ -20,14 +20,12 @@ async function bootstrap() {
     SwaggerModule.setup(config.get('swagger.path'), app, document);
   }
 
-  const port: number = parseInt(process.env.PORT, 10) || config.get('server.port');
+  const port: number = Number(process.env.PORT) || config.get('server.port');
   app.enableCors();
 
   await app.listen(port);
 
-  logger.log(
-    `App started on port ${config.get('server.port')} on ${process.env.NODE_ENV} mode`,
-  );
+  logger.log(`App started on port ${port} on ${process.env.NODE_ENV} mode`);
 }
 
 (async () => {
