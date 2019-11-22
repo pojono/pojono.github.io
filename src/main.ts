@@ -13,7 +13,7 @@ async function bootstrap() {
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
-      .setDescription('ProstoApp API description')
+      .setDescription('ProstoApp API specification')
       .setVersion('0.0.1')
       .build();
     const document = SwaggerModule.createDocument(app, options);
