@@ -12,7 +12,9 @@
     "member-ordering": [false],
     "interface-name": [false],
     "arrow-parens": false,
+    "max-classes-per-file": false,
     "object-literal-sort-keys": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "no-var-requires": false
 }

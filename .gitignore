@@ -1,3 +1,5 @@
 .idea
 node_modules
 dist
+prosto-jenkins.pem
+deploy

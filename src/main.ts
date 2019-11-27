@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as config from 'config';
+import HTTP_CODE_DESCRIPTION from './http.description';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -13,7 +14,7 @@ async function bootstrap() {
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
-      .setDescription('ProstoApp API specification')
+      .setDescription('ProstoApp API specification. ' + HTTP_CODE_DESCRIPTION)
       .setVersion('0.0.1')
       .build();
     const document = SwaggerModule.createDocument(app, options);
