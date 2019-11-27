@@ -8,7 +8,10 @@ nest new prostoapp_api
 Default - содержит все параметры, подгружается всегда по умолчанию.
 Development - загружается по умолчанию, если NODE_ENV не указана. Используем для локальной разработки.
 Staging - тестовый сервер
-Production
+Production - продакшен сервер.
 
 ##Start local database:
 docker run --name prosto-postgres -p 5454:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+
+##Сборка на Jenkins:
+http://jenkins.prostoapp.com/
