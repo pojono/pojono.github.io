@@ -25,7 +25,7 @@ HTTP STATUS: 401 - неправильный Bearer токен
     "error": "Unauthorized"
   }
 
-HTTP STATUS: 500 - серверу плохо
+HTTP STATUS: 500 - серверу плохо.
   {
     "statusCode": 500,
     "message": "Internal server error"

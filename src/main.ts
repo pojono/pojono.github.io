@@ -26,7 +26,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.log(`App started on port ${port} on ${process.env.NODE_ENV} mode`);
+  logger.log(`App started on port ${port} on ${process.env.NODE_ENV} env`);
 }
 
 (async () => {
