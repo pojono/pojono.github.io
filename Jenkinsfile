@@ -1,21 +1,26 @@
 node {
     try {
 
+      def region          = "eu-west-1"
+      def repositoryId    = "708752839087"
+      def repositoryName  = "prostoapp_api"
+      def credentialsName = "iam-cred"
+
       def imageTag        = env.BRANCH_NAME
       def remoteImageTag  = env.BRANCH_NAME
-      def ecRegistry      = "https://708752839087.dkr.ecr.eu-west-1.amazonaws.com"
+      def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
 
       stage("Checkout") {
         checkout scm
       }
 
       stage("Docker build") {
-        sh "docker build -t prostoapp_api:${remoteImageTag} ."
+        sh "docker build -t ${repositoryName}:${remoteImageTag} ."
       }
 
       stage("Docker push") {
-        docker.withRegistry(ecRegistry, "ecr:eu-west-1:iam-cred") {
-          docker.image("prostoapp_api:${remoteImageTag}").push(remoteImageTag)
+        docker.withRegistry(ecRegistry, "ecr:${region}:${credentialsName}") {
+          docker.image("${repositoryName}:${remoteImageTag}").push(remoteImageTag)
         }
       }
 
