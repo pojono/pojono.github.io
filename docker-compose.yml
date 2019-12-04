@@ -5,6 +5,8 @@ services:
     image: prostoapp_api:${TAG}
     container_name: prostoapp_api
     restart: always
+    environment:
+      - NODE_ENV=${ENV}
     networks:
       - web
     expose:
