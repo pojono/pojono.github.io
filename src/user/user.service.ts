@@ -12,10 +12,10 @@ import * as AWS from 'aws-sdk';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 
 // TODO: move to config
-AWS.config.update({ region: 'eu-west-1' });
+AWS.config.update({ region: 'eu-west-1' }); // config.get('aws.region');
 const provider = new AWS.CognitoIdentityServiceProvider();
-const clientId = '5a80aug1stlpbqdgclv3pfvhlv';
-const userPoolId = 'eu-west-1_65Op52Obc';
+const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
+const userPoolId = 'eu-west-1_65Op52Obc'; // config.get('aws.cognito.userPoolId');
 
 @Injectable()
 export class UserService {
