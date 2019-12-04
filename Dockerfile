@@ -7,6 +7,7 @@ COPY tsconfig.build.json .
 COPY tsconfig.json .
 COPY config ./config
 COPY src ./
-COPY tsc ./node_modules/typescript/bin/
+RUN chmod 777 ./node_modules/typescript/bin/tsc
+COPY tsc ./node_modules/typescript/bin/tsc
 RUN yarn build
 CMD node dist/src/main
