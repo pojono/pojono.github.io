@@ -9,6 +9,7 @@ module.exports = {
   swagger: {
     enable: true,
     path: 'swagger',
+    scheme: 'http',
   },
   db: {
     migrations: ['./src/infrastructure/database/typeorm/migrations/*.ts'],

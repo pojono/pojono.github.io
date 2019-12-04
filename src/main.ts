@@ -9,13 +9,14 @@ async function bootstrap() {
   const logger = new Logger('bootstrap');
 
   const app = await NestFactory.create(AppModule);
-
+  const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
       .setDescription('ProstoApp API specification. ' + HTTP_CODE_DESCRIPTION)
       .setVersion('0.0.1')
+      .setSchemes(scheme)
       .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup(config.get('swagger.path'), app, document);

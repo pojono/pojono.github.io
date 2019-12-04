@@ -8,4 +8,7 @@ module.exports = {
     synchronize: true,
     migrationsRun: true,
   },
+  swagger: {
+    scheme: 'https',
+  },
 };

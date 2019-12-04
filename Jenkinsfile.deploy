@@ -50,7 +50,11 @@ def getGitBranches() {
         credentialsId: 'bitbucket',
         url: 'https://bitbucket.org/citronium/prostoapp_api.git'
 
-    def gettags = sh(returnStdout: true, script: "git for-each-ref --format='%(refname:short)' refs/heads/").trim()
+    def gettags = sh(returnStdout: true, script: "git for-each-ref --format='%(refname:short)' refs/remotes/origin").trim()
+    def lines = gettags.readLines();
 
-    return gettags.readLines();
+    def tags = [];
+    lines.each { tags.push(it.substring(it.lastIndexOf('/') + 1, it.length())) }
+
+    return tags;
 }
