@@ -8,7 +8,7 @@
     "node": ">=12.10.0"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "export NODE_OPTIONS=--max_old_space_size=4096",
     "build": "tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
