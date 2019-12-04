@@ -1,2 +1,0 @@
-#!/usr/bin/env node --max-old-space-size=4096
-require('../lib/tsc.js')
