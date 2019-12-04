@@ -1,0 +1,31 @@
+import groovy.json.JsonSlurperClassic
+
+pipeline {
+    agent any
+    stages {
+        stage("input") {
+            steps {
+                script {
+                     def branches = getBranches()
+                     SELECTED_BRANCH = input id: "Branch_name", message: "Select a tag", ok: "select",
+                         parameters: [choice(name: "BRANCH_NAME", choices: branches, description: "Available Tags")]
+                     echo("${SELECTED_BRANCH}")
+                 }
+            }
+        }
+        stage("start") {
+            steps {
+                sh "docker-compose -e ${SELECTED_BRANCH} up -d"
+            }
+        }
+    }
+}
+
+def getBranches() {
+  def cmd = "aws2 ecr list-images --repository-name prostoapp_api --filter tagStatus=TAGGED --region eu-west-1"
+  def ecr_images_json = cmd.execute()
+  def data = new JsonSlurperClassic().parseText(ecr_images_json.text)
+  def ecr_images = [];
+  data.imageIds.each { ecr_images.push(it.imageTag) }
+  return ecr_images.sort()
+}
