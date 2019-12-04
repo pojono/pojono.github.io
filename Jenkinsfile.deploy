@@ -6,16 +6,30 @@ pipeline {
         stage("input") {
             steps {
                 script {
+
+                     def gitBranches = getGitBranches()
+
                      def branches = getBranches()
-                     SELECTED_BRANCH = input id: "Branch_name", message: "Select a tag", ok: "select",
-                         parameters: [choice(name: "BRANCH_NAME", choices: branches, description: "Available Tags")]
-                     echo("${SELECTED_BRANCH}")
+                     INPUT_PARAMS = input id: "Branch_name", message: "Select a tag", ok: "select",
+                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'staging\nproduction', description: 'Config environment')]
+                     echo("${INPUT_PARAMS}")
                  }
             }
         }
+
+        stage('clone') {
+            steps {
+                git branch: "${INPUT_PARAMS.BRANCH_NAME}",
+                    credentialsId: 'bitbucket',
+                    url: 'https://bitbucket.org/citronium/prostoapp_api.git'
+
+                sh "ls -lat"
+            }
+        }
+
         stage("start") {
             steps {
-                sh "docker-compose -e ${SELECTED_BRANCH} up -d"
+                sh "ENV=${INPUT_PARAMS.ENV} TAG=${INPUT_PARAMS.IMAGE_NAME} docker-compose up -d"
             }
         }
     }
@@ -28,4 +42,15 @@ def getBranches() {
   def ecr_images = [];
   data.imageIds.each { ecr_images.push(it.imageTag) }
   return ecr_images.sort()
+}
+
+def getGitBranches() {
+
+    git branch: "master",
+        credentialsId: 'bitbucket',
+        url: 'https://bitbucket.org/citronium/prostoapp_api.git'
+
+    def gettags = sh(returnStdout: true, script: "git for-each-ref --format='%(refname:short)' refs/heads/").trim()
+
+    return gettags.readLines();
 }
