@@ -6,6 +6,6 @@ RUN yarn
 COPY tsconfig.build.json .
 COPY tsconfig.json .
 COPY config ./config
-COPY src ./
+COPY src ./src
 RUN yarn build
 CMD node dist/src/main
