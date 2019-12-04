@@ -3,11 +3,19 @@ import { Assert } from '../lib/assert';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import { INVALID_CREDENTIALS } from '../lib/errors';
+import { AMAZON_COGNITO_ERROR, INVALID_CREDENTIALS } from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
 import { User } from './user.entity';
 import { SmsRequestDto } from './dto/sms.request.dto';
+import * as AWS from 'aws-sdk';
+import { CognitoIdentityServiceProvider } from 'aws-sdk';
+
+// TODO: move to config
+AWS.config.update({ region: 'eu-west-1' });
+const provider = new AWS.CognitoIdentityServiceProvider();
+const clientId = '5a80aug1stlpbqdgclv3pfvhlv';
+const userPoolId = 'eu-west-1_65Op52Obc';
 
 @Injectable()
 export class UserService {
@@ -29,24 +37,146 @@ export class UserService {
       Assert.isTrue(true, INVALID_CREDENTIALS);
     }
 
-    const payload: JwtPayload = { id: user.id };
-    const token = await this.jwtService.sign(payload);
+    try {
+      await this.respondToAuthChallenge(
+        String(signInRequestDto.code),
+        user.session,
+        user.phone,
+      );
 
-    return { token };
+      await this.userRepository.updateSession(user, null);
+
+      const payload: JwtPayload = { id: user.id };
+      const token = await this.jwtService.sign(payload);
+
+      return { token };
+    } catch (err) {
+      Assert.isTrue(true, INVALID_CREDENTIALS);
+    }
   }
 
   async sms(smsRequestDto: SmsRequestDto): Promise<void> {
     const { phone } = smsRequestDto;
 
-    const user: User | undefined = await this.getUserByPhone(phone);
+    let user: User | undefined = await this.getUserByPhone(phone);
     if (!user) {
-      await this.createUserByPhone(phone);
+      user = await this.createUserByPhone(phone);
     }
 
-    // TODO: send sms code
+    try {
+      await this.adminGetUser(user.phone);
+    } catch (err) {
+      try {
+        await this.signUp(user.phone);
+      } catch (error) {
+        Assert.isTrue(true, AMAZON_COGNITO_ERROR);
+      }
+    }
+
+    try {
+      const authData: CognitoIdentityServiceProvider.Types.InitiateAuthResponse = await this.initiateAuth(
+        user.phone,
+      );
+      await this.userRepository.updateSession(user, authData.Session);
+    } catch {
+      Assert.isTrue(true, AMAZON_COGNITO_ERROR);
+    }
   }
 
   async createUserByPhone(phone: string): Promise<User> {
     return this.userRepository.createUser(phone);
+  }
+
+  async initiateAuth(phone: string) {
+    const params: CognitoIdentityServiceProvider.Types.InitiateAuthRequest = {
+      AuthFlow: 'CUSTOM_AUTH',
+      ClientId: clientId,
+      AuthParameters: {
+        USERNAME: phone,
+      },
+    };
+
+    return new Promise((resolve, reject) => {
+      provider.initiateAuth(params, async (err, data) => {
+        if (err) {
+          this.logger.error(err, err.stack);
+          reject(err);
+        } else {
+          this.logger.log(data); // successful response}
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  async respondToAuthChallenge(code: string, session: string, phone: string) {
+    const params: CognitoIdentityServiceProvider.Types.RespondToAuthChallengeRequest = {
+      ChallengeName: 'CUSTOM_CHALLENGE',
+      ChallengeResponses: {
+        USERNAME: phone,
+        ANSWER: code,
+      },
+      ClientId: clientId,
+      Session: session,
+    };
+
+    return new Promise((resolve, reject) => {
+      provider.respondToAuthChallenge(params, (err, data) => {
+        if (err) {
+          this.logger.error(err, err.stack);
+          reject(err);
+        } else {
+          this.logger.log(data);
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  async signUp(phone: string) {
+    const params: CognitoIdentityServiceProvider.Types.SignUpRequest = {
+      ClientId: clientId,
+      Username: phone,
+      // TODO: generate random password
+      Password: 'caff2a4536f3669c7071197b2f67fbaad49acf4a66adb40d59464f06b84b',
+      UserAttributes: [
+        {
+          Name: 'name',
+          Value: phone,
+        },
+      ],
+      ValidationData: null,
+    };
+
+    return new Promise((resolve, reject) => {
+      provider.signUp(params, (err, data) => {
+        if (err) {
+          this.logger.error(err, err.stack);
+          reject(err);
+        } else {
+          this.logger.log(data);
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  async adminGetUser(phone: string) {
+    const params: CognitoIdentityServiceProvider.Types.AdminGetUserRequest = {
+      Username: phone,
+      UserPoolId: userPoolId,
+    };
+
+    return new Promise((resolve, reject) => {
+      provider.adminGetUser(params, (err, data) => {
+        if (err) {
+          this.logger.error(err, err.stack);
+          reject(err);
+        } else {
+          this.logger.log(data);
+          resolve(data);
+        }
+      });
+    });
   }
 }

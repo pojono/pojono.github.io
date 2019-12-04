@@ -15,8 +15,9 @@ module.exports = {
     migrationsDir: './src/infrastructure/database/typeorm/migrations/',
   },
   sms: {
-    minCode: 1000,
-    maxCode: 9999,
+    // TODO: only 4 digits by spec in code
+    minCode: 100000,
+    maxCode: 999999,
     minRepeatTime: 60000,
     codeLifetime: 5 * 60000,
     isRandom: false,
