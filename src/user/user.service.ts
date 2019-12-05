@@ -21,6 +21,8 @@ const provider = new AWS.CognitoIdentityServiceProvider();
 const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
 const userPoolId = 'eu-west-1_65Op52Obc'; // config.get('aws.cognito.userPoolId');
 
+const phonePlus = phone => '+' + phone;
+
 @Injectable()
 export class UserService {
   private logger = new Logger('AuthService');
@@ -92,6 +94,8 @@ export class UserService {
   }
 
   async initiateAuth(phone: string) {
+    phone = phonePlus(phone);
+
     const params: CognitoIdentityServiceProvider.Types.InitiateAuthRequest = {
       AuthFlow: 'CUSTOM_AUTH',
       ClientId: clientId,
@@ -114,6 +118,8 @@ export class UserService {
   }
 
   async respondToAuthChallenge(code: string, session: string, phone: string) {
+    phone = phonePlus(phone);
+
     const params: CognitoIdentityServiceProvider.Types.RespondToAuthChallengeRequest = {
       ChallengeName: 'CUSTOM_CHALLENGE',
       ChallengeResponses: {
@@ -138,6 +144,8 @@ export class UserService {
   }
 
   async signUp(phone: string) {
+    phone = phonePlus(phone);
+
     const params: CognitoIdentityServiceProvider.Types.SignUpRequest = {
       ClientId: clientId,
       Username: phone,
@@ -166,6 +174,8 @@ export class UserService {
   }
 
   async adminGetUser(phone: string) {
+    phone = phonePlus(phone);
+
     const params: CognitoIdentityServiceProvider.Types.AdminGetUserRequest = {
       Username: phone,
       UserPoolId: userPoolId,
