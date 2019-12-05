@@ -13,10 +13,10 @@ import { CognitoIdentityServiceProvider } from 'aws-sdk';
 
 // TODO: move to config
 AWS.config.update({
-  region: 'eu-west-1',
-  accessKeyId: 'AKIA2KBHWCGX7R552NHR',
-  secretAccessKey: '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',
-}); // config.get('aws.region');
+  region: 'eu-west-1', // config.get('aws.region');
+  accessKeyId: 'AKIA2KBHWCGX7R552NHR', // config.get('aws.accessKeyId');
+  secretAccessKey: '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', // config.get('aws.secretAccessKey');
+});
 const provider = new AWS.CognitoIdentityServiceProvider();
 const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
 const userPoolId = 'eu-west-1_65Op52Obc'; // config.get('aws.cognito.userPoolId');
