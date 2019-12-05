@@ -11,3 +11,8 @@ export const AMAZON_COGNITO_ERROR: StandardRestApiError = StandardRestApiError.c
   1002,
   'Amazon Cognito Error',
 );
+
+export const SMS_TOO_OFTEN: StandardRestApiError = StandardRestApiError.create(
+  1003,
+  'Sms request too often',
+);

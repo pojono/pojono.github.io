@@ -14,4 +14,9 @@ export class UserRepository extends Repository<User> {
     user.session = session;
     await user.save();
   }
+
+  async updateLastCode(user: User): Promise<void> {
+    user.lastCode = new Date();
+    await user.save();
+  }
 }

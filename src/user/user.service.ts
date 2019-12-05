@@ -3,13 +3,18 @@ import { Assert } from '../lib/assert';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import { AMAZON_COGNITO_ERROR, INVALID_CREDENTIALS } from '../lib/errors';
+import {
+  AMAZON_COGNITO_ERROR,
+  INVALID_CREDENTIALS,
+  SMS_TOO_OFTEN,
+} from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
 import { User } from './user.entity';
 import { SmsRequestDto } from './dto/sms.request.dto';
 import * as AWS from 'aws-sdk';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import * as config from 'config';
 
 // TODO: move to config
 AWS.config.update({
@@ -68,6 +73,7 @@ export class UserService {
     if (!user) {
       user = await this.createUserByPhone(phone);
     }
+    Assert.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
 
     try {
       await this.adminGetUser(user.phone);
@@ -84,9 +90,18 @@ export class UserService {
         user.phone,
       );
       await this.userRepository.updateSession(user, authData.Session);
+      await this.userRepository.updateLastCode(user);
     } catch {
       Assert.isTrue(true, AMAZON_COGNITO_ERROR);
     }
+  }
+
+  isFewTime(user): boolean {
+    const REPEAT_SMS_TIME_MS: number = config.get('sms.minRepeatTime');
+    if (!user.lastCode) {
+      return false;
+    }
+    return Math.abs(Number(new Date()) - user.lastCode) < REPEAT_SMS_TIME_MS;
   }
 
   async createUserByPhone(phone: string): Promise<User> {
