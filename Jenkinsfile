@@ -21,11 +21,13 @@ node {
       def credentialsName = "iam-cred"
 
       def imageTag        = env.BRANCH_NAME
-      def remoteImageTag  = env.BRANCH_NAME
+      def remoteImageTag
       def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
 
       stage("Checkout") {
         checkout scm
+        def commit_hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+        remoteImageTag  = "${BUILD_NUMBER}-${imageTag}-${commit_hash}"
       }
 
       stage("Docker build") {
