@@ -45,7 +45,7 @@ export class UserService {
 
     try {
       await this.respondToAuthChallenge(
-        String(signInRequestDto.code),
+        signInRequestDto.code,
         user.session,
         user.phone,
       );
