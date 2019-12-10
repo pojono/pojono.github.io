@@ -27,7 +27,7 @@ node {
       stage("Checkout") {
         checkout scm
         def commit_hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-        remoteImageTag  = "${BUILD_NUMBER}-${imageTag}-${commit_hash}"
+        remoteImageTag  = "${imageTag}-${BUILD_NUMBER}-${commit_hash}"
       }
 
       stage("Docker build") {
