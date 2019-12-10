@@ -9,4 +9,14 @@ export class UserRepository extends Repository<User> {
     await user.save();
     return user;
   }
+
+  async updateSession(user: User, session: string): Promise<void> {
+    user.session = session;
+    await user.save();
+  }
+
+  async updateLastCode(user: User): Promise<void> {
+    user.lastCode = new Date();
+    await user.save();
+  }
 }

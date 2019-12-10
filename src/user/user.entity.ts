@@ -17,4 +17,10 @@ export class User extends BaseEntity {
 
   @Column()
   phone: string;
+
+  @Column({ nullable: true })
+  session: string;
+
+  @Column({ nullable: true })
+  lastCode: Date;
 }

@@ -6,6 +6,7 @@ import {
   MinLength,
   Max,
   IsNumberString,
+  Length,
 } from 'class-validator';
 import * as config from 'config';
 import { ApiModelProperty } from '@nestjs/swagger';
@@ -21,15 +22,14 @@ export class SignInRequestDto {
   })
   phone: string;
 
-  @IsNumber()
-  @Min(config.get('sms.minCode'))
-  @Max(config.get('sms.maxCode'))
+  @IsNumberString()
+  @Length(4, 4)
   @ApiModelProperty({
-    type: 'number',
+    type: 'string',
     example: config.get('sms.notRandom'),
     required: true,
     minimum: config.get('sms.minCode'),
     maximum: config.get('sms.maxCode'),
   })
-  code: number;
+  code: string;
 }
