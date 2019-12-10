@@ -41,7 +41,7 @@ node {
       }
 
       stage("notify") {
-        telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${remoteImageTag} \n${sendChangeLogs()}"
+        telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n\n${remoteImageTag} \n${sendChangeLogs()}"
       }
 
     } catch(e) {
