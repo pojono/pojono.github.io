@@ -13,23 +13,22 @@ async function bootstrap() {
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
     const errors = Object.keys(ERRORS).reduce(
-      (sum, current) => {
-        return (
-          sum +
-          `
-      ${ERRORS[current].getCode()}. ${ERRORS[current].getMessage()}
-      `
-        );
-      },
-      `
-    `,
+      (allText, currentError) =>
+        allText +
+        `${ERRORS[currentError].getCode()}. ${ERRORS[
+          currentError
+        ].getMessage()} \n`,
+      '',
     );
-
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
       .setDescription(
-        'ProstoApp API specification. ' + HTTP_CODE_DESCRIPTION + errors,
+        'ProstoApp API specification. ' +
+          HTTP_CODE_DESCRIPTION +
+          ' \n ``` \n' +
+          errors +
+          '```',
       )
       .setVersion('0.0.1')
       .setSchemes(scheme)
