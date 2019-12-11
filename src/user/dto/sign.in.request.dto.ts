@@ -28,8 +28,6 @@ export class SignInRequestDto {
     type: 'string',
     example: config.get('sms.notRandom'),
     required: true,
-    minimum: config.get('sms.minCode'),
-    maximum: config.get('sms.maxCode'),
   })
   code: string;
 }

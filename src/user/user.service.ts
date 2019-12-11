@@ -8,6 +8,7 @@ import {
   INVALID_CREDENTIALS,
   SMS_TOO_OFTEN,
 } from '../lib/errors';
+
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
 import { User } from './user.entity';
@@ -49,14 +50,19 @@ export class UserService {
     }
 
     try {
-      await this.respondToAuthChallenge(
-        signInRequestDto.code,
-        user.session,
-        user.phone,
-      );
-
-      await this.userRepository.updateSession(user, null);
-
+      if (config.get('sms.useCognito')) {
+        await this.respondToAuthChallenge(
+          signInRequestDto.code,
+          user.session,
+          user.phone,
+        );
+        await this.userRepository.updateSession(user, null);
+      } else {
+        Assert.isFalse(
+          signInRequestDto.code === config.get('sms.notRandom'),
+          INVALID_CREDENTIALS,
+        );
+      }
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
@@ -75,24 +81,25 @@ export class UserService {
     }
     Assert.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
 
-    try {
-      await this.adminGetUser(user.phone);
-    } catch (err) {
+    if (config.get('sms.useCognito')) {
       try {
-        await this.signUp(user.phone);
-      } catch (error) {
+        await this.adminGetUser(user.phone);
+      } catch (err) {
+        try {
+          await this.signUp(user.phone);
+        } catch (error) {
+          Assert.isTrue(true, AMAZON_COGNITO_ERROR);
+        }
+      }
+      try {
+        const authData: CognitoIdentityServiceProvider.Types.InitiateAuthResponse = await this.initiateAuth(
+          user.phone,
+        );
+        await this.userRepository.updateSession(user, authData.Session);
+        await this.userRepository.updateLastCode(user);
+      } catch {
         Assert.isTrue(true, AMAZON_COGNITO_ERROR);
       }
-    }
-
-    try {
-      const authData: CognitoIdentityServiceProvider.Types.InitiateAuthResponse = await this.initiateAuth(
-        user.phone,
-      );
-      await this.userRepository.updateSession(user, authData.Session);
-      await this.userRepository.updateLastCode(user);
-    } catch {
-      Assert.isTrue(true, AMAZON_COGNITO_ERROR);
     }
   }
 

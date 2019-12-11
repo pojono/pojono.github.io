@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as config from 'config';
 import HTTP_CODE_DESCRIPTION from './http.description';
+import * as ERRORS from './lib/errors';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -11,10 +12,25 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
+    const errors = Object.keys(ERRORS).reduce(
+      (sum, current) => {
+        return (
+          sum +
+          `
+      ${ERRORS[current].getCode()}. ${ERRORS[current].getMessage()}
+      `
+        );
+      },
+      `
+    `,
+    );
+
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
-      .setDescription('ProstoApp API specification. ' + HTTP_CODE_DESCRIPTION)
+      .setDescription(
+        'ProstoApp API specification. ' + HTTP_CODE_DESCRIPTION + errors,
+      )
       .setVersion('0.0.1')
       .setSchemes(scheme)
       .build();

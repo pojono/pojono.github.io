@@ -16,11 +16,9 @@ module.exports = {
     migrationsDir: './src/infrastructure/database/typeorm/migrations/',
   },
   sms: {
-    minCode: '0000',
-    maxCode: '9999',
     minRepeatTime: 60000,
     codeLifetime: 5 * 60000,
-    isRandom: false,
     notRandom: '1234',
+    useCognito: false,
   },
 };

@@ -11,4 +11,7 @@ module.exports = {
   swagger: {
     scheme: 'https',
   },
+  sms: {
+    useCognito: false,
+  },
 };
