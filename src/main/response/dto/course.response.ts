@@ -30,13 +30,4 @@ export class CourseResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly colour: string;
-
-  @ApiModelProperty({ type: 'number', nullable: false })
-  public readonly numberOfLessons: number;
-
-  @ApiModelProperty({ type: 'number', nullable: false })
-  public readonly finishedLessons: number;
-
-  @ApiModelProperty({ type: 'number', nullable: false })
-  public readonly numberOfStudents: number;
 }

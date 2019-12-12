@@ -1,17 +1,17 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
-import { CourseResponseDto } from './dto/course.response';
 import { VideoAdviceResponseDto } from './dto/video.advice.response';
 import { LessonResponseDto } from './dto/lesson.response';
 import { ChallengeResponseDto } from './dto/challenge.response';
+import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
 
 class GetCourseResponseDto {
   @ApiModelProperty({
-    type: CourseResponseDto,
+    type: CourseWithStatsResponseDto,
     nullable: false,
     isArray: false,
   })
-  public readonly course: CourseResponseDto;
+  public readonly course: CourseWithStatsResponseDto;
 
   @ApiModelProperty({
     type: LessonResponseDto,

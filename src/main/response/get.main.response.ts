@@ -4,14 +4,15 @@ import { FastSupportResponseDto } from './dto/fast.support.response';
 import { CourseResponseDto } from './dto/course.response';
 import { MainStatsResponseDto } from './dto/main.stats.response';
 import { VideoAdviceResponseDto } from './dto/video.advice.response';
+import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
 
 class GetMainResponseDto {
   @ApiModelProperty({
-    type: CourseResponseDto,
+    type: CourseWithStatsResponseDto,
     nullable: false,
     isArray: false,
   })
-  public readonly topCourse: CourseResponseDto;
+  public readonly topCourse: CourseWithStatsResponseDto;
 
   @ApiModelProperty({
     type: MainStatsResponseDto,
