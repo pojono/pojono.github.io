@@ -30,7 +30,7 @@ async function bootstrap() {
           errors +
           '```',
       )
-      .setVersion(process.env.IMAGE_TAG || 'PLEASE SET IMAGE_TAG')
+      .setVersion(process.env.TAG || 'PLEASE SET ENV TAG')
       .setSchemes(scheme)
       .build();
     const document = SwaggerModule.createDocument(app, options);
