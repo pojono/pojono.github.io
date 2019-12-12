@@ -10,8 +10,8 @@ import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetCourseResponse } from '../response/get.course.response';
 
-@Controller('course')
-@ApiUseTags('course')
+@Controller('courses')
+@ApiUseTags('courses')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class CourseController {

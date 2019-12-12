@@ -10,8 +10,8 @@ import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRubricResponse } from '../response/get.rubric.response';
 
-@Controller('rubric')
-@ApiUseTags('rubric')
+@Controller('rubrics')
+@ApiUseTags('rubrics')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class RubricController {

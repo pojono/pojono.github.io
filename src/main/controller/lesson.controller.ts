@@ -9,8 +9,8 @@ import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetLessonResponse } from '../response/get.lesson.response';
 
-@Controller('lesson')
-@ApiUseTags('lesson')
+@Controller('lessons')
+@ApiUseTags('lessons')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class LessonController {
