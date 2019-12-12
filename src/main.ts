@@ -30,7 +30,7 @@ async function bootstrap() {
           errors +
           '```',
       )
-      .setVersion('0.0.1')
+      .setVersion(process.env.BUILD_TAG || 'PLEASE SET BUILD_TAG')
       .setSchemes(scheme)
       .build();
     const document = SwaggerModule.createDocument(app, options);

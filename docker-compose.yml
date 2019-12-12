@@ -2,7 +2,7 @@ version: '3'
 
 services:
   api:
-    image: prostoapp_api:${TAG}
+    image: prostoapp_api:${BUILD_TAG}
     container_name: prostoapp_api
     restart: always
     environment:
