@@ -25,8 +25,8 @@ import { SignInResponse } from './response/sign.in.response';
 import * as config from 'config';
 import { MeResponse } from './response/me.response';
 
-@ApiUseTags('user')
-@Controller('user')
+@ApiUseTags('users')
+@Controller('user') // TODO: change to userS
 export class UserController {
   private logger = new Logger();
 

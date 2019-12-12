@@ -23,8 +23,16 @@ async function bootstrap() {
     const options = new DocumentBuilder()
       .setTitle('ProstoApp')
       .addBearerAuth()
+      .addTag('users', 'TODO: изменить роуты на мн. число')
+      .addTag('root', 'Системная информация о сервере')
+      .addTag('main', '')
+      .addTag('courses', '')
+      .addTag('rubrics', '')
+      .addTag('lessons', '')
       .setDescription(
-        'ProstoApp API specification. ' +
+        'Server started at: ' +
+          new Date().toISOString() +
+          ' (UTC) \n' +
           HTTP_CODE_DESCRIPTION +
           ' \n ``` \n' +
           errors +
