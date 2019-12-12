@@ -1,5 +1,10 @@
 import groovy.json.JsonSlurperClassic
 
+def region          = "eu-west-1"
+def repositoryId    = "708752839087"
+def repositoryName  = "prostoapp_api"
+def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
+
 pipeline {
     agent any
     stages {
@@ -24,6 +29,12 @@ pipeline {
                     url: 'https://bitbucket.org/citronium/prostoapp_api.git'
 
                 sh "ls -lat"
+            }
+        }
+
+        stage('pull') {
+            steps {
+                sh "docker pull ${ecRegistry}/${repositoryName}:${INPUT_PARAMS.IMAGE_NAME}"
             }
         }
 
