@@ -28,6 +28,9 @@ export class CourseResponseDto {
   @ApiModelProperty({ type: 'boolean', nullable: false })
   public readonly firstCourse: boolean;
 
+  @ApiModelProperty({ type: 'boolean', nullable: false })
+  public readonly forMainPage: boolean;
+
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly colour: string;
 }
