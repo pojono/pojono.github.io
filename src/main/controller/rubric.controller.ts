@@ -9,6 +9,7 @@ import { GetMainResponse } from '../response/get.main.response';
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRubricResponse } from '../response/get.rubric.response';
+import { GetRubricByIdResponse } from '../response/get.rubric.by.id.response';
 
 @Controller('rubrics')
 @ApiUseTags('rubrics')
@@ -24,5 +25,12 @@ export class RubricController {
   @ApiOperation({ title: 'Загрузка экрана со списком рубрик' })
   async main(): Promise<GetRubricResponse> {
     return new GetRubricResponse(null);
+  }
+
+  @Get('/:id')
+  @ApiResponse({ status: 200, type: GetRubricByIdResponse })
+  @ApiOperation({ title: 'Загрузка экрана определённой рубрики' })
+  async getById(): Promise<GetRubricByIdResponse> {
+    return new GetRubricByIdResponse(null);
   }
 }

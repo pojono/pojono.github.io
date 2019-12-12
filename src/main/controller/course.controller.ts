@@ -8,7 +8,7 @@ import {
 import { GetMainResponse } from '../response/get.main.response';
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
-import { GetCourseResponse } from '../response/get.course.response';
+import { GetCourseByIdResponse } from '../response/get.course.by.id.response';
 
 @Controller('courses')
 @ApiUseTags('courses')
@@ -20,9 +20,9 @@ export class CourseController {
   constructor(private mainService: MainService) {}
 
   @Get('/:id')
-  @ApiResponse({ status: 200, type: GetCourseResponse })
+  @ApiResponse({ status: 200, type: GetCourseByIdResponse })
   @ApiOperation({ title: 'Загрузка экрана определенного курса' })
-  async main(): Promise<GetCourseResponse> {
-    return new GetCourseResponse(null);
+  async main(): Promise<GetCourseByIdResponse> {
+    return new GetCourseByIdResponse(null);
   }
 }

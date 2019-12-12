@@ -5,7 +5,7 @@ import { LessonResponseDto } from './dto/lesson.response';
 import { ChallengeResponseDto } from './dto/challenge.response';
 import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
 
-class GetCourseResponseDto {
+class GetCourseByIdResponseDto {
   @ApiModelProperty({
     type: CourseWithStatsResponseDto,
     nullable: false,
@@ -35,11 +35,15 @@ class GetCourseResponseDto {
   public readonly videoAdvice: VideoAdviceResponseDto;
 }
 
-export class GetCourseResponse extends CustomResponse {
-  @ApiModelProperty({ type: GetCourseResponseDto })
-  data: GetCourseResponseDto;
+export class GetCourseByIdResponse extends CustomResponse {
+  @ApiModelProperty({
+    type: GetCourseByIdResponseDto,
+    nullable: false,
+    isArray: false,
+  })
+  data: GetCourseByIdResponseDto;
 
-  constructor(data: GetCourseResponseDto) {
+  constructor(data: GetCourseByIdResponseDto) {
     super(true);
     this.data = data;
   }
