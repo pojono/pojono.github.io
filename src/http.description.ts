@@ -3,6 +3,7 @@ const HTTP_CODE_DESCRIPTION: string = `
 HTTP STATUS: 200 и 201 - всё хорошо. В поле data может быть null, массив или запрашиваемый объект.
     "success": true,
     "timestamp": "2019-11-14T10:06:14.109Z",
+    "requestId": "jcMhP42G5CT2Y7F0",
     "data": null
 
 HTTP STATUS: 400 - ошибка валидации. statusCode всегда 400.

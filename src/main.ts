@@ -5,9 +5,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as config from 'config';
 import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
+import { AllExceptionsFilter } from './lib/all.exception.filter';
 
 async function bootstrap() {
-  const logger = new Logger('bootstrap');
+  const logger = new Logger('Bootstrap');
 
   const app = await NestFactory.create(AppModule);
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
@@ -47,6 +48,7 @@ async function bootstrap() {
 
   const port: number = Number(process.env.PORT) || config.get('server.port');
   app.enableCors();
+  // app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(port);
 

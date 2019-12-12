@@ -2,6 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { RootResponse } from './app.response';
+import { SMS_TOO_OFTEN } from './lib/errors';
+import { ErrorIf } from './lib/error.if';
+import { GetRequestId } from './lib/get.request.id.decorator';
+import { logger } from './lib/logger';
 
 @ApiUseTags('root')
 @Controller()
@@ -13,7 +17,8 @@ export class AppController {
   @ApiOperation({
     title: 'Время работы сервера с момента последнего запуска',
   })
-  getRoot(): RootResponse {
-    return new RootResponse(this.appService.getUptime());
+  getRoot(@GetRequestId() requestId): RootResponse {
+    logger(requestId).log('get uptime by id');
+    return new RootResponse(requestId, this.appService.getUptime());
   }
 }

@@ -39,8 +39,8 @@ export class GetRubricByIdResponse extends CustomResponse {
   @ApiModelProperty({ type: GetRubricByIdResponseDto })
   data: GetRubricByIdResponseDto;
 
-  constructor(data: GetRubricByIdResponseDto) {
-    super(true);
+  constructor(requestId: string, data: GetRubricByIdResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

@@ -1,7 +1,7 @@
 import { StandardRestApiError } from './standard.rest.api.error';
 import { RestApiError } from './rest.api.error';
 
-export class Assert {
+export class ErrorIf {
   public static isEmpty<T>(
     value: T | undefined | null,
     error: StandardRestApiError,

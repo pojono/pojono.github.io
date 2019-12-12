@@ -24,12 +24,11 @@ import { SignInRequestDto } from './dto/sign.in.request.dto';
 import { SignInResponse } from './response/sign.in.response';
 import * as config from 'config';
 import { MeResponse } from './response/me.response';
+import { GetRequestId } from '../lib/get.request.id.decorator';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
 export class UserController {
-  private logger = new Logger();
-
   constructor(private userService: UserService) {}
 
   @Post('/sms')
@@ -38,10 +37,11 @@ export class UserController {
     title: 'Регистрация нового аккаунта или вход в существующий',
   })
   async sms(
+    @GetRequestId() requestId,
     @Body(ValidationPipe) smsRequestDto: SmsRequestDto,
   ): Promise<SmsResponse> {
     await this.userService.sms(smsRequestDto);
-    return new SmsResponse(null);
+    return new SmsResponse(requestId, null);
   }
 
   @Post('/signin')
@@ -56,9 +56,13 @@ export class UserController {
       )} мс`,
   })
   async signIn(
+    @GetRequestId() requestId,
     @Body(ValidationPipe) signInRequestDto: SignInRequestDto,
   ): Promise<SignInResponse> {
-    return new SignInResponse(await this.userService.signIn(signInRequestDto));
+    return new SignInResponse(
+      requestId,
+      await this.userService.signIn(signInRequestDto),
+    );
   }
 
   @Get('/me')
@@ -66,7 +70,10 @@ export class UserController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: MeResponse })
   @ApiOperation({ title: 'Информация об авторизованном юзере' })
-  async getMe(@GetUser() user: User): Promise<MeResponse> {
-    return new MeResponse(user);
+  async getMe(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+  ): Promise<MeResponse> {
+    return new MeResponse(requestId, user);
   }
 }

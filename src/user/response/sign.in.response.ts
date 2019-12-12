@@ -14,8 +14,8 @@ export class SignInResponse extends CustomResponse {
   @ApiModelProperty({ type: SingInResponseDto })
   data: SingInResponseDto;
 
-  constructor(data: SingInResponseDto) {
-    super(true);
+  constructor(requestId: string, data: SingInResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

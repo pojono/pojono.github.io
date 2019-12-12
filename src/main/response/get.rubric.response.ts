@@ -6,8 +6,8 @@ export class GetRubricResponse extends CustomResponse {
   @ApiModelProperty({ type: RubricResponseDto, isArray: true })
   data: RubricResponseDto;
 
-  constructor(data: RubricResponseDto) {
-    super(true);
+  constructor(requestId: string, data: RubricResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

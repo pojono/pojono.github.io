@@ -10,27 +10,26 @@ import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRubricResponse } from '../response/get.rubric.response';
 import { GetRubricByIdResponse } from '../response/get.rubric.by.id.response';
+import { GetRequestId } from '../../lib/get.request.id.decorator';
 
 @Controller('rubrics')
 @ApiUseTags('rubrics')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class RubricController {
-  private logger = new Logger();
-
   constructor(private mainService: MainService) {}
 
   @Get('/')
   @ApiResponse({ status: 200, type: GetRubricResponse })
   @ApiOperation({ title: 'Загрузка экрана со списком рубрик' })
-  async main(): Promise<GetRubricResponse> {
-    return new GetRubricResponse(null);
+  async main(@GetRequestId() requestId): Promise<GetRubricResponse> {
+    return new GetRubricResponse(requestId, null);
   }
 
   @Get('/:id')
   @ApiResponse({ status: 200, type: GetRubricByIdResponse })
   @ApiOperation({ title: 'Загрузка экрана определённой рубрики' })
-  async getById(): Promise<GetRubricByIdResponse> {
-    return new GetRubricByIdResponse(null);
+  async getById(@GetRequestId() requestId): Promise<GetRubricByIdResponse> {
+    return new GetRubricByIdResponse(requestId, null);
   }
 }

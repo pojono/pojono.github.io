@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Assert } from '../lib/assert';
+import { ErrorIf } from '../lib/error.if';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
@@ -46,7 +46,7 @@ export class UserService {
   async signIn(signInRequestDto: SignInRequestDto): Promise<{ token: string }> {
     const user = await this.getUserByPhone(signInRequestDto.phone);
     if (!user) {
-      Assert.isTrue(true, INVALID_CREDENTIALS);
+      ErrorIf.isTrue(true, INVALID_CREDENTIALS);
     }
 
     try {
@@ -58,7 +58,7 @@ export class UserService {
         );
         await this.userRepository.updateSession(user, null);
       } else {
-        Assert.isFalse(
+        ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
           INVALID_CREDENTIALS,
         );
@@ -68,7 +68,7 @@ export class UserService {
 
       return { token };
     } catch (err) {
-      Assert.isTrue(true, INVALID_CREDENTIALS);
+      ErrorIf.isTrue(true, INVALID_CREDENTIALS);
     }
   }
 
@@ -79,7 +79,7 @@ export class UserService {
     if (!user) {
       user = await this.createUserByPhone(phone);
     }
-    Assert.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
+    ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
 
     if (config.get('sms.useCognito')) {
       try {
@@ -88,7 +88,7 @@ export class UserService {
         try {
           await this.signUp(user.phone);
         } catch (error) {
-          Assert.isTrue(true, AMAZON_COGNITO_ERROR);
+          ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
         }
       }
       try {
@@ -98,7 +98,7 @@ export class UserService {
         await this.userRepository.updateSession(user, authData.Session);
         await this.userRepository.updateLastCode(user);
       } catch {
-        Assert.isTrue(true, AMAZON_COGNITO_ERROR);
+        ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
       }
     }
   }

@@ -17,8 +17,8 @@ export class MeResponse extends CustomResponse {
   @ApiModelProperty({ type: MeResponseDto })
   data: MeResponseDto;
 
-  constructor(data: User) {
-    super(true);
+  constructor(requestId: string, data: User) {
+    super(requestId);
     this.data = data;
   }
 }

@@ -7,8 +7,8 @@ export class SmsResponse extends CustomResponse {
   @ApiModelProperty({ type: SmsResponseDto, nullable: true })
   data: SmsResponseDto;
 
-  constructor(data: SmsResponseDto) {
-    super(true);
+  constructor(requestId: string, data: SmsResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

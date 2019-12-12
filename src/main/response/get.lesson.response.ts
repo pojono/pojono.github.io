@@ -23,8 +23,8 @@ export class GetLessonResponse extends CustomResponse {
   @ApiModelProperty({ type: GetLessonResponseDto, isArray: false })
   data: GetLessonResponseDto;
 
-  constructor(data: GetLessonResponseDto) {
-    super(true);
+  constructor(requestId: string, data: GetLessonResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

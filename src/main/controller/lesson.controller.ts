@@ -8,20 +8,19 @@ import {
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetLessonResponse } from '../response/get.lesson.response';
+import { GetRequestId } from '../../lib/get.request.id.decorator';
 
 @Controller('lessons')
 @ApiUseTags('lessons')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class LessonController {
-  private logger = new Logger();
-
   constructor(private mainService: MainService) {}
 
   @Get('/:id')
   @ApiResponse({ status: 200, type: GetLessonResponse })
   @ApiOperation({ title: 'Загрузка экрана занятия' })
-  async main(): Promise<GetLessonResponse> {
-    return new GetLessonResponse(null);
+  async main(@GetRequestId() requestId): Promise<GetLessonResponse> {
+    return new GetLessonResponse(requestId, null);
   }
 }

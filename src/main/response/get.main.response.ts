@@ -54,8 +54,8 @@ export class GetMainResponse extends CustomResponse {
   @ApiModelProperty({ type: GetMainResponseDto })
   data: GetMainResponseDto;
 
-  constructor(data: GetMainResponseDto) {
-    super(true);
+  constructor(requestId: string, data: GetMainResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

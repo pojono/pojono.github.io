@@ -10,8 +10,8 @@ export class RootResponse extends CustomResponse {
   @ApiModelProperty({ type: RootResponseDto })
   data: RootResponseDto;
 
-  constructor(data: RootResponseDto) {
-    super(true);
+  constructor(requestId: string, data: RootResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

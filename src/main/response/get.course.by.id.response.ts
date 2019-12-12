@@ -43,8 +43,8 @@ export class GetCourseByIdResponse extends CustomResponse {
   })
   data: GetCourseByIdResponseDto;
 
-  constructor(data: GetCourseByIdResponseDto) {
-    super(true);
+  constructor(requestId: string, data: GetCourseByIdResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }
