@@ -6,11 +6,14 @@ class MeResponseDto {
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly id: number;
 
-  @ApiModelProperty({ type: 'string', nullable: true })
-  public readonly name: string;
-
   @ApiModelProperty({ type: 'string', nullable: false })
   public readonly phone: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly firstName: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly lastName: string;
 }
 
 export class MeResponse extends CustomResponse {

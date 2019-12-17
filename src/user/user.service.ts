@@ -16,6 +16,7 @@ import { SmsRequestDto } from './dto/sms.request.dto';
 import * as AWS from 'aws-sdk';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import * as config from 'config';
+import { UserUpdateDto } from './dto/user.update.dto';
 
 // TODO: move to config
 AWS.config.update({
@@ -41,6 +42,10 @@ export class UserService {
 
   async getUserByPhone(phone: string): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { phone } });
+  }
+
+  async editMyself(user: User, userUpdateDto: UserUpdateDto): Promise<User> {
+    return this.userRepository.updateUser(user, userUpdateDto);
   }
 
   async signIn(signInRequestDto: SignInRequestDto): Promise<{ token: string }> {

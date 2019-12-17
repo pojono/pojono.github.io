@@ -19,4 +19,18 @@ export class UserRepository extends Repository<User> {
     user.lastCode = new Date();
     await user.save();
   }
+
+  async updateUser(user: User, userUpdateDto): Promise<User> {
+    const dtoKeys: string[] = Object.keys(userUpdateDto);
+
+    if (dtoKeys.includes('firstName')) {
+      user.firstName = userUpdateDto.firstName;
+    }
+
+    if (dtoKeys.includes('lastName')) {
+      user.lastName = userUpdateDto.lastName;
+    }
+
+    return await user.save();
+  }
 }

@@ -4,7 +4,7 @@ module.exports = {
     host: 'localhost',
     username: 'postgres',
     password: 'postgres',
-    database: 'prostoapp',
+    database: 'postgres',
     synchronize: true,
     migrationsRun: true,
   },

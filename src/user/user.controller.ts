@@ -6,6 +6,7 @@ import {
   UseGuards,
   ValidationPipe,
   Body,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -25,6 +26,7 @@ import { SignInResponse } from './response/sign.in.response';
 import * as config from 'config';
 import { MeResponse } from './response/me.response';
 import { GetRequestId } from '../lib/get.request.id.decorator';
+import { UserUpdateDto } from './dto/user.update.dto';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
@@ -75,5 +77,21 @@ export class UserController {
     @GetUser() user: User,
   ): Promise<MeResponse> {
     return new MeResponse(requestId, user);
+  }
+
+  @Put('/me')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: MeResponse })
+  @ApiOperation({ title: 'Редактирование полей юзера' })
+  async editMyself(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+    @Body(ValidationPipe) userUpdateDto: UserUpdateDto,
+  ): Promise<MeResponse> {
+    return new MeResponse(
+      requestId,
+      await this.userService.editMyself(user, userUpdateDto),
+    );
   }
 }
