@@ -5,7 +5,7 @@ import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
 import { FastSupportResponseDto } from './dto/fast.support.response';
 import { RubricResponseDto } from './dto/rubric.response';
 
-class GetRubricByIdResponseDto {
+export class GetRubricByIdResponseDto {
   @ApiModelProperty({
     type: RubricResponseDto,
     nullable: false,
@@ -18,25 +18,29 @@ class GetRubricByIdResponseDto {
     nullable: false,
     isArray: true,
   })
-  public readonly course: CourseWithStatsResponseDto;
+  public readonly course: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
     type: FastSupportResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly fastSupport: FastSupportResponseDto;
+  public readonly fastSupport: FastSupportResponseDto[];
 
   @ApiModelProperty({
     type: VideoAdviceResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly videoAdvice: VideoAdviceResponseDto;
+  public readonly videoAdvice: VideoAdviceResponseDto[];
 }
 
 export class GetRubricByIdResponse extends CustomResponse {
-  @ApiModelProperty({ type: GetRubricByIdResponseDto })
+  @ApiModelProperty({
+    type: GetRubricByIdResponseDto,
+    isArray: false,
+    nullable: false,
+  })
   data: GetRubricByIdResponseDto;
 
   constructor(requestId: string, data: GetRubricByIdResponseDto) {

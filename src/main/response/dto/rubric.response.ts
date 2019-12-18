@@ -15,4 +15,7 @@ export class RubricResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: false })
   public readonly isSleep: boolean;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly colour: string;
 }

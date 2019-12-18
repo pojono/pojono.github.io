@@ -16,3 +16,8 @@ export const SMS_TOO_OFTEN: StandardRestApiError = StandardRestApiError.create(
   1003,
   'Sms request too often',
 );
+
+export const OBJECT_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1004,
+  'Object not found',
+);

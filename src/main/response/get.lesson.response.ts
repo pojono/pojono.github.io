@@ -3,7 +3,7 @@ import CustomResponse from '../../lib/custom.response';
 import { LessonResponseDto } from './dto/lesson.response';
 import { TrackResponseDto } from './dto/track.response';
 
-class GetLessonResponseDto {
+export class GetLessonResponseDto {
   @ApiModelProperty({
     type: LessonResponseDto,
     nullable: false,
@@ -16,11 +16,15 @@ class GetLessonResponseDto {
     nullable: false,
     isArray: true,
   })
-  public readonly track: TrackResponseDto;
+  public readonly track: TrackResponseDto[];
 }
 
 export class GetLessonResponse extends CustomResponse {
-  @ApiModelProperty({ type: GetLessonResponseDto, isArray: false })
+  @ApiModelProperty({
+    type: GetLessonResponseDto,
+    isArray: false,
+    nullable: false,
+  })
   data: GetLessonResponseDto;
 
   constructor(requestId: string, data: GetLessonResponseDto) {

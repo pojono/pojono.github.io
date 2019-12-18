@@ -4,4 +4,34 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class Course extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: true })
+  name: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  picture: string;
+
+  @Column({ nullable: true })
+  durationOfLessons: string;
+
+  @Column({ nullable: true })
+  startDate: Date;
+
+  @Column({ nullable: false })
+  theBestForYou: boolean;
+
+  @Column({ nullable: false })
+  forAnnounce: boolean;
+
+  @Column({ nullable: false })
+  firstCourse: boolean;
+
+  @Column({ nullable: false })
+  beginnerCourse: boolean;
+
+  @Column({ nullable: true })
+  colour: string;
 }

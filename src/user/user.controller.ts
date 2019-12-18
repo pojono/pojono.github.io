@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Logger,
   Post,
   UseGuards,
   ValidationPipe,

@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CourseController } from './controller/course.controller';
 import { RubricController } from './controller/rubric.controller';
 import { LessonController } from './controller/lesson.controller';
+import { RubricService } from './service/rubric.service';
+import { RubricRepository } from './repository/rubric.repository';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([RubricRepository]),
   ],
   controllers: [
     MainController,
@@ -18,6 +20,6 @@ import { LessonController } from './controller/lesson.controller';
     RubricController,
     LessonController,
   ],
-  providers: [MainService],
+  providers: [MainService, RubricService],
 })
 export class MainModule {}

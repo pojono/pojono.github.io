@@ -4,4 +4,16 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class FastSupport extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: true })
+  name: string;
+
+  @Column({ nullable: true })
+  trackId: number;
+
+  @Column({ nullable: false })
+  forMainPage: boolean;
+
+  @Column({ nullable: true })
+  colour: string;
 }

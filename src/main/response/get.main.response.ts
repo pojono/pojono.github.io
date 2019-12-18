@@ -5,7 +5,7 @@ import { MainStatsResponseDto } from './dto/main.stats.response';
 import { VideoAdviceResponseDto } from './dto/video.advice.response';
 import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
 
-class GetMainResponseDto {
+export class GetMainResponseDto {
   @ApiModelProperty({
     type: CourseWithStatsResponseDto,
     nullable: false,
@@ -25,32 +25,36 @@ class GetMainResponseDto {
     nullable: false,
     isArray: true,
   })
-  public readonly bestCourses: CourseWithStatsResponseDto;
+  public readonly bestCourses: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
     type: CourseWithStatsResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly announcement: CourseWithStatsResponseDto;
+  public readonly announcement: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
     type: FastSupportResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly fastSupport: FastSupportResponseDto;
+  public readonly fastSupport: FastSupportResponseDto[];
 
   @ApiModelProperty({
     type: VideoAdviceResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly videoAdvice: VideoAdviceResponseDto;
+  public readonly videoAdvice: VideoAdviceResponseDto[];
 }
 
 export class GetMainResponse extends CustomResponse {
-  @ApiModelProperty({ type: GetMainResponseDto })
+  @ApiModelProperty({
+    type: GetMainResponseDto,
+    isArray: false,
+    nullable: false,
+  })
   data: GetMainResponseDto;
 
   constructor(requestId: string, data: GetMainResponseDto) {
