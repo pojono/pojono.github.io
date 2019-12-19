@@ -25,10 +25,12 @@ async function bootstrap() {
       .setTitle('ProstoApp')
       .addBearerAuth()
       .addTag('users', 'TODO: изменить роуты на мн. число')
-      .addTag('rubrics', '')
-      .addTag('main', '')
-      .addTag('courses', '')
-      .addTag('lessons', '')
+      .addTag('rubrics', 'Все рубрики и страница конкретной рубрики')
+      .addTag('main', 'Главная страница приложения')
+      .addTag('courses', 'Курсы')
+      .addTag('lessons', 'Занятия в курсе')
+      .addTag('quizzes', 'Диалоги в псевдо-мессенджере')
+      .addTag('events', 'Ивенты о происходящем в приложении')
       .addTag('root', 'Системная информация о сервере')
       .setDescription(
         'Server started at: ' +
