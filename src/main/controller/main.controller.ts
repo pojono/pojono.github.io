@@ -22,7 +22,10 @@ export class MainController {
 
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
-  @ApiOperation({ title: 'Загрузка главного экрана приложения' })
+  @ApiOperation({
+    title: 'Загрузка главного экрана приложения',
+    deprecated: true,
+  })
   async main(
     @GetRequestId() requestId,
     @GetUser() user: User,

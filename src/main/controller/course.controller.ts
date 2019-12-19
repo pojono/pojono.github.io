@@ -19,7 +19,10 @@ export class CourseController {
 
   @Get('/:id')
   @ApiResponse({ status: 200, type: GetCourseByIdResponse })
-  @ApiOperation({ title: 'Загрузка экрана определенного курса' })
+  @ApiOperation({
+    title: 'Загрузка экрана определенного курса',
+    deprecated: true,
+  })
   async main(@GetRequestId() requestId): Promise<GetCourseByIdResponse> {
     return new GetCourseByIdResponse(requestId, null);
   }

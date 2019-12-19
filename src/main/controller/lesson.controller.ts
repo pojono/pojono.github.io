@@ -19,7 +19,7 @@ export class LessonController {
 
   @Get('/:id')
   @ApiResponse({ status: 200, type: GetLessonResponse })
-  @ApiOperation({ title: 'Загрузка экрана занятия' })
+  @ApiOperation({ title: 'Загрузка экрана занятия', deprecated: true })
   async main(@GetRequestId() requestId): Promise<GetLessonResponse> {
     return new GetLessonResponse(requestId, null);
   }
