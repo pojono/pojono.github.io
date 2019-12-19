@@ -29,7 +29,12 @@ export class CourseService {
     for (const course of courses) {
       result.push({
         courseInfo: course,
-        courseStats: null,
+        courseStats: {
+          // TODO: count stats
+          numberOfLessons: 0,
+          finishedLessons: 0,
+          numberOfStudents: 0,
+        },
       });
     }
 
