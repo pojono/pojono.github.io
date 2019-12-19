@@ -15,4 +15,7 @@ export class FastSupportResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly colour: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly duration: string;
 }

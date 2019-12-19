@@ -11,7 +11,7 @@ Staging - тестовый сервер
 Production - продакшен сервер.
 
 ##Start local database:
-docker run --name prosto-postgres -p 5454:5432 -e POSTGRES_PASSWORD=postgres -d postgres:11.6
+docker run --name postgres -p 5454:5432 -e POSTGRES_PASSWORD=postgres POSTGRES_DB=prostoapp -d postgres:11.5
 
 ##Сборка на Jenkins:
 http://jenkins.prostoapp.com/

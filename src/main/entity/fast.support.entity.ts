@@ -16,4 +16,7 @@ export class FastSupport extends BaseEntity {
 
   @Column({ nullable: true })
   colour: string;
+
+  @Column({ nullable: true })
+  duration: string;
 }

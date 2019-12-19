@@ -57,7 +57,7 @@ export class GetMainResponse extends CustomResponse {
   })
   data: GetMainResponseDto;
 
-  constructor(requestId: string, data: GetMainResponseDto) {
+  constructor(requestId: string, data: any /*GetMainResponseDto*/) {
     super(requestId);
     this.data = data;
   }

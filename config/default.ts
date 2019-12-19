@@ -21,4 +21,5 @@ module.exports = {
     notRandom: '1234',
     useCognito: false,
   },
+  daysForNewBadge: 7,
 };

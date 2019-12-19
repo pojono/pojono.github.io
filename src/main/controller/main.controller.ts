@@ -9,6 +9,9 @@ import { GetMainResponse } from '../response/get.main.response';
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRequestId } from '../../lib/get.request.id.decorator';
+import { mockData } from './main.mock.data';
+import { GetUser } from '../../user/get.user.decorator';
+import { User } from '../../user/user.entity';
 
 @Controller('main')
 @ApiUseTags('main')
@@ -19,8 +22,23 @@ export class MainController {
 
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
-  @ApiOperation({ title: 'Загрузка главного экрана приложения' })
-  async main(@GetRequestId() requestId): Promise<GetMainResponse> {
-    return new GetMainResponse(requestId, null);
+  @ApiOperation({
+    title: 'Загрузка главного экрана приложения',
+    deprecated: true,
+  })
+  async main(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+  ): Promise<any /*GetMainResponse*/> {
+    let response = null;
+    if (user.phone === '79025666777') {
+      response = mockData;
+      response.topCourse.courseInfo.beginnerCourse = true;
+    }
+    if (user.phone === '79027666555') {
+      response = mockData;
+      response.topCourse.courseInfo.beginnerCourse = false;
+    }
+    return new GetMainResponse(requestId, mockData);
   }
 }
