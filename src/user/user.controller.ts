@@ -26,6 +26,7 @@ import * as config from 'config';
 import { MeResponse } from './response/me.response';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { UserUpdateDto } from './dto/user.update.dto';
+import { SettingsResponse } from './response/settings.response';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
@@ -49,12 +50,13 @@ export class UserController {
   @ApiResponse({ status: 201, type: SignInResponse })
   @ApiOperation({
     title:
-      'Используйте код 1234 для авторизации на тестовом сервере.' +
+      'Используйте код 1234.' +
       ' Для авторизации к полученному токену нужно добавить слово Bearer и пробел. ' +
-      ` Время жизни кода ${config.get('sms.codeLifetime')} мс` +
-      ` Повторно отправить запрос на смс можно через ${config.get(
-        'sms.minRepeatTime',
-      )} мс`,
+      ` Время жизни кода ${Number(config.get('sms.codeLifetime')) /
+        1000} сек.` +
+      ` Повторно отправить запрос на смс можно через ${Number(
+        config.get('sms.minRepeatTime'),
+      ) / 1000} сек.`,
   })
   async signIn(
     @GetRequestId() requestId,
@@ -92,5 +94,19 @@ export class UserController {
       requestId,
       await this.userService.editMyself(user, userUpdateDto),
     );
+  }
+
+  @Get('/settings')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: SettingsResponse })
+  @ApiOperation({ title: 'Параметры приложения, заданные на сервере' })
+  async getSettings(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+  ): Promise<SettingsResponse> {
+    return new SettingsResponse(requestId, {
+      daysForNewBadge: config.get('daysForNewBadge'),
+    });
   }
 }
