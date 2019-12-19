@@ -2,29 +2,37 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CourseRepository } from '../repository/course.repository';
 import { Course } from '../entity/course.entity';
-import { ErrorIf } from '../../lib/error.if';
-import { OBJECT_NOT_FOUND } from '../../lib/errors';
-import { GetCourseByIdResponseDto } from '../response/get.course.by.id.response';
 import { CourseWithStatsResponseDto } from '../response/dto/course.with.stats.response';
+import { RubricToCourseService } from './rubric.to.course.service';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(CourseRepository)
     private courseRepository: CourseRepository,
+    private rubricToCourseService: RubricToCourseService,
   ) {}
 
-  async getCoursesWithStatsById(
-    id: number,
-  ): Promise<CourseWithStatsResponseDto[]> {
-    const course: Course | undefined = await this.courseRepository.findById(id);
-    ErrorIf.notExist(course, OBJECT_NOT_FOUND);
+  async getByIds(ids: number[]) {
+    return this.courseRepository.findByIds(ids);
+  }
 
-    return [
-      {
-        courseInfo: null,
-        courseStats: null, // TODO
-      },
-    ];
+  async getByRubricId(id: number): Promise<CourseWithStatsResponseDto[]> {
+    const courseIds: number[] = await this.rubricToCourseService.getByRubricId(
+      id,
+    );
+
+    const courses: Course[] = await this.getByIds(courseIds);
+
+    const result: CourseWithStatsResponseDto[] = [];
+
+    for (const course of courses) {
+      result.push({
+        courseInfo: course,
+        courseStats: null,
+      });
+    }
+
+    return result;
   }
 }

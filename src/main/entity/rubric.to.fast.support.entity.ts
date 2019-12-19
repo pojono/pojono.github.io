@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class RubricToCourse extends BaseEntity {
+export class RubricToFastSupport extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -9,7 +9,7 @@ export class RubricToCourse extends BaseEntity {
   rubricId: number;
 
   @Column({ nullable: false })
-  courseId: number;
+  fastSupportId: number;
 
   @Column({ nullable: true })
   orderIndex: number;
