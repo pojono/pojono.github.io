@@ -9,6 +9,7 @@ import { GetMainResponse } from '../response/get.main.response';
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRequestId } from '../../lib/get.request.id.decorator';
+import { mockData } from './main.mock.data';
 
 @Controller('main')
 @ApiUseTags('main')
@@ -20,7 +21,7 @@ export class MainController {
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
   @ApiOperation({ title: 'Загрузка главного экрана приложения' })
-  async main(@GetRequestId() requestId): Promise<GetMainResponse> {
-    return new GetMainResponse(requestId, null);
+  async main(@GetRequestId() requestId): Promise<any /*GetMainResponse*/> {
+    return new GetMainResponse(requestId, mockData);
   }
 }
