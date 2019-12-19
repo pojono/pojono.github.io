@@ -25,11 +25,11 @@ async function bootstrap() {
       .setTitle('ProstoApp')
       .addBearerAuth()
       .addTag('users', 'TODO: изменить роуты на мн. число')
-      .addTag('root', 'Системная информация о сервере')
+      .addTag('rubrics', '')
       .addTag('main', '')
       .addTag('courses', '')
-      .addTag('rubrics', '')
       .addTag('lessons', '')
+      .addTag('root', 'Системная информация о сервере')
       .setDescription(
         'Server started at: ' +
           new Date().toISOString() +
