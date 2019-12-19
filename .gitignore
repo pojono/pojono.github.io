@@ -3,3 +3,4 @@ node_modules
 dist
 prosto-jenkins.pem
 deploy
+yarn-error.log
