@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Lesson } from '../entity/rubric.entity';
 import { Track } from '../entity/track.entity';
 
 @EntityRepository(Track)

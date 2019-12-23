@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('lesson_to_track')
 export class LessonToTrack extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

@@ -15,4 +15,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     migrationsDir: config.get('db.migrationsDir'),
   },
   migrationsRun: config.get('db.migrationsRun'),
+  logging: config.get('db.logging'),
 };

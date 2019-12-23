@@ -1,5 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
+const addDays = (segments, days) =>
+  days > 0 ? segments.push(days + ' day' + (days === 1 ? '' : 's')) : segments;
+const addHours = (segments, hours) =>
+  hours > 0
+    ? segments.push(hours + ' hour' + (hours === 1 ? '' : 's'))
+    : segments;
+const addMinutes = (segments, minutes) =>
+  minutes > 0
+    ? segments.push(minutes + ' minute' + (minutes === 1 ? '' : 's'))
+    : segments;
+const addSeconds = (segments, seconds) =>
+  seconds > 0
+    ? segments.push(seconds + ' second' + (seconds === 1 ? '' : 's'))
+    : segments;
+
 @Injectable()
 export class AppService {
   getUptime(): { uptime: string } {
@@ -10,25 +25,14 @@ export class AppService {
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
     const seconds = date.getUTCSeconds();
-    const milliseconds = date.getUTCMilliseconds();
 
     const segments = [];
 
-    if (days > 0) {
-      segments.push(days + ' day' + (days === 1 ? '' : 's'));
-    }
-    if (hours > 0) {
-      segments.push(hours + ' hour' + (hours === 1 ? '' : 's'));
-    }
-    if (minutes > 0) {
-      segments.push(minutes + ' minute' + (minutes === 1 ? '' : 's'));
-    }
-    if (seconds > 0) {
-      segments.push(seconds + ' second' + (seconds === 1 ? '' : 's'));
-    }
-    if (milliseconds > 0) {
-      segments.push(milliseconds + ' m' + (seconds === 1 ? '' : 's'));
-    }
+    addDays(segments, days);
+    addHours(segments, hours);
+    addMinutes(segments, minutes);
+    addSeconds(segments, seconds);
+
     return { uptime: segments.join(', ') };
   }
 }

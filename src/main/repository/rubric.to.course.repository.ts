@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { LessonToCourse } from '../entity/rubric.to.course.entity';
+import { RubricToCourse } from '../entity/rubric.to.course.entity';
 
-@EntityRepository(LessonToCourse)
-export class RubricToCourseRepository extends Repository<LessonToCourse> {
-  async findByRubricId(rubricId: number): Promise<LessonToCourse[]> {
-    return LessonToCourse.find({ where: { rubricId } });
+@EntityRepository(RubricToCourse)
+export class RubricToCourseRepository extends Repository<RubricToCourse> {
+  async findByRubricId(rubricId: number): Promise<RubricToCourse[]> {
+    return RubricToCourse.find({ where: { rubricId } });
   }
 }

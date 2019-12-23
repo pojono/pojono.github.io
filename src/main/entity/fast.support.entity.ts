@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('fast_support')
 export class FastSupport extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

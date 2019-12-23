@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class LessonToCourse extends BaseEntity {
+@Entity('rubric_to_course')
+export class RubricToCourse extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

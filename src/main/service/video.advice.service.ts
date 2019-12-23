@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VideoAdviceRepository } from '../repository/video.advice.repository';
 import { RubricToVideoAdviceService } from './rubric.to.video.advice.service';
