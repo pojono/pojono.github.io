@@ -20,6 +20,12 @@ import { RubricToCourseRepository } from './repository/rubric.to.course.reposito
 import { RubricToFastSupportRepository } from './repository/rubric.to.fast.support.repository';
 import { RubricToVideoAdviceRepository } from './repository/rubric.to.video.advice.repository';
 import { VideoAdviceRepository } from './repository/video.advice.repository';
+import { LessonRepository } from './repository/lesson.repository';
+import { LessonToTrackRepository } from './repository/lesson.to.track.repository';
+import { TrackRepository } from './repository/track.repository';
+import { LessonService } from './service/lesson.service';
+import { LessonToTrackService } from './service/lesson.to.track.service';
+import { TrackService } from './service/track.service';
 
 @Module({
   imports: [
@@ -32,6 +38,9 @@ import { VideoAdviceRepository } from './repository/video.advice.repository';
       RubricToFastSupportRepository,
       RubricToVideoAdviceRepository,
       VideoAdviceRepository,
+      LessonRepository,
+      LessonToTrackRepository,
+      TrackRepository,
     ]),
   ],
   controllers: [
@@ -49,6 +58,9 @@ import { VideoAdviceRepository } from './repository/video.advice.repository';
     RubricToFastSupportService,
     RubricToVideoAdviceService,
     VideoAdviceService,
+    LessonService,
+    LessonToTrackService,
+    TrackService,
   ],
 })
 export class MainModule {}

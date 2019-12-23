@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RubricRepository } from '../repository/rubric.repository';
-import { Rubric } from '../entity/rubric.entity';
+import { Lesson } from '../entity/rubric.entity';
 import { ErrorIf } from '../../lib/error.if';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
 import { GetRubricByIdResponseDto } from '../response/get.rubric.by.id.response';
@@ -22,12 +22,12 @@ export class RubricService {
     private videoAdviceService: VideoAdviceService,
   ) {}
 
-  async getAllRubrics(): Promise<Rubric[]> {
+  async getAllRubrics(): Promise<Lesson[]> {
     return this.rubricRepository.findAll();
   }
 
   async getRubricById(id: number): Promise<GetRubricByIdResponseDto> {
-    const rubric: Rubric | undefined = await this.rubricRepository.findById(id);
+    const rubric: Lesson | undefined = await this.rubricRepository.findById(id);
     ErrorIf.notExist(rubric, OBJECT_NOT_FOUND);
 
     const course: CourseWithStatsResponseDto[] = await this.courseService.getByRubricId(
