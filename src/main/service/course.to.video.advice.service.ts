@@ -1,0 +1,19 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CourseToVideoAdvice } from '../entity/course.to.video.advice.entity';
+import { CourseToVideoAdviceRepository } from '../repository/course.to.video.advice.repository';
+
+@Injectable()
+export class CourseToVideoAdviceService {
+  constructor(
+    @InjectRepository(CourseToVideoAdviceRepository)
+    private courseToVideoAdviceRepository: CourseToVideoAdviceRepository,
+  ) {}
+
+  async getByCourseId(courseId: number): Promise<number[]> {
+    const courseToVideoAdvices: CourseToVideoAdvice[] = await this.courseToVideoAdviceRepository.findByCourseId(
+      courseId,
+    );
+    return courseToVideoAdvices.map(element => element.videoAdviceId);
+  }
+}

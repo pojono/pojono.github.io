@@ -10,4 +10,8 @@ export class LessonRepository extends Repository<Lesson> {
   async findById(id: number): Promise<Lesson | undefined> {
     return Lesson.findOne(id);
   }
+
+  async findByCourseId(courseId: number): Promise<Lesson[]> {
+    return Lesson.find({ where: { courseId } });
+  }
 }

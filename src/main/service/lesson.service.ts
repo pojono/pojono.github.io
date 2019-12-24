@@ -27,6 +27,10 @@ export class LessonService {
     return this.lessonRepository.findById(id);
   }
 
+  async getLessonsByCourseId(id: number): Promise<LessonResponseDto[]> {
+    return this.lessonRepository.findByCourseId(id);
+  }
+
   async getLessonById(id: number): Promise<GetLessonResponseDto> {
     const lesson: LessonResponseDto = await this.getById(id);
 

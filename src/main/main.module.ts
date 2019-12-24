@@ -26,6 +26,10 @@ import { TrackRepository } from './repository/track.repository';
 import { LessonService } from './service/lesson.service';
 import { LessonToTrackService } from './service/lesson.to.track.service';
 import { TrackService } from './service/track.service';
+import { ChallengeRepository } from './repository/challenge.repository';
+import { ChallengeService } from './service/challenge.service';
+import { CourseToVideoAdviceService } from './service/course.to.video.advice.service';
+import { CourseToVideoAdviceRepository } from './repository/course.to.video.advice.repository';
 
 @Module({
   imports: [
@@ -41,6 +45,8 @@ import { TrackService } from './service/track.service';
       LessonRepository,
       LessonToTrackRepository,
       TrackRepository,
+      ChallengeRepository,
+      CourseToVideoAdviceRepository,
     ]),
   ],
   controllers: [
@@ -61,6 +67,8 @@ import { TrackService } from './service/track.service';
     LessonService,
     LessonToTrackService,
     TrackService,
+    ChallengeService,
+    CourseToVideoAdviceService,
   ],
 })
 export class MainModule {}
