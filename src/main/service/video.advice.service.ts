@@ -36,6 +36,11 @@ export class VideoAdviceService {
     return this.getByIds(videoAdviceIds);
   }
 
+  async getForMainPage(): Promise<VideoAdviceResponseDto[]> {
+    // TODO: get video advices for main page
+    return [];
+  }
+
   async getVideoAdviceStats(
     courseId: number,
   ): Promise<VideoAdviceStatsResponseDto> {

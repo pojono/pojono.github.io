@@ -10,4 +10,15 @@ export class CourseRepository extends Repository<Course> {
   async findById(id: number): Promise<Course | undefined> {
     return Course.findOne(id);
   }
+
+  async findBeginnerCourse(): Promise<Course> {
+    return Course.findOne({ where: { beginnerCourse: true } });
+  }
+
+  async findBestCourseIds(): Promise<number[]> {
+    const courses: Course[] = await Course.find({
+      where: { theBestForYou: true },
+    });
+    return courses.map(course => course.id);
+  }
 }

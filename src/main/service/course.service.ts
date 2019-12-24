@@ -12,6 +12,8 @@ import { LessonService } from './lesson.service';
 import { VideoAdviceService } from './video.advice.service';
 import { ChallengeService } from './challenge.service';
 import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
+import { ErrorIf } from '../../lib/error.if';
+import { OBJECT_NOT_FOUND } from '../../lib/errors';
 
 @Injectable()
 export class CourseService {
@@ -61,6 +63,41 @@ export class CourseService {
       finishedLessons: 0,
       numberOfStudents: 0,
     };
+  }
+
+  async getTopCourse(userId: number): Promise<CourseWithStatsResponseDto> {
+    // TODO: add logic to choose top course
+
+    let courseId: number; // НАЙТИ ПОСЛЕДНИЙ КУРС
+
+    // if (НИ ОДНОГО КУРСА НЕ НАЧАТО) {
+    courseId = await this.getBeginnerCourseId();
+    // }  else {
+    //    return this.getById(ID ПОСЛЕДНЕГО КУРСА);
+    // }
+    return this.getCourseWithStatsById(courseId);
+  }
+
+  async getBeginnerCourseId(): Promise<number> {
+    const beginnerCourse: Course = await this.courseRepository.findBeginnerCourse();
+    ErrorIf.notExist(beginnerCourse, OBJECT_NOT_FOUND);
+    return beginnerCourse.id;
+  }
+
+  async getBestCourses(): Promise<CourseWithStatsResponseDto[]> {
+    const courseIds = await this.courseRepository.findBestCourseIds();
+
+    const result: CourseWithStatsResponseDto[] = [];
+
+    for (const courseId of courseIds) {
+      result.push(await this.getCourseWithStatsById(courseId));
+    }
+    return result;
+  }
+
+  async getAnnouncementCourses(): Promise<CourseWithStatsResponseDto[]> {
+    // TODO: add logic to get announcement courses
+    return [];
   }
 
   /*
