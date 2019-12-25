@@ -1,4 +1,4 @@
-import { Controller, Logger, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   ApiUseTags,
   ApiResponse,
@@ -29,8 +29,9 @@ export class MainController {
   async main(
     @GetRequestId() requestId,
     @GetUser() user: User,
-  ): Promise<any /*GetMainResponse*/> {
-    let response = null;
+  ): Promise<GetMainResponse> {
+    const response = await this.mainService.main(user.id);
+    /*
     if (user.phone === '79025666777') {
       response = mockData;
       response.topCourse.courseInfo.beginnerCourse = true;
@@ -39,6 +40,7 @@ export class MainController {
       response = mockData;
       response.topCourse.courseInfo.beginnerCourse = false;
     }
-    return new GetMainResponse(requestId, mockData);
+    */
+    return new GetMainResponse(requestId, response);
   }
 }

@@ -1,16 +1,13 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('rubric_to_course')
-export class RubricToCourse extends BaseEntity {
+@Entity('track')
+export class Track extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
-  rubricId: number;
+  duration: number;
 
   @Column({ nullable: false })
-  courseId: number;
-
-  @Column({ nullable: true })
-  orderIndex: number;
+  url: string;
 }

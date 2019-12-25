@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { FastSupport } from '../entity/fast.support.entity';
 import { VideoAdvice } from '../entity/video.advice.entity';
 
 @EntityRepository(VideoAdvice)

@@ -14,6 +14,7 @@ module.exports = {
   db: {
     migrations: ['./src/infrastructure/database/typeorm/migrations/*.ts'],
     migrationsDir: './src/infrastructure/database/typeorm/migrations/',
+    logging: false,
   },
   sms: {
     minRepeatTime: 60000,

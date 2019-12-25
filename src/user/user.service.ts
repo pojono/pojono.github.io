@@ -77,7 +77,7 @@ export class UserService {
     }
   }
 
-  async sms(smsRequestDto: SmsRequestDto): Promise<void> {
+  async sendSms(smsRequestDto: SmsRequestDto): Promise<void> {
     const { phone } = smsRequestDto;
 
     let user: User | undefined = await this.getUserByPhone(phone);

@@ -1,7 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RubricRepository } from '../repository/rubric.repository';
-import { Rubric } from '../entity/rubric.entity';
 import { ErrorIf } from '../../lib/error.if';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
 import { GetRubricByIdResponseDto } from '../response/get.rubric.by.id.response';
@@ -11,6 +10,7 @@ import { FastSupportResponseDto } from '../response/dto/fast.support.response';
 import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { FastSupportService } from './fast.support.service';
 import { VideoAdviceService } from './video.advice.service';
+import { Rubric } from '../entity/rubric.entity';
 
 @Injectable()
 export class RubricService {

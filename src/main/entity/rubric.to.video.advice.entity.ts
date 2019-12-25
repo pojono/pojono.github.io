@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('rubric_to_video_advice')
 export class RubricToVideoAdvice extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

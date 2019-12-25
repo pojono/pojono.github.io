@@ -1,6 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
-import { User } from '../user.entity';
 
 class SettingsResponseDto {
   @ApiModelProperty({ type: 'number', nullable: false })

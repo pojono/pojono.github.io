@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('rubric_to_fast_support')
 export class RubricToFastSupport extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

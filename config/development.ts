@@ -7,5 +7,6 @@ module.exports = {
     database: 'prostoapp',
     synchronize: true,
     migrationsRun: true,
+    logging: true,
   },
 };

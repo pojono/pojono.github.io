@@ -13,7 +13,7 @@ export class ChallengeResponseDto {
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly description: string;
 
-  @ApiModelProperty({ type: 'string', nullable: false })
+  @ApiModelProperty({ type: 'string', nullable: true })
   public readonly picture: string;
 
   @ApiModelProperty({ type: 'number', nullable: false })

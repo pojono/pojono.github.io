@@ -1,22 +1,25 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('fast_support')
-export class FastSupport extends BaseEntity {
+@Entity('challenge')
+export class Challenge extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: false })
+  courseId: number;
 
   @Column({ nullable: true })
   name: string;
 
   @Column({ nullable: true })
-  trackId: number;
+  description: string;
+
+  @Column({ nullable: true })
+  picture: string;
 
   @Column({ nullable: false })
-  forMainPage: boolean;
+  showAfterLessonIndex: number;
 
   @Column({ nullable: true })
   colour: string;
-
-  @Column({ nullable: true })
-  duration: string;
 }

@@ -38,11 +38,11 @@ export class UserController {
   @ApiOperation({
     title: 'Регистрация нового аккаунта или вход в существующий',
   })
-  async sms(
+  async sendSms(
     @GetRequestId() requestId,
     @Body(ValidationPipe) smsRequestDto: SmsRequestDto,
   ): Promise<SmsResponse> {
-    await this.userService.sms(smsRequestDto);
+    await this.userService.sendSms(smsRequestDto);
     return new SmsResponse(requestId, null);
   }
 

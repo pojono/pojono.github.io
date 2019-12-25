@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('rubric')
 export class Rubric extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
