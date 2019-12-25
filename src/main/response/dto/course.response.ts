@@ -26,9 +26,6 @@ export class CourseResponseDto {
   public readonly forAnnounce: boolean;
 
   @ApiModelProperty({ type: 'boolean', nullable: false })
-  public readonly firstCourse: boolean;
-
-  @ApiModelProperty({ type: 'boolean', nullable: false })
   public readonly beginnerCourse: boolean;
 
   @ApiModelProperty({ type: 'string', nullable: true })

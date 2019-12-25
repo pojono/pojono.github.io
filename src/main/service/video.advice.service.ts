@@ -4,12 +4,8 @@ import { VideoAdviceRepository } from '../repository/video.advice.repository';
 import { RubricToVideoAdviceService } from './rubric.to.video.advice.service';
 import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
-import { CourseWithStatsResponseDto } from '../response/dto/course.with.stats.response';
-import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
 import { VideoAdviceStatsResponseDto } from '../response/dto/video.advice.stats.response';
 import { CourseToVideoAdviceService } from './course.to.video.advice.service';
-import { Course } from '../entity/course.entity';
-import { VideoAdvice } from '../entity/video.advice.entity';
 
 @Injectable()
 export class VideoAdviceService {
@@ -37,8 +33,7 @@ export class VideoAdviceService {
   }
 
   async getForMainPage(): Promise<VideoAdviceResponseDto[]> {
-    // TODO: get video advices for main page
-    return [];
+    return this.videoAdviceRepository.findForMainPage();
   }
 
   async getVideoAdviceStats(

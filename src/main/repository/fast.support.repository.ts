@@ -10,4 +10,8 @@ export class FastSupportRepository extends Repository<FastSupport> {
   async findById(id: number): Promise<FastSupport | undefined> {
     return FastSupport.findOne(id);
   }
+
+  async findForMainPage(): Promise<FastSupport[]> {
+    return FastSupport.find({ where: { forMainPage: true } });
+  }
 }

@@ -21,4 +21,11 @@ export class CourseRepository extends Repository<Course> {
     });
     return courses.map(course => course.id);
   }
+
+  async findAnnouncementCoursesIds(): Promise<number[]> {
+    const courses: Course[] = await Course.find({
+      where: { forAnnounce: true },
+    });
+    return courses.map(course => course.id);
+  }
 }

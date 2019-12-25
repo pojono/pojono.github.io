@@ -23,24 +23,34 @@ export class MainController {
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
   @ApiOperation({
-    title: 'Загрузка главного экрана приложения',
+    title: 'Загрузка главного экрана приложения (замоканные данные)',
     deprecated: true,
   })
-  async main(
+  async main(@GetRequestId() requestId, @GetUser() user: User): Promise<any> {
+    const response = mockData;
+
+    if (user.phone === '79025666777') {
+      response.topCourse.courseInfo.beginnerCourse = true;
+    }
+    if (user.phone === '79027666555') {
+      response.topCourse.courseInfo.beginnerCourse = false;
+    }
+
+    return new GetMainResponse(requestId, response);
+  }
+
+  @Get('/new')
+  @ApiResponse({ status: 200, type: GetMainResponse })
+  @ApiOperation({
+    title:
+      'Загрузка главного экрана приложения (если заполнить БД то он будет основным роутом)',
+    deprecated: false,
+  })
+  async newMain(
     @GetRequestId() requestId,
     @GetUser() user: User,
   ): Promise<GetMainResponse> {
     const response = await this.mainService.main(user.id);
-    /*
-    if (user.phone === '79025666777') {
-      response = mockData;
-      response.topCourse.courseInfo.beginnerCourse = true;
-    }
-    if (user.phone === '79027666555') {
-      response = mockData;
-      response.topCourse.courseInfo.beginnerCourse = false;
-    }
-    */
     return new GetMainResponse(requestId, response);
   }
 }

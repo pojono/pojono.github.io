@@ -21,3 +21,8 @@ export const OBJECT_NOT_FOUND: StandardRestApiError = StandardRestApiError.creat
   1004,
   'Object not found',
 );
+
+export const BEGINNER_COURSE_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1005,
+  'Beginner course not found',
+);

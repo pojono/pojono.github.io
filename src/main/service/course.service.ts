@@ -13,7 +13,7 @@ import { VideoAdviceService } from './video.advice.service';
 import { ChallengeService } from './challenge.service';
 import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
 import { ErrorIf } from '../../lib/error.if';
-import { OBJECT_NOT_FOUND } from '../../lib/errors';
+import { BEGINNER_COURSE_NOT_FOUND } from '../../lib/errors';
 
 @Injectable()
 export class CourseService {
@@ -65,51 +65,45 @@ export class CourseService {
     };
   }
 
+  async getLatestCourseIdForUser(userId: number): Promise<number> {
+    return null;
+  }
+
   async getTopCourse(userId: number): Promise<CourseWithStatsResponseDto> {
-    // TODO: add logic to choose top course
+    let latestCourseId: number = await this.getLatestCourseIdForUser(userId);
 
-    let courseId: number; // НАЙТИ ПОСЛЕДНИЙ КУРС
-
-    // if (НИ ОДНОГО КУРСА НЕ НАЧАТО) {
-    courseId = await this.getBeginnerCourseId();
-    // }  else {
-    //    return this.getById(ID ПОСЛЕДНЕГО КУРСА);
-    // }
-    return this.getCourseWithStatsById(courseId);
+    if (!latestCourseId) {
+      latestCourseId = await this.getBeginnerCourseId();
+    }
+    return this.getCourseWithStatsById(latestCourseId);
   }
 
   async getBeginnerCourseId(): Promise<number> {
     const beginnerCourse: Course = await this.courseRepository.findBeginnerCourse();
-    ErrorIf.notExist(beginnerCourse, OBJECT_NOT_FOUND);
+    ErrorIf.notExist(beginnerCourse, BEGINNER_COURSE_NOT_FOUND);
     return beginnerCourse.id;
   }
 
   async getBestCourses(): Promise<CourseWithStatsResponseDto[]> {
     const courseIds = await this.courseRepository.findBestCourseIds();
+    return this.getCoursesWithStatsByIds(courseIds);
+  }
 
-    const result: CourseWithStatsResponseDto[] = [];
+  async getCoursesWithStatsByIds(
+    courseIds: number[],
+  ): Promise<CourseWithStatsResponseDto[]> {
+    const courses: CourseWithStatsResponseDto[] = [];
 
     for (const courseId of courseIds) {
-      result.push(await this.getCourseWithStatsById(courseId));
+      courses.push(await this.getCourseWithStatsById(courseId));
     }
-    return result;
+    return courses;
   }
 
   async getAnnouncementCourses(): Promise<CourseWithStatsResponseDto[]> {
-    // TODO: add logic to get announcement courses
-    return [];
+    const courseIds: number[] = await this.courseRepository.findAnnouncementCoursesIds();
+    return this.getCoursesWithStatsByIds(courseIds);
   }
-
-  /*
-  async getCourseWithStats(
-    course: Course,
-  ): Promise<CourseWithStatsResponseDto> {
-    return {
-      courseInfo: course,
-      courseStats: await this.getCourseStats(course.id),
-    };
-  }
-  */
 
   async getCourseWithStatsById(
     courseId: number,
@@ -124,22 +118,6 @@ export class CourseService {
     const courseIds: number[] = await this.rubricToCourseService.getByRubricId(
       id,
     );
-
-    /*
-    const courses: Course[] = await this.getByIds(courseIds);
-
-    const result: CourseWithStatsResponseDto[] = [];
-
-    for (const course of courses) {
-      result.push(await this.getCourseWithStats(course));
-    }*/
-
-    const coursesWithStats: CourseWithStatsResponseDto[] = [];
-
-    for (const courseId of courseIds) {
-      coursesWithStats.push(await this.getCourseWithStatsById(courseId));
-    }
-
-    return coursesWithStats;
+    return this.getCoursesWithStatsByIds(courseIds);
   }
 }

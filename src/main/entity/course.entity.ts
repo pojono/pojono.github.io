@@ -27,9 +27,6 @@ export class Course extends BaseEntity {
   forAnnounce: boolean;
 
   @Column({ nullable: false })
-  firstCourse: boolean;
-
-  @Column({ nullable: false })
   beginnerCourse: boolean;
 
   @Column({ nullable: true })

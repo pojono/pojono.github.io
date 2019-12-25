@@ -10,4 +10,8 @@ export class VideoAdviceRepository extends Repository<VideoAdvice> {
   async findById(id: number): Promise<VideoAdvice | undefined> {
     return VideoAdvice.findOne(id);
   }
+
+  async findForMainPage(): Promise<VideoAdvice[]> {
+    return VideoAdvice.find({ where: { forMainPage: true } });
+  }
 }

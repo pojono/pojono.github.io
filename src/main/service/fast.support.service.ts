@@ -26,7 +26,6 @@ export class FastSupportService {
   }
 
   async getForMainPage(): Promise<FastSupportResponseDto[]> {
-    // TODO: get fast support for main page
-    return [];
+    return this.fastSupportRepository.findForMainPage();
   }
 }
