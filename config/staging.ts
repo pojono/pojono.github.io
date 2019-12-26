@@ -12,6 +12,6 @@ module.exports = {
     scheme: 'https',
   },
   sms: {
-    useCognito: false,
+    useCognito: true,
   },
 };

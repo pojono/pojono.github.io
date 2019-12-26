@@ -5,7 +5,7 @@
   "author": "Ivan Chulkov",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=12.13.1"
+    "node": ">=12.10.0"
   },
   "scripts": {
     "prebuild": "rimraf dist",
