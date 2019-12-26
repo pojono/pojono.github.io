@@ -17,6 +17,7 @@ import * as AWS from 'aws-sdk';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import * as config from 'config';
 import { UserUpdateDto } from './dto/user.update.dto';
+import * as moment from 'moment';
 
 // TODO: move to config
 AWS.config.update({
@@ -85,6 +86,7 @@ export class UserService {
       user = await this.createUserByPhone(phone);
     }
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
+    await this.userRepository.updateLastCode(user);
 
     if (config.get('sms.useCognito')) {
       try {
@@ -101,7 +103,6 @@ export class UserService {
           user.phone,
         );
         await this.userRepository.updateSession(user, authData.Session);
-        await this.userRepository.updateLastCode(user);
       } catch {
         ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
       }
@@ -219,5 +220,20 @@ export class UserService {
         }
       });
     });
+  }
+
+  async countTodayUsers(): Promise<number> {
+    const dayAgo: Date = moment()
+      .subtract(24, 'hour')
+      .toDate();
+    return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
+  }
+
+  async updateLastActivity(user: User): Promise<void> {
+    await this.userRepository.updateLastActivity(user);
+  }
+
+  async maxStrike(): Promise<number> {
+    return this.userRepository.countMaxStrike();
   }
 }

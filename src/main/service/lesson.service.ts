@@ -40,4 +40,8 @@ export class LessonService {
 
     return { lesson, track };
   }
+
+  async countOfLessonsByCourseId(courseId: number): Promise<number> {
+    return Lesson.count({ where: { courseId } });
+  }
 }

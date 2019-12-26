@@ -14,6 +14,33 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly lastName: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly session: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  public readonly lastCode: Date;
+
+  @ApiModelProperty({ type: 'number', nullable: true })
+  public readonly latestCourseId: number;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  public readonly lastActivity: Date;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly picture: string;
+
+  @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
+  public readonly currentStrike: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
+  public readonly maxStrike: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
+  public readonly sessionsCounter: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
+  public readonly sessionsDuration: number;
 }
 
 export class MeResponse extends CustomResponse {

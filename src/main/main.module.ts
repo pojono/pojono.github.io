@@ -30,6 +30,11 @@ import { ChallengeRepository } from './repository/challenge.repository';
 import { ChallengeService } from './service/challenge.service';
 import { CourseToVideoAdviceService } from './service/course.to.video.advice.service';
 import { CourseToVideoAdviceRepository } from './repository/course.to.video.advice.repository';
+import { UserRepository } from '../user/user.repository';
+import { UserService } from '../user/user.service';
+import { JwtModule } from '@nestjs/jwt';
+import * as config from 'config';
+import { JwtStrategy } from '../user/jwt.strategy';
 
 @Module({
   imports: [
@@ -47,7 +52,14 @@ import { CourseToVideoAdviceRepository } from './repository/course.to.video.advi
       TrackRepository,
       ChallengeRepository,
       CourseToVideoAdviceRepository,
+      UserRepository,
     ]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || config.get('jwt.secret'),
+      signOptions: {
+        expiresIn: config.get('jwt.expiresIn'),
+      },
+    }),
   ],
   controllers: [
     MainController,
@@ -69,6 +81,8 @@ import { CourseToVideoAdviceRepository } from './repository/course.to.video.advi
     TrackService,
     ChallengeService,
     CourseToVideoAdviceService,
+    UserService,
+    JwtStrategy,
   ],
 })
 export class MainModule {}

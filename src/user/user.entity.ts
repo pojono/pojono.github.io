@@ -26,4 +26,25 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   lastCode: Date;
+
+  @Column({ nullable: true })
+  latestCourseId: number;
+
+  @Column({ nullable: false })
+  lastActivity: Date;
+
+  @Column({ nullable: true })
+  picture: string;
+
+  @Column({ nullable: false, default: 0 })
+  currentStrike: number;
+
+  @Column({ nullable: false, default: 0 })
+  maxStrike: number;
+
+  @Column({ nullable: false, default: 0 })
+  sessionsCounter: number;
+
+  @Column({ nullable: false, default: 0 })
+  sessionsDuration: number;
 }

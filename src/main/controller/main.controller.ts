@@ -50,7 +50,7 @@ export class MainController {
     @GetRequestId() requestId,
     @GetUser() user: User,
   ): Promise<GetMainResponse> {
-    const response = await this.mainService.main(user.id);
+    const response = await this.mainService.main(user);
     return new GetMainResponse(requestId, response);
   }
 }

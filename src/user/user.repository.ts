@@ -1,11 +1,13 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, MoreThan, Repository } from 'typeorm';
 import { User } from './user.entity';
+import * as moment from 'moment';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async createUser(phone: string): Promise<User> {
     const user = new User();
     user.phone = phone;
+    user.lastActivity = moment().toDate();
     await user.save();
     return user;
   }
@@ -16,8 +18,15 @@ export class UserRepository extends Repository<User> {
   }
 
   async updateLastCode(user: User): Promise<void> {
-    user.lastCode = new Date();
+    user.lastCode = moment().toDate();
     await user.save();
+  }
+
+  async countMaxStrike(): Promise<number> {
+    const query = this.createQueryBuilder('user');
+    query.select('MAX(user.maxStrike)', 'max');
+    const result = await query.getRawOne();
+    return result.max;
   }
 
   async updateUser(user: User, userUpdateDto): Promise<User> {
@@ -32,5 +41,14 @@ export class UserRepository extends Repository<User> {
     }
 
     return await user.save();
+  }
+
+  async countUsersWithActivityAfterDate(activityDate: Date) {
+    return User.count({ where: { lastActivity: MoreThan(activityDate) } });
+  }
+
+  async updateLastActivity(user: User): Promise<void> {
+    user.lastActivity = moment().toDate();
+    await user.save();
   }
 }

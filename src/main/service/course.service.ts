@@ -14,6 +14,7 @@ import { ChallengeService } from './challenge.service';
 import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
 import { ErrorIf } from '../../lib/error.if';
 import { BEGINNER_COURSE_NOT_FOUND } from '../../lib/errors';
+import { User } from '../../user/user.entity';
 
 @Injectable()
 export class CourseService {
@@ -59,18 +60,20 @@ export class CourseService {
   async getCourseStats(courseId: number): Promise<CourseStatsResponseDto> {
     return {
       // TODO: count stats
-      numberOfLessons: 0,
+      numberOfLessons: await this.lessonService.countOfLessonsByCourseId(
+        courseId,
+      ),
       finishedLessons: 0,
       numberOfStudents: 0,
     };
   }
 
-  async getLatestCourseIdForUser(userId: number): Promise<number> {
-    return null;
+  async getLatestCourseIdForUser(user: User): Promise<number> {
+    return user.latestCourseId;
   }
 
-  async getTopCourse(userId: number): Promise<CourseWithStatsResponseDto> {
-    let latestCourseId: number = await this.getLatestCourseIdForUser(userId);
+  async getTopCourse(user: User): Promise<CourseWithStatsResponseDto> {
+    let latestCourseId: number = await this.getLatestCourseIdForUser(user);
 
     if (!latestCourseId) {
       latestCourseId = await this.getBeginnerCourseId();
