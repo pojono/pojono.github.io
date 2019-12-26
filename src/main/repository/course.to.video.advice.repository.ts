@@ -8,4 +8,16 @@ export class CourseToVideoAdviceRepository extends Repository<
   async findByCourseId(courseId: number): Promise<CourseToVideoAdvice[]> {
     return CourseToVideoAdvice.find({ where: { courseId } });
   }
+
+  async findByCourseIdAndVideoAdviceId(
+    courseId: number,
+    videoAdviceId: number,
+  ): Promise<CourseToVideoAdvice | undefined> {
+    return CourseToVideoAdvice.findOne({
+      where: {
+        courseId,
+        videoAdviceId,
+      },
+    });
+  }
 }

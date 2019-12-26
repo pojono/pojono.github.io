@@ -6,6 +6,7 @@ import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
 import { VideoAdviceStatsResponseDto } from '../response/dto/video.advice.stats.response';
 import { CourseToVideoAdviceService } from './course.to.video.advice.service';
+import { CourseToVideoAdvice } from '../entity/course.to.video.advice.entity';
 
 @Injectable()
 export class VideoAdviceService {
@@ -28,7 +29,6 @@ export class VideoAdviceService {
     const videoAdviceIds: number[] = await this.rubricToVideoAdviceService.getByRubricId(
       id,
     );
-
     return this.getByIds(videoAdviceIds);
   }
 
@@ -38,32 +38,29 @@ export class VideoAdviceService {
 
   async getVideoAdviceStats(
     courseId: number,
+    videoAdviceId: number,
   ): Promise<VideoAdviceStatsResponseDto> {
+    const result: CourseToVideoAdvice = await this.courseToVideoAdviceService.getByCourseIdAndVideoAdviceId(
+      courseId,
+      videoAdviceId,
+    );
+    const showAfterLessonIndex: number = result
+      ? result.showAfterLessonIndex
+      : 0;
     return {
-      // TODO: count stats
-      showAfterLessonIndex: 0,
+      showAfterLessonIndex,
     };
   }
 
   async getVideoAdviceWithStatsById(
     courseId: number,
+    videoAdviceId: number,
   ): Promise<VideoAdviceWithStatsResponseDto> {
     return {
-      videoAdviceInfo: await this.getById(courseId),
-      videoAdviceStats: await this.getVideoAdviceStats(courseId),
+      videoAdviceInfo: await this.getById(videoAdviceId),
+      videoAdviceStats: await this.getVideoAdviceStats(courseId, videoAdviceId),
     };
   }
-
-  /*
-  async getVideoAdviceWithStats(
-    videoAdvice: VideoAdvice,
-  ): Promise<VideoAdviceWithStatsResponseDto> {
-    return {
-      videoAdviceInfo: videoAdvice,
-      videoAdviceStats: await this.getVideoAdviceStats(videoAdvice.id),
-    };
-  }
-  */
 
   async getVideoAdvicesWithStatsByCourseId(
     courseId: number,
@@ -76,7 +73,7 @@ export class VideoAdviceService {
 
     for (const videoAdviceId of videoAdviceIds) {
       videoAdvicesWithStats.push(
-        await this.getVideoAdviceWithStatsById(videoAdviceId),
+        await this.getVideoAdviceWithStatsById(courseId, videoAdviceId),
       );
     }
 

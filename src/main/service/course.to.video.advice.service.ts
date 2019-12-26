@@ -16,4 +16,14 @@ export class CourseToVideoAdviceService {
     );
     return courseToVideoAdvices.map(element => element.videoAdviceId);
   }
+
+  async getByCourseIdAndVideoAdviceId(
+    courseId: number,
+    videoAdviceId: number,
+  ): Promise<CourseToVideoAdvice | undefined> {
+    return this.courseToVideoAdviceRepository.findByCourseIdAndVideoAdviceId(
+      courseId,
+      videoAdviceId,
+    );
+  }
 }
