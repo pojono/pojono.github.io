@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
 import { LessonResponseDto } from './dto/lesson.response';
-import { TrackResponseDto } from './dto/track.response';
+import { TrackWithStatsResponseDto } from './dto/track.with.stats.response';
 
 export class GetLessonResponseDto {
   @ApiModelProperty({
@@ -12,11 +12,11 @@ export class GetLessonResponseDto {
   public readonly lesson: LessonResponseDto;
 
   @ApiModelProperty({
-    type: TrackResponseDto,
+    type: TrackWithStatsResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly track: TrackResponseDto[];
+  public readonly track: TrackWithStatsResponseDto[];
 }
 
 export class GetLessonResponse extends CustomResponse {

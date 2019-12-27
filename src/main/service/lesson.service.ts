@@ -9,6 +9,7 @@ import { LessonResponseDto } from '../response/dto/lesson.response';
 import { GetLessonResponseDto } from '../response/get.lesson.response';
 import { LessonToTrackService } from './lesson.to.track.service';
 import { TrackService } from './track.service';
+import { TrackWithStatsResponseDto } from '../response/dto/track.with.stats.response';
 
 @Injectable()
 export class LessonService {
@@ -36,7 +37,7 @@ export class LessonService {
 
     ErrorIf.isEmpty(lesson, OBJECT_NOT_FOUND);
 
-    const track: TrackResponseDto[] = await this.trackService.getByLessonId(id);
+    const track: TrackWithStatsResponseDto[] = []; // TODO: await this.trackService.getByLessonId(id);
 
     return { lesson, track };
   }
