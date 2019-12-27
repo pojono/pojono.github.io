@@ -35,6 +35,8 @@ import { UserService } from '../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
 import { JwtStrategy } from '../user/jwt.strategy';
+import { StatisticService } from './service/statistic.service';
+import { StatisticController } from './controller/statistic.controller';
 
 @Module({
   imports: [
@@ -66,6 +68,7 @@ import { JwtStrategy } from '../user/jwt.strategy';
     CourseController,
     RubricController,
     LessonController,
+    StatisticController,
   ],
   providers: [
     MainService,
@@ -83,6 +86,7 @@ import { JwtStrategy } from '../user/jwt.strategy';
     CourseToVideoAdviceService,
     UserService,
     JwtStrategy,
+    StatisticService,
   ],
 })
 export class MainModule {}
