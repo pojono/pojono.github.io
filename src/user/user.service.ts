@@ -66,7 +66,7 @@ export class UserService {
           user.phone,
         );
 
-        if (!result.AuthenticationResult) {
+        if (result.AuthenticationResult) {
           await this.userRepository.updateSession(user, null);
         } else {
           await this.userRepository.updateSession(user, result.Session);
