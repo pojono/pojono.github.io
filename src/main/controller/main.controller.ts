@@ -20,6 +20,7 @@ import { User } from '../../user/user.entity';
 export class MainController {
   constructor(private mainService: MainService) {}
 
+  /*
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
   @ApiOperation({
@@ -37,13 +38,12 @@ export class MainController {
     }
 
     return new GetMainResponse(requestId, response);
-  }
+  }*/
 
-  @Get('/new')
+  @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
   @ApiOperation({
-    title:
-      'Загрузка главного экрана приложения (если заполнить БД то он будет основным роутом)',
+    title: 'Загрузка главного экрана приложения',
     deprecated: false,
   })
   async newMain(
