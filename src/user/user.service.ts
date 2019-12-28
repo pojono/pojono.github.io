@@ -26,8 +26,11 @@ AWS.config.update({
   secretAccessKey: 'Z97hEoIxcrnuvqj0imodfRdvSuhyW6uITxBFaVSN', // config.get('aws.secretAccessKey');
 });
 const provider = new AWS.CognitoIdentityServiceProvider();
-const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
-const userPoolId: string = config.get('aws.cognito.userPoolId');
+// const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
+// const userPoolId: string = config.get('aws.cognito.userPoolId');
+
+const clientId = '1sm0t6a4ml5keiqtmvb3mnkqlf';
+const userPoolId = 'eu-west-1_Zpp22BnuX';
 
 const phonePlus = phone => '+' + phone;
 
@@ -57,12 +60,18 @@ export class UserService {
 
     try {
       if (config.get('sms.useCognito')) {
-        await this.respondToAuthChallenge(
+        const result: CognitoIdentityServiceProvider.Types.AdminRespondToAuthChallengeResponse = await this.respondToAuthChallenge(
           signInRequestDto.code,
           user.session,
           user.phone,
         );
-        await this.userRepository.updateSession(user, null);
+
+        if (!result.AuthenticationResult) {
+          await this.userRepository.updateSession(user, null);
+        } else {
+          await this.userRepository.updateSession(user, result.Session);
+          ErrorIf.isTrue(true, INVALID_CREDENTIALS);
+        }
       } else {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
@@ -153,7 +162,7 @@ export class UserService {
       ClientId: clientId,
       UserPoolId: userPoolId,
       ChallengeResponses: {
-        USERNAME: '558b1753-8a67-4f56-b61b-0c8b523721d4', // phone,
+        USERNAME: phone,
         ANSWER: code,
       },
       Session: session,
