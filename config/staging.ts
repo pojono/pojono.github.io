@@ -1,4 +1,15 @@
 module.exports = {
+  swagger: {
+    scheme: 'https',
+  },
+  sms: {
+    useCognito: true,
+  },
+  aws: {
+    cognito: {
+      userPoolId: 'eu-west-1_65Op52Obc',
+    },
+  },
   db: {
     port: '5432',
     host: 'prosto-dev.czt41szsg5y0.eu-west-1.rds.amazonaws.com',
@@ -7,11 +18,5 @@ module.exports = {
     database: 'prostoapp',
     synchronize: true,
     migrationsRun: true,
-  },
-  swagger: {
-    scheme: 'https',
-  },
-  sms: {
-    useCognito: true,
   },
 };

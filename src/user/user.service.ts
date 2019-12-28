@@ -27,7 +27,7 @@ AWS.config.update({
 });
 const provider = new AWS.CognitoIdentityServiceProvider();
 const clientId = '5a80aug1stlpbqdgclv3pfvhlv'; // config.get('aws.cognito.clientId');
-const userPoolId = 'eu-west-1_65Op52Obc'; // config.get('aws.cognito.userPoolId');
+const userPoolId: string = config.get('aws.cognito.userPoolId');
 
 const phonePlus = phone => '+' + phone;
 
@@ -148,18 +148,19 @@ export class UserService {
   async respondToAuthChallenge(code: string, session: string, phone: string) {
     phone = phonePlus(phone);
 
-    const params: CognitoIdentityServiceProvider.Types.RespondToAuthChallengeRequest = {
+    const params: CognitoIdentityServiceProvider.Types.AdminRespondToAuthChallengeRequest = {
       ChallengeName: 'CUSTOM_CHALLENGE',
+      ClientId: clientId,
+      UserPoolId: userPoolId,
       ChallengeResponses: {
-        USERNAME: phone,
+        USERNAME: '558b1753-8a67-4f56-b61b-0c8b523721d4', // phone,
         ANSWER: code,
       },
-      ClientId: clientId,
       Session: session,
     };
 
     return new Promise((resolve, reject) => {
-      provider.respondToAuthChallenge(params, (err, data) => {
+      provider.adminRespondToAuthChallenge(params, (err, data) => {
         if (err) {
           this.logger.error(err, err.stack);
           reject(err);
