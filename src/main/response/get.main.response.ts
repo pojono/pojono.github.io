@@ -4,6 +4,7 @@ import { FastSupportResponseDto } from './dto/fast.support.response';
 import { MainStatsResponseDto } from './dto/main.stats.response';
 import { VideoAdviceResponseDto } from './dto/video.advice.response';
 import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
+import { FastSupportWithStatsResponseDto } from './dto/fast.support.with.stats.response';
 
 export class GetMainResponseDto {
   @ApiModelProperty({
@@ -35,11 +36,11 @@ export class GetMainResponseDto {
   public readonly announcement: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
-    type: FastSupportResponseDto,
+    type: FastSupportWithStatsResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly fastSupport: FastSupportResponseDto[];
+  public readonly fastSupport: FastSupportWithStatsResponseDto[];
 
   @ApiModelProperty({
     type: VideoAdviceResponseDto,

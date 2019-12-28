@@ -37,7 +37,9 @@ export class LessonService {
 
     ErrorIf.isEmpty(lesson, OBJECT_NOT_FOUND);
 
-    const track: TrackWithStatsResponseDto[] = []; // TODO: await this.trackService.getByLessonId(id);
+    const track: TrackWithStatsResponseDto[] = await this.trackService.getByLessonId(
+      id,
+    );
 
     return { lesson, track };
   }

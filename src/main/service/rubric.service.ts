@@ -11,6 +11,7 @@ import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { FastSupportService } from './fast.support.service';
 import { VideoAdviceService } from './video.advice.service';
 import { Rubric } from '../entity/rubric.entity';
+import { FastSupportWithStatsResponseDto } from '../response/dto/fast.support.with.stats.response';
 
 @Injectable()
 export class RubricService {
@@ -34,7 +35,7 @@ export class RubricService {
       id,
     );
 
-    const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getByRubricId(
+    const fastSupport: FastSupportWithStatsResponseDto[] = await this.fastSupportService.getByRubricId(
       id,
     );
 

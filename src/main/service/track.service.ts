@@ -4,6 +4,8 @@ import { TrackResponseDto } from '../response/dto/track.response';
 import { TrackRepository } from '../repository/track.repository';
 import { LessonToTrackService } from './lesson.to.track.service';
 import { Track } from '../entity/track.entity';
+import { TrackWithStatsResponseDto } from '../response/dto/track.with.stats.response';
+import { TrackStatsResponseDto } from '../response/dto/track.stats.response';
 
 @Injectable()
 export class TrackService {
@@ -17,11 +19,37 @@ export class TrackService {
     return this.trackRepository.findByIds(ids);
   }
 
-  async getByLessonId(id: number): Promise<TrackResponseDto[]> {
+  async getById(id: number) {
+    return this.trackRepository.findById(id);
+  }
+
+  async getTrackStatsById(trackId): Promise<TrackStatsResponseDto> {
+    return {
+      lastProgress: 0, // TODO: get progress
+      maxProgress: 0,
+    };
+  }
+
+  async getTrackWithStatsById(
+    trackId: number,
+  ): Promise<TrackWithStatsResponseDto> {
+    return {
+      trackInfo: await this.getById(trackId),
+      trackStats: await this.getTrackStatsById(trackId),
+    };
+  }
+
+  async getByLessonId(id: number): Promise<TrackWithStatsResponseDto[]> {
     const trackIds: number[] = await this.lessonToTrackService.getByLessonId(
       id,
     );
 
-    return this.getByIds(trackIds);
+    const tracks: TrackWithStatsResponseDto[] = [];
+
+    for (const trackId of trackIds) {
+      tracks.push(await this.getTrackWithStatsById(trackId));
+    }
+
+    return tracks;
   }
 }
