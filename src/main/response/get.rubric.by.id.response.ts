@@ -22,11 +22,11 @@ export class GetRubricByIdResponseDto {
   public readonly course: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
-    type: FastSupportWithStatsResponseDto,
+    type: FastSupportResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly fastSupport: FastSupportWithStatsResponseDto[];
+  public readonly fastSupport: FastSupportResponseDto[];
 
   @ApiModelProperty({
     type: VideoAdviceResponseDto,

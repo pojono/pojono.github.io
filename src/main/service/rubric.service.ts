@@ -35,7 +35,7 @@ export class RubricService {
       id,
     );
 
-    const fastSupport: FastSupportWithStatsResponseDto[] = await this.fastSupportService.getByRubricId(
+    const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getByRubricId(
       id,
     );
 

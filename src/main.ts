@@ -29,6 +29,7 @@ async function bootstrap() {
       .addTag('main', 'Главная страница приложения')
       .addTag('courses', 'Курсы')
       .addTag('lessons', 'Занятия в курсе')
+      .addTag('fast_support', 'Быстрая помощь')
       .addTag('statistics', 'Статистика по приложению')
       .addTag('quizzes', 'Диалоги в псевдо-мессенджере')
       .addTag('events', 'Ивенты о происходящем в приложении')

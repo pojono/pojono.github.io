@@ -30,7 +30,7 @@ export class StatisticController {
   @ApiResponse({ status: 200, type: PostStatisticTrackResponse })
   @ApiOperation({
     title: 'Отправка статистики по прослушиванию треков',
-    deprecated: false,
+    deprecated: true,
   })
   async updateTrackStatistic(
     @GetRequestId() requestId,

@@ -36,11 +36,11 @@ export class GetMainResponseDto {
   public readonly announcement: CourseWithStatsResponseDto[];
 
   @ApiModelProperty({
-    type: FastSupportWithStatsResponseDto,
+    type: FastSupportResponseDto,
     nullable: false,
     isArray: true,
   })
-  public readonly fastSupport: FastSupportWithStatsResponseDto[];
+  public readonly fastSupport: FastSupportResponseDto[];
 
   @ApiModelProperty({
     type: VideoAdviceResponseDto,

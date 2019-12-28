@@ -11,7 +11,6 @@ import { VideoAdviceResponseDto } from './response/dto/video.advice.response';
 import { FastSupportService } from './service/fast.support.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
-import { FastSupportWithStatsResponseDto } from './response/dto/fast.support.with.stats.response';
 
 @Injectable()
 export class MainService {
@@ -39,7 +38,7 @@ export class MainService {
     const stats: MainStatsResponseDto = await this.getMainStats();
     const bestCourses: CourseWithStatsResponseDto[] = await this.courseService.getBestCourses();
     const announcement: CourseWithStatsResponseDto[] = await this.courseService.getAnnouncementCourses();
-    const fastSupport: FastSupportWithStatsResponseDto[] = await this.fastSupportService.getForMainPage();
+    const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getForMainPage();
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getForMainPage();
 
     return {

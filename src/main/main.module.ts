@@ -37,6 +37,7 @@ import * as config from 'config';
 import { JwtStrategy } from '../user/jwt.strategy';
 import { StatisticService } from './service/statistic.service';
 import { StatisticController } from './controller/statistic.controller';
+import { FastSupportController } from './controller/fast.support.controller';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { StatisticController } from './controller/statistic.controller';
     RubricController,
     LessonController,
     StatisticController,
+    FastSupportController,
   ],
   providers: [
     MainService,

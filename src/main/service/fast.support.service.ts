@@ -19,45 +19,17 @@ export class FastSupportService {
     return this.fastSupportRepository.findByIds(ids);
   }
 
-  async getByRubricId(id: number): Promise<FastSupportWithStatsResponseDto[]> {
+  async getByRubricId(id: number): Promise<FastSupportResponseDto[]> {
     const fastSupportIds: number[] = await this.rubricToFastSupportService.getByRubricId(
       id,
     );
 
-    const fastSupport: FastSupport[] = await this.getByIds(fastSupportIds);
-
-    const result: FastSupportWithStatsResponseDto[] = [];
-
-    // TODO: refactor it
-    for (const fs of fastSupport) {
-      result.push({
-        fastSupportInfo: fs,
-        trackStats: {
-          lastProgress: 0,
-          maxProgress: 0,
-        },
-      });
-    }
-
-    return result;
+    return this.getByIds(fastSupportIds);
   }
 
-  async getForMainPage(): Promise<FastSupportWithStatsResponseDto[]> {
+  async getForMainPage(): Promise<FastSupportResponseDto[]> {
     const fastSupport: FastSupport[] = await this.fastSupportRepository.findForMainPage();
 
-    const result: FastSupportWithStatsResponseDto[] = [];
-
-    // TODO: refactor it
-    for (const fs of fastSupport) {
-      result.push({
-        fastSupportInfo: fs,
-        trackStats: {
-          lastProgress: 0,
-          maxProgress: 0,
-        },
-      });
-    }
-
-    return result;
+    return fastSupport;
   }
 }
