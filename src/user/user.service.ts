@@ -8,7 +8,6 @@ import {
   INVALID_CREDENTIALS,
   SMS_TOO_OFTEN,
 } from '../lib/errors';
-
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
 import { User } from './user.entity';
@@ -239,11 +238,79 @@ export class UserService {
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
   }
 
+  async addTotalListenTime(user: User, sessionsDuration: number) {
+    const sumDuration: number = user.sessionsDuration + sessionsDuration;
+    await this.userRepository.updateSessionsDuration(user, sumDuration);
+  }
+
+  async updateUtcDiff(user: User, utcDiff: number): Promise<User> {
+    return this.userRepository.updateUtcDiff(user, utcDiff);
+  }
+
   async updateLastActivity(user: User): Promise<void> {
     await this.userRepository.updateLastActivity(user);
   }
 
   async maxStrike(): Promise<number> {
     return this.userRepository.countMaxStrike();
+  }
+
+  async updateStrike(user: User, utcDiff: number): Promise<void> {
+    const lastActivity: moment.Moment = moment(user.lastActivity);
+
+    const reverseUtcDiff: number = utcDiff * -1;
+    const serverTime: moment.Moment = moment.utc();
+    const userTime: moment.Moment = moment.utc().add(reverseUtcDiff, 'minute');
+    const userStartToday: moment.Moment = moment
+      .utc()
+      .startOf('day')
+      .add(reverseUtcDiff, 'minute');
+    const userStartYesterday: moment.Moment = moment(userStartToday).subtract(
+      24,
+      'hour',
+    );
+
+    this.logger.log('lastActivity ' + lastActivity.toISOString());
+    this.logger.log('serverTime ' + serverTime.toISOString());
+    this.logger.log('userTime ' + userTime.toISOString());
+    this.logger.log('userStartToday ' + userStartToday.toISOString());
+    this.logger.log('userStartYesterday ' + userStartYesterday.toISOString());
+
+    if (lastActivity.isAfter(userStartToday)) {
+      this.logger.log('Last Activity is Today. Strike does not change');
+    }
+
+    if (
+      lastActivity.isAfter(userStartYesterday) &&
+      lastActivity.isBefore(userStartToday)
+    ) {
+      this.logger.log('Last Activity was yesterday. Strike +1');
+      await this.userRepository.incrementStrike(user);
+    }
+
+    if (lastActivity.isBefore(userStartYesterday)) {
+      this.logger.log('LastActivity was before yesterday. Strike = 1');
+      await this.userRepository.resetStrike(user);
+    }
+  }
+
+  async updateSession(user): Promise<void> {
+    const lastActivity: moment.Moment = moment(user.lastActivity);
+    const maxSessionIdleTime: number = config.get('sessionIdleDuration');
+    const sessionEdgeTime: moment.Moment = moment
+      .utc()
+      .subtract(maxSessionIdleTime, 'minutes');
+
+    this.logger.log('lastActivity ' + lastActivity.toISOString());
+    this.logger.log('sessionEdgeTime ' + sessionEdgeTime.toISOString());
+
+    if (lastActivity.isAfter(sessionEdgeTime)) {
+      this.logger.log(
+        'Last Activity is not so far. Session counter does not change',
+      );
+    } else {
+      this.logger.log('Last Activity was so far. Session counter +1');
+      await this.userRepository.incrementSession(user);
+    }
   }
 }

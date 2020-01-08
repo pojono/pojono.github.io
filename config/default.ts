@@ -23,4 +23,5 @@ module.exports = {
     useCognito: false,
   },
   daysForNewBadge: 7,
+  sessionIdleDuration: 10,
 };

@@ -47,4 +47,7 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false, default: 0 })
   sessionsDuration: number;
+
+  @Column({ nullable: false, default: 0 })
+  utcDiff: number;
 }

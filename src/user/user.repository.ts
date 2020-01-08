@@ -51,4 +51,33 @@ export class UserRepository extends Repository<User> {
     user.lastActivity = moment().toDate();
     await user.save();
   }
+
+  async updateSessionsDuration(user, sessionsDuration): Promise<void> {
+    user.sessionsDuration = sessionsDuration;
+    await user.save();
+  }
+
+  async updateUtcDiff(user, utcDiff): Promise<User> {
+    user.utcDiff = utcDiff;
+    return user.save();
+  }
+
+  async incrementSession(user: User): Promise<void> {
+    user.sessionsCounter = ++user.sessionsCounter;
+    await user.save();
+  }
+
+  async incrementStrike(user: User): Promise<void> {
+    user.currentStrike = ++user.currentStrike;
+
+    if (user.currentStrike > user.maxStrike) {
+      user.maxStrike = user.currentStrike;
+    }
+    await user.save();
+  }
+
+  async resetStrike(user: User): Promise<void> {
+    user.currentStrike = 1;
+    await user.save();
+  }
 }

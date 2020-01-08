@@ -27,6 +27,7 @@ import { MeResponse } from './response/me.response';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { SettingsResponse } from './response/settings.response';
+import { UserStatsResponse } from './response/user.stats.response';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
@@ -108,5 +109,20 @@ export class UserController {
     return new SettingsResponse(requestId, {
       daysForNewBadge: config.get('daysForNewBadge'),
     });
+  }
+
+  @Get('/stats')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: UserStatsResponse })
+  @ApiOperation({
+    title: 'Обобщенная статистика по авторизованному пользователю',
+    deprecated: true,
+  })
+  async getUserStats(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+  ): Promise<UserStatsResponse> {
+    return new UserStatsResponse(requestId, null);
   }
 }

@@ -23,6 +23,13 @@ export class TrackService {
     return this.trackRepository.findById(id);
   }
 
+  async getSecondsByPercent(track: Track, percent: number): Promise<number> {
+    if (!track.duration) {
+      return 0;
+    }
+    return Math.round((track.duration * percent) / 100);
+  }
+
   async getTrackStatsById(trackId): Promise<TrackStatsResponseDto> {
     return {
       lastProgress: 0, // TODO: get progress
