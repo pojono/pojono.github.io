@@ -1,6 +1,6 @@
 module.exports = {
   server: {
-    port: 3000,
+    port: 3001,
   },
   jwt: {
     expiresIn: 3600000,
