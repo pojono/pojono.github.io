@@ -28,4 +28,17 @@ export class StatisticTrackDto {
       'Сколько прослушано с момента последней отправки статистики, в % от длины трека',
   })
   diff: number;
+
+  @IsNumber()
+  @Min(-720)
+  @Max(720)
+  @ApiModelProperty({
+    type: 'number',
+    example: -180,
+    required: true,
+    minimum: -720,
+    maximum: 720,
+    description: 'Разница в минутах между местным временем пользователя и UTC',
+  })
+  utcDiff: number;
 }
