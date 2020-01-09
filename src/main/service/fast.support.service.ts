@@ -29,6 +29,10 @@ export class FastSupportService {
     return this.fastSupportRepository.findById(id);
   }
 
+  async getByTrackId(id: number) {
+    return this.fastSupportRepository.findByTrackId(id);
+  }
+
   async getFastSupportById(id: number): Promise<GetFastSupportResponseDto> {
     const fastSupport: FastSupport = await this.getById(id);
     ErrorIf.isEmpty(fastSupport, OBJECT_NOT_FOUND);

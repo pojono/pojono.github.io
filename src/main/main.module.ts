@@ -38,6 +38,8 @@ import { JwtStrategy } from '../user/jwt.strategy';
 import { StatisticService } from './service/statistic.service';
 import { StatisticController } from './controller/statistic.controller';
 import { FastSupportController } from './controller/fast.support.controller';
+import { StatisticHourService } from './service/statistic.hour.service';
+import { StatisticHourRepository } from './repository/statistic.hour.repository';
 
 @Module({
   imports: [
@@ -56,6 +58,7 @@ import { FastSupportController } from './controller/fast.support.controller';
       ChallengeRepository,
       CourseToVideoAdviceRepository,
       UserRepository,
+      StatisticHourRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -89,6 +92,7 @@ import { FastSupportController } from './controller/fast.support.controller';
     UserService,
     JwtStrategy,
     StatisticService,
+    StatisticHourService,
   ],
 })
 export class MainModule {}

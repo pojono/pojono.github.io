@@ -5,12 +5,23 @@ import { Track } from '../entity/track.entity';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
 import { ErrorIf } from '../../lib/error.if';
 import { UserService } from '../../user/user.service';
+import { GetStatisticMeDto } from '../response/get.statatistic.me.response';
+import { StatisticHourService } from './statistic.hour.service';
+import * as moment from 'moment';
+import { FastSupport } from '../entity/fast.support.entity';
+import { FastSupportService } from './fast.support.service';
+import { LessonService } from './lesson.service';
+import { CourseService } from './course.service';
 
 @Injectable()
 export class StatisticService {
   constructor(
     private trackService: TrackService,
     private userService: UserService,
+    private statisticHourService: StatisticHourService,
+    private fastSupportService: FastSupportService,
+    private lessonService: LessonService,
+    private courseService: CourseService,
   ) {}
 
   async updateStatisticTrack(
@@ -34,8 +45,61 @@ export class StatisticService {
 
     await this.userService.addTotalListenTime(user, deltaListenTime);
 
+    await this.statisticHourService.addDuration(user.id, deltaListenTime);
+
     await this.userService.updateLastActivity(user);
 
     await this.userService.updateUtcDiff(user, utcDiff);
+  }
+
+  async calculateAverageSessionTime(user: User): Promise<number> {
+    if (user.sessionsCounter <= 0) {
+      return 0;
+    }
+    if (user.sessionsDuration <= 0) {
+      return 0;
+    }
+    return Math.round(user.sessionsDuration / user.sessionsCounter);
+  }
+
+  async getMyStatistic(user: User): Promise<GetStatisticMeDto> {
+    const userStartMonth: Date = moment
+      .utc()
+      .startOf('month')
+      .add(user.utcDiff * -1, 'minutes')
+      .toDate();
+
+    const currentStrike: number = user.currentStrike;
+
+    const currentMonthTime: number = await this.statisticHourService.sumByUserIdAfterDate(
+      user.id,
+      userStartMonth,
+      false,
+    );
+
+    const currentMonthSleepTime: number = await this.statisticHourService.sumByUserIdAfterDate(
+      user.id,
+      userStartMonth,
+      true,
+    );
+
+    const averageSessionTime: number = await this.calculateAverageSessionTime(
+      user,
+    );
+
+    const totalListenTime: number = user.sessionsDuration;
+
+    const finishedCourses: number = 0; // TODO:
+    const finishedLessons: number = 0; // TODO;
+
+    return {
+      currentStrike,
+      currentMonthTime,
+      currentMonthSleepTime,
+      averageSessionTime,
+      totalListenTime,
+      finishedCourses,
+      finishedLessons,
+    };
   }
 }

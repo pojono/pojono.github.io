@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   UseGuards,
@@ -20,6 +21,10 @@ import { PostStatisticTrackResponse } from '../response/post.statistic.track.res
 import { StatisticTrackDto } from '../dto/statistic.track.dto';
 import { GetUser } from '../../user/get.user.decorator';
 import { User } from '../../user/user.entity';
+import {
+  GetStatatisticMeResponse,
+  GetStatisticMeDto,
+} from '../response/get.statatistic.me.response';
 
 @Controller('statistics')
 @ApiUseTags('statistics')
@@ -48,5 +53,23 @@ export class StatisticController {
       user,
     );
     return new PostStatisticTrackResponse(requestId, null);
+  }
+
+  @Get('/me')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: GetStatatisticMeResponse })
+  @ApiOperation({
+    title: 'Обобщенная статистика по авторизованному пользователю',
+    deprecated: false,
+  })
+  async getUserStats(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+  ): Promise<GetStatatisticMeResponse> {
+    const stats: GetStatisticMeDto = await this.statisticService.getMyStatistic(
+      user,
+    );
+    return new GetStatatisticMeResponse(requestId, stats);
   }
 }

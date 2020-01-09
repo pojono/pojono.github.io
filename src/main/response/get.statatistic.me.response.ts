@@ -1,7 +1,10 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
 
-class UserStatsResponseDto {
+export class GetStatisticMeDto {
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly currentStrike: number;
+
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly currentMonthTime: number;
 
@@ -21,11 +24,11 @@ class UserStatsResponseDto {
   public readonly finishedLessons: number;
 }
 
-export class UserStatsResponse extends CustomResponse {
-  @ApiModelProperty({ type: UserStatsResponseDto })
-  data: UserStatsResponseDto;
+export class GetStatatisticMeResponse extends CustomResponse {
+  @ApiModelProperty({ type: GetStatisticMeDto })
+  data: GetStatisticMeDto;
 
-  constructor(requestId: string, data: UserStatsResponseDto) {
+  constructor(requestId: string, data: GetStatisticMeDto) {
     super(requestId);
     this.data = data;
   }

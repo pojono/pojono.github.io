@@ -11,6 +11,14 @@ export class FastSupportRepository extends Repository<FastSupport> {
     return FastSupport.findOne(id);
   }
 
+  async findByTrackId(trackId: number): Promise<FastSupport | undefined> {
+    return FastSupport.findOne({
+      where: {
+        trackId,
+      },
+    });
+  }
+
   async findForMainPage(): Promise<FastSupport[]> {
     return FastSupport.find({ where: { forMainPage: true } });
   }
