@@ -10,6 +10,7 @@ import { GetLessonResponseDto } from '../response/get.lesson.response';
 import { LessonToTrackService } from './lesson.to.track.service';
 import { TrackService } from './track.service';
 import { TrackWithStatsResponseDto } from '../response/dto/track.with.stats.response';
+import { LessonToTrack } from '../entity/lesson.to.track.entity';
 
 @Injectable()
 export class LessonService {
@@ -19,6 +20,17 @@ export class LessonService {
     private lessonToTrackService: LessonToTrackService,
     private trackService: TrackService,
   ) {}
+
+  async getByTrackId(trackId): Promise<Lesson | undefined> {
+    const lessonToTrack:
+      | LessonToTrack
+      | undefined = await this.lessonToTrackService.getByTrackId(trackId);
+    let lesson: Lesson | undefined;
+    if (lessonToTrack) {
+      lesson = await this.lessonRepository.findById(lessonToTrack.lessonId);
+    }
+    return lesson;
+  }
 
   async getByIds(ids: number[]) {
     return this.lessonRepository.findByIds(ids);

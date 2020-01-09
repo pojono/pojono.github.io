@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Track } from '../entity/track.entity';
 import { StatisticHour } from '../entity/statistic.hour.entity';
 
 @EntityRepository(StatisticHour)

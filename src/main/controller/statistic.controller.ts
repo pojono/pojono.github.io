@@ -24,7 +24,7 @@ import { User } from '../../user/user.entity';
 import {
   GetStatatisticMeResponse,
   GetStatisticMeDto,
-} from '../response/get.statatistic.me.response';
+} from '../response/get.statistic.me.response';
 
 @Controller('statistics')
 @ApiUseTags('statistics')

@@ -5,13 +5,21 @@ import { Track } from '../entity/track.entity';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
 import { ErrorIf } from '../../lib/error.if';
 import { UserService } from '../../user/user.service';
-import { GetStatisticMeDto } from '../response/get.statatistic.me.response';
+import { GetStatisticMeDto } from '../response/get.statistic.me.response';
 import { StatisticHourService } from './statistic.hour.service';
 import * as moment from 'moment';
 import { FastSupport } from '../entity/fast.support.entity';
 import { FastSupportService } from './fast.support.service';
 import { LessonService } from './lesson.service';
 import { CourseService } from './course.service';
+import { Lesson } from '../entity/lesson.entity';
+import { Course } from '../entity/course.entity';
+import { StatisticLessonService } from './statistic.lesson.service';
+import { StatisticCourseService } from './statistic.course.service';
+import { StatisticTrackRepository } from '../repository/statistic.track.repository';
+import { StatisticTrackService } from './statistic.track.service';
+
+export const FINISH_EDGE: number = 90;
 
 @Injectable()
 export class StatisticService {
@@ -22,6 +30,9 @@ export class StatisticService {
     private fastSupportService: FastSupportService,
     private lessonService: LessonService,
     private courseService: CourseService,
+    private statisticCourseService: StatisticCourseService,
+    private statisticLessonService: StatisticLessonService,
+    private statisticTrackService: StatisticTrackService,
   ) {}
 
   async updateStatisticTrack(
@@ -38,6 +49,33 @@ export class StatisticService {
       track,
       diff,
     );
+
+    // const fastSupport: FastSupport | undefined = await this.fastSupportService.getByTrackId(trackId);
+    const lesson: Lesson | undefined = await this.lessonService.getByTrackId(
+      trackId,
+    );
+    let course: Course | undefined;
+    if (lesson) {
+      course = await this.courseService.getById(lesson.courseId);
+    }
+
+    if (course) {
+      await this.statisticLessonService.updateProgress(
+        user.id,
+        lesson.id,
+        trackId,
+        course.id,
+        progress,
+      );
+      await this.statisticTrackService.updateProgress(
+        user.id,
+        trackId,
+        progress,
+      );
+      if (lesson.isLatest && progress >= FINISH_EDGE) {
+        await this.statisticCourseService.finishCourse(user.id, course.id);
+      }
+    }
 
     await this.userService.updateStrike(user, utcDiff);
 
@@ -90,7 +128,9 @@ export class StatisticService {
     const totalListenTime: number = user.sessionsDuration;
 
     const finishedCourses: number = 0; // TODO:
-    const finishedLessons: number = 0; // TODO;
+    const finishedLessons: number = await this.statisticLessonService.countFinishedByUserId(
+      user.id,
+    );
 
     return {
       currentStrike,

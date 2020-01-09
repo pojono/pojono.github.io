@@ -27,7 +27,7 @@ import { MeResponse } from './response/me.response';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { SettingsResponse } from './response/settings.response';
-import { GetStatatisticMeResponse } from '../main/response/get.statatistic.me.response';
+import { GetStatatisticMeResponse } from '../main/response/get.statistic.me.response';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS

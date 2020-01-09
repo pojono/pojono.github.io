@@ -16,4 +16,12 @@ export class LessonToTrackService {
     );
     return lessonToTrack.map(element => element.trackId);
   }
+
+  async getByTrackId(trackId: number): Promise<LessonToTrack | undefined> {
+    return this.lessonToTrackRepository.findOne({
+      where: {
+        trackId,
+      },
+    });
+  }
 }
