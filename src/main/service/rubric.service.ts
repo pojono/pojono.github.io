@@ -24,7 +24,11 @@ export class RubricService {
   ) {}
 
   async getAllRubrics(): Promise<Rubric[]> {
-    return this.rubricRepository.findAll();
+    return this.rubricRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async getRubricById(id: number): Promise<GetRubricByIdResponseDto> {
