@@ -17,8 +17,6 @@ import { BEGINNER_COURSE_NOT_FOUND } from '../../lib/errors';
 import { User } from '../../user/user.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
-import { StatisticLessonRepository } from '../repository/statistic.lesson.repository';
-import { LessonStatisticService } from './lesson.statistic.service';
 
 @Injectable()
 export class CourseService {
@@ -31,9 +29,7 @@ export class CourseService {
     private challengeService: ChallengeService,
     private videoAdviceService: VideoAdviceService,
 
-    private statisticLessonService: LessonStatisticService,
-    // @InjectRepository(StatisticLessonRepository)
-    // private statisticLessonRepository: StatisticLessonRepository,
+    private statisticLessonService: StatisticLessonService,
     private statisticCourseService: StatisticCourseService,
   ) {}
 
@@ -78,10 +74,10 @@ export class CourseService {
       numberOfLessons: await this.lessonService.countOfLessonsByCourseId(
         courseId,
       ),
-      finishedLessons: null /*await this.statisticLessonRepository.countFinishedByUserIdAndCourseId(
+      finishedLessons: await this.statisticLessonService.countFinishedByUserIdAndCourseId(
         userId,
         courseId,
-      ),*/,
+      ),
       numberOfStudents: await this.statisticCourseService.countUsersOnCourseId(
         courseId,
       ),

@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { StatisticLesson } from '../entity/statistic.lesson.entity';
-import { FINISH_EDGE } from '../service/statistic.service';
+// import { FINISH_EDGE } from '../service/statistic.service';
 
 @EntityRepository(StatisticLesson)
 export class StatisticLessonRepository extends Repository<StatisticLesson> {
@@ -47,7 +47,7 @@ export class StatisticLessonRepository extends Repository<StatisticLesson> {
       .where({
         userId,
       })
-      .andWhere(`progress >= ${FINISH_EDGE}`)
+      .andWhere(`progress >= 90`) // TODO: move to config
       .getRawOne();
     return Number(count);
   }
@@ -63,7 +63,7 @@ export class StatisticLessonRepository extends Repository<StatisticLesson> {
         userId,
         courseId,
       })
-      .andWhere(`progress >= ${FINISH_EDGE}`)
+      .andWhere(`progress >= 90`) // TODO: move to config
       .getRawOne();
     return Number(count);
   }

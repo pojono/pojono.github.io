@@ -46,7 +46,6 @@ import { StatisticTrackService } from './service/statistic.track.service';
 import { StatisticCourseRepository } from './repository/statistic.course.repository';
 import { StatisticLessonRepository } from './repository/statistic.lesson.repository';
 import { StatisticTrackRepository } from './repository/statistic.track.repository';
-import { LessonStatisticService } from './service/lesson.statistic.service';
 
 @Module({
   imports: [
@@ -102,7 +101,6 @@ import { LessonStatisticService } from './service/lesson.statistic.service';
     UserService,
     JwtStrategy,
     StatisticLessonService,
-    LessonStatisticService,
     StatisticService,
     StatisticHourService,
     StatisticCourseService,
