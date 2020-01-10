@@ -55,21 +55,23 @@ export class VideoAdviceService {
   async getVideoAdviceWithStatsById(
     courseId: number,
     videoAdviceId: number,
-  ): Promise<VideoAdviceWithStatsResponseDto> {
-    return {
+  ): Promise<VideoAdviceResponseDto> {
+    return this.getById(
+      videoAdviceId,
+    ); /* {
       videoAdviceInfo: await this.getById(videoAdviceId),
       videoAdviceStats: await this.getVideoAdviceStats(courseId, videoAdviceId),
-    };
+    };*/
   }
 
   async getVideoAdvicesWithStatsByCourseId(
     courseId: number,
-  ): Promise<VideoAdviceWithStatsResponseDto[]> {
+  ): Promise<VideoAdviceResponseDto[]> {
     const videoAdviceIds: number[] = await this.courseToVideoAdviceService.getByCourseId(
       courseId,
     );
 
-    const videoAdvicesWithStats: VideoAdviceWithStatsResponseDto[] = [];
+    const videoAdvicesWithStats: VideoAdviceResponseDto[] = [];
 
     for (const videoAdviceId of videoAdviceIds) {
       videoAdvicesWithStats.push(
