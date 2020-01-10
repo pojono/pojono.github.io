@@ -44,12 +44,16 @@ export class LessonService {
     return this.lessonRepository.findByCourseId(id);
   }
 
-  async getLessonById(id: number): Promise<GetLessonResponseDto> {
+  async getLessonById(
+    userId: number,
+    id: number,
+  ): Promise<GetLessonResponseDto> {
     const lesson: LessonResponseDto = await this.getById(id);
 
     ErrorIf.isEmpty(lesson, OBJECT_NOT_FOUND);
 
     const track: TrackWithStatsResponseDto[] = await this.trackService.getByLessonId(
+      userId,
       id,
     );
 
@@ -57,6 +61,7 @@ export class LessonService {
   }
 
   async countOfLessonsByCourseId(courseId: number): Promise<number> {
+    // #STATS-1
     return Lesson.count({ where: { courseId } });
   }
 }

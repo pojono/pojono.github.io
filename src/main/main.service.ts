@@ -11,6 +11,8 @@ import { VideoAdviceResponseDto } from './response/dto/video.advice.response';
 import { FastSupportService } from './service/fast.support.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
+import { StatisticHourService } from './service/statistic.hour.service';
+import { StatisticCourseService } from './service/statistic.course.service';
 
 @Injectable()
 export class MainService {
@@ -21,12 +23,15 @@ export class MainService {
     private videoAdviceService: VideoAdviceService,
     private fastSupportService: FastSupportService,
     private userService: UserService,
+    private statisticHourService: StatisticHourService,
   ) {}
 
-  async getMainStats(): Promise<MainStatsResponseDto> {
+  async getMainStats(user: User): Promise<MainStatsResponseDto> {
     return {
-      todayUsers: await this.userService.countTodayUsers(),
-      todayUsersTime: 0, // TODO: count users time,
+      todayUsers: await this.userService.countTodayUsers(user),
+      todayUsersTime: await this.statisticHourService.sumForAllUsersLastDay(
+        user,
+      ),
       maxStrike: await this.userService.maxStrike(),
     };
   }
@@ -35,9 +40,13 @@ export class MainService {
     const topCourse: CourseWithStatsResponseDto = await this.courseService.getTopCourse(
       user,
     );
-    const stats: MainStatsResponseDto = await this.getMainStats();
-    const bestCourses: CourseWithStatsResponseDto[] = await this.courseService.getBestCourses();
-    const announcement: CourseWithStatsResponseDto[] = await this.courseService.getAnnouncementCourses();
+    const stats: MainStatsResponseDto = await this.getMainStats(user);
+    const bestCourses: CourseWithStatsResponseDto[] = await this.courseService.getBestCourses(
+      user.id,
+    );
+    const announcement: CourseWithStatsResponseDto[] = await this.courseService.getAnnouncementCourses(
+      user.id,
+    );
     const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getForMainPage();
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getForMainPage();
 

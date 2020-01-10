@@ -23,6 +23,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async countMaxStrike(): Promise<number> {
+    // #STATS-4
     const query = this.createQueryBuilder('user');
     query.select('MAX(user.maxStrike)', 'max');
     const result = await query.getRawOne();

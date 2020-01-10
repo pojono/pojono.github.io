@@ -27,11 +27,15 @@ export class RubricService {
     return this.rubricRepository.findAll();
   }
 
-  async getRubricById(id: number): Promise<GetRubricByIdResponseDto> {
+  async getRubricById(
+    userId: number,
+    id: number,
+  ): Promise<GetRubricByIdResponseDto> {
     const rubric: Rubric | undefined = await this.rubricRepository.findById(id);
     ErrorIf.notExist(rubric, OBJECT_NOT_FOUND);
 
     const course: CourseWithStatsResponseDto[] = await this.courseService.getByRubricId(
+      userId,
       id,
     );
 

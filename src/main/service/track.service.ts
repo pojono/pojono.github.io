@@ -6,6 +6,8 @@ import { LessonToTrackService } from './lesson.to.track.service';
 import { Track } from '../entity/track.entity';
 import { TrackWithStatsResponseDto } from '../response/dto/track.with.stats.response';
 import { TrackStatsResponseDto } from '../response/dto/track.stats.response';
+import { StatisticTrackService } from './statistic.track.service';
+import { StatisticTrack } from '../entity/statistic.track.entity';
 
 @Injectable()
 export class TrackService {
@@ -13,6 +15,7 @@ export class TrackService {
     @InjectRepository(TrackRepository)
     private trackRepository: TrackRepository,
     private lessonToTrackService: LessonToTrackService,
+    private statisticTrackService: StatisticTrackService,
   ) {}
 
   async getByIds(ids: number[]): Promise<Track[]> {
@@ -30,23 +33,36 @@ export class TrackService {
     return Math.round((track.duration * percent) / 100);
   }
 
-  async getTrackStatsById(trackId): Promise<TrackStatsResponseDto> {
+  async getTrackStatsById(
+    userId: number,
+    trackId: number,
+  ): Promise<TrackStatsResponseDto> {
+    const trackStats:
+      | StatisticTrack
+      | undefined = await this.statisticTrackService.getStatsByUserIdAndTrackId(
+      userId,
+      trackId,
+    );
     return {
-      lastProgress: 0, // TODO: get progress
-      maxProgress: 0,
+      lastProgress: trackStats ? trackStats.lastProgress : 0,
+      maxProgress: trackStats ? trackStats.maxProgress : 0,
     };
   }
 
   async getTrackWithStatsById(
+    userId: number,
     trackId: number,
   ): Promise<TrackWithStatsResponseDto> {
     return {
       trackInfo: await this.getById(trackId),
-      trackStats: await this.getTrackStatsById(trackId),
+      trackStats: await this.getTrackStatsById(userId, trackId),
     };
   }
 
-  async getByLessonId(id: number): Promise<TrackWithStatsResponseDto[]> {
+  async getByLessonId(
+    userId: number,
+    id: number,
+  ): Promise<TrackWithStatsResponseDto[]> {
     const trackIds: number[] = await this.lessonToTrackService.getByLessonId(
       id,
     );
@@ -54,7 +70,7 @@ export class TrackService {
     const tracks: TrackWithStatsResponseDto[] = [];
 
     for (const trackId of trackIds) {
-      tracks.push(await this.getTrackWithStatsById(trackId));
+      tracks.push(await this.getTrackWithStatsById(userId, trackId));
     }
 
     return tracks;

@@ -231,9 +231,11 @@ export class UserService {
     });
   }
 
-  async countTodayUsers(): Promise<number> {
+  async countTodayUsers(user: User): Promise<number> {
+    // #STATS-2
     const dayAgo: Date = moment()
       .subtract(24, 'hour')
+      .add(user.utcDiff * -1, 'minutes')
       .toDate();
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
   }

@@ -16,7 +16,6 @@ import { Lesson } from '../entity/lesson.entity';
 import { Course } from '../entity/course.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
-import { StatisticTrackRepository } from '../repository/statistic.track.repository';
 import { StatisticTrackService } from './statistic.track.service';
 
 export const FINISH_EDGE: number = 90;
@@ -72,6 +71,7 @@ export class StatisticService {
         trackId,
         progress,
       );
+      await this.statisticCourseService.courseInProgress(user.id, course.id);
       if (lesson.isLatest && progress >= FINISH_EDGE) {
         await this.statisticCourseService.finishCourse(user.id, course.id);
       }
@@ -83,6 +83,7 @@ export class StatisticService {
 
     await this.userService.addTotalListenTime(user, deltaListenTime);
 
+    // TODO: add sleep time
     await this.statisticHourService.addDuration(user.id, deltaListenTime);
 
     await this.userService.updateLastActivity(user);
@@ -91,6 +92,7 @@ export class StatisticService {
   }
 
   async calculateAverageSessionTime(user: User): Promise<number> {
+    // #STATS-9
     if (user.sessionsCounter <= 0) {
       return 0;
     }
@@ -107,6 +109,7 @@ export class StatisticService {
       .add(user.utcDiff * -1, 'minutes')
       .toDate();
 
+    // #STATS-7
     const currentStrike: number = user.currentStrike;
 
     const currentMonthTime: number = await this.statisticHourService.sumByUserIdAfterDate(
@@ -125,9 +128,12 @@ export class StatisticService {
       user,
     );
 
+    // #STATS-8
     const totalListenTime: number = user.sessionsDuration;
 
-    const finishedCourses: number = 0; // TODO:
+    const finishedCourses: number = await this.statisticCourseService.countFinishedCoursesByUserId(
+      user.id,
+    );
     const finishedLessons: number = await this.statisticLessonService.countFinishedByUserId(
       user.id,
     );

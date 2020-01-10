@@ -12,6 +12,16 @@ export class StatisticHourService {
     private statisticHourRepository: StatisticHourRepository,
   ) {}
 
+  async sumForAllUsersLastDay(user: User): Promise<number> {
+    // #STATS-3
+    const dayAgo: Date = moment
+      .utc()
+      .subtract(24, 'hour')
+      .add(user.utcDiff * -1, 'minutes')
+      .toDate();
+    return this.sumAfterDate(dayAgo, false);
+  }
+
   async sumByUserIdAfterDate(
     userId: number,
     date: Date,
@@ -22,6 +32,10 @@ export class StatisticHourService {
       date,
       forSleep,
     );
+  }
+
+  async sumAfterDate(date: Date, forSleep: boolean): Promise<number> {
+    return this.statisticHourRepository.sumAfterDate(date, forSleep);
   }
 
   async addDuration(userId: number, duration: number): Promise<void> {

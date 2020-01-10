@@ -41,6 +41,7 @@ export class StatisticLessonRepository extends Repository<StatisticLesson> {
   }
 
   async countFinishedByUserId(userId: number): Promise<number> {
+    // #STATS-13
     const { count } = await this.createQueryBuilder('statistic_lesson')
       .select(`COUNT(statistic_lesson.id)`, 'count')
       .where({
@@ -55,6 +56,7 @@ export class StatisticLessonRepository extends Repository<StatisticLesson> {
     userId: number,
     courseId: number,
   ): Promise<number> {
+    // #STATS-5
     const { count } = await this.createQueryBuilder('statistic_lesson')
       .select(`COUNT(statistic_lesson.id)`, 'count')
       .where({

@@ -38,6 +38,7 @@ export class StatisticHourRepository extends Repository<StatisticHour> {
     date: Date,
     forSleep: boolean,
   ): Promise<number> {
+    // #STATS-10
     const filters = {
       after: date.toISOString() as any,
     };
@@ -49,6 +50,19 @@ export class StatisticHourRepository extends Repository<StatisticHour> {
       .where({
         userId,
       })
+      .andWhere('date >= :after')
+      .setParameters(filters)
+      .getRawOne();
+    return Number(sum);
+  }
+
+  async sumAfterDate(date: Date, forSleep: boolean): Promise<number> {
+    const filters = {
+      after: date.toISOString() as any,
+    };
+    const sleepColumn: string = forSleep ? 'Sleep' : '';
+    const { sum } = await this.createQueryBuilder('statistic_hour')
+      .select(`SUM(statistic_hour.duration${sleepColumn})`, 'sum')
       .andWhere('date >= :after')
       .setParameters(filters)
       .getRawOne();

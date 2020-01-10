@@ -19,6 +19,8 @@ import {
   GetFastSupportResponseDto,
 } from '../response/get.fast.support.response';
 import { FastSupportService } from '../service/fast.support.service';
+import { GetUser } from '../../user/get.user.decorator';
+import { User } from '../../user/user.entity';
 
 @Controller('fast_support')
 @ApiUseTags('fast_support')
@@ -32,9 +34,11 @@ export class FastSupportController {
   @ApiOperation({ title: 'Загрузка быстрой помощи', deprecated: false })
   async getLesson(
     @GetRequestId() requestId,
+    @GetUser() user: User,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<GetFastSupportResponse> {
     const response: GetFastSupportResponseDto = await this.fastSupportService.getFastSupportById(
+      user.id,
       idRequestDto.id,
     );
     return new GetFastSupportResponse(requestId, response);

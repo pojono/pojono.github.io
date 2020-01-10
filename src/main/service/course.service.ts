@@ -15,6 +15,10 @@ import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
 import { ErrorIf } from '../../lib/error.if';
 import { BEGINNER_COURSE_NOT_FOUND } from '../../lib/errors';
 import { User } from '../../user/user.entity';
+import { StatisticLessonService } from './statistic.lesson.service';
+import { StatisticCourseService } from './statistic.course.service';
+import { StatisticLessonRepository } from '../repository/statistic.lesson.repository';
+import { LessonStatisticService } from './lesson.statistic.service';
 
 @Injectable()
 export class CourseService {
@@ -26,6 +30,11 @@ export class CourseService {
     private lessonService: LessonService,
     private challengeService: ChallengeService,
     private videoAdviceService: VideoAdviceService,
+
+    private statisticLessonService: LessonStatisticService,
+    // @InjectRepository(StatisticLessonRepository)
+    // private statisticLessonRepository: StatisticLessonRepository,
+    private statisticCourseService: StatisticCourseService,
   ) {}
 
   async getByIds(ids: number[]) {
@@ -36,8 +45,12 @@ export class CourseService {
     return this.courseRepository.findById(id);
   }
 
-  async getCourseById(id: number): Promise<GetCourseByIdResponseDto> {
+  async getCourseById(
+    userId: number,
+    id: number,
+  ): Promise<GetCourseByIdResponseDto> {
     const course: CourseWithStatsResponseDto = await this.getCourseWithStatsById(
+      userId,
       id,
     );
     const lesson: LessonResponseDto[] = await this.lessonService.getLessonsByCourseId(
@@ -57,14 +70,21 @@ export class CourseService {
     };
   }
 
-  async getCourseStats(courseId: number): Promise<CourseStatsResponseDto> {
+  async getCourseStats(
+    userId: number,
+    courseId: number,
+  ): Promise<CourseStatsResponseDto> {
     return {
-      // TODO: count stats
       numberOfLessons: await this.lessonService.countOfLessonsByCourseId(
         courseId,
       ),
-      finishedLessons: 0,
-      numberOfStudents: 0,
+      finishedLessons: null /*await this.statisticLessonRepository.countFinishedByUserIdAndCourseId(
+        userId,
+        courseId,
+      ),*/,
+      numberOfStudents: await this.statisticCourseService.countUsersOnCourseId(
+        courseId,
+      ),
     };
   }
 
@@ -78,7 +98,7 @@ export class CourseService {
     if (!latestCourseId) {
       latestCourseId = await this.getBeginnerCourseId();
     }
-    return this.getCourseWithStatsById(latestCourseId);
+    return this.getCourseWithStatsById(user.id, latestCourseId);
   }
 
   async getBeginnerCourseId(): Promise<number> {
@@ -87,40 +107,47 @@ export class CourseService {
     return beginnerCourse.id;
   }
 
-  async getBestCourses(): Promise<CourseWithStatsResponseDto[]> {
+  async getBestCourses(userId: number): Promise<CourseWithStatsResponseDto[]> {
     const courseIds = await this.courseRepository.findBestCourseIds();
-    return this.getCoursesWithStatsByIds(courseIds);
+    return this.getCoursesWithStatsByIds(userId, courseIds);
   }
 
   async getCoursesWithStatsByIds(
+    userId: number,
     courseIds: number[],
   ): Promise<CourseWithStatsResponseDto[]> {
     const courses: CourseWithStatsResponseDto[] = [];
 
     for (const courseId of courseIds) {
-      courses.push(await this.getCourseWithStatsById(courseId));
+      courses.push(await this.getCourseWithStatsById(userId, courseId));
     }
     return courses;
   }
 
-  async getAnnouncementCourses(): Promise<CourseWithStatsResponseDto[]> {
+  async getAnnouncementCourses(
+    userId: number,
+  ): Promise<CourseWithStatsResponseDto[]> {
     const courseIds: number[] = await this.courseRepository.findAnnouncementCoursesIds();
-    return this.getCoursesWithStatsByIds(courseIds);
+    return this.getCoursesWithStatsByIds(userId, courseIds);
   }
 
   async getCourseWithStatsById(
+    userId: number,
     courseId: number,
   ): Promise<CourseWithStatsResponseDto> {
     return {
       courseInfo: await this.getById(courseId),
-      courseStats: await this.getCourseStats(courseId),
+      courseStats: await this.getCourseStats(userId, courseId),
     };
   }
 
-  async getByRubricId(id: number): Promise<CourseWithStatsResponseDto[]> {
+  async getByRubricId(
+    userId: number,
+    id: number,
+  ): Promise<CourseWithStatsResponseDto[]> {
     const courseIds: number[] = await this.rubricToCourseService.getByRubricId(
       id,
     );
-    return this.getCoursesWithStatsByIds(courseIds);
+    return this.getCoursesWithStatsByIds(userId, courseIds);
   }
 }

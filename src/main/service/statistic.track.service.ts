@@ -29,4 +29,14 @@ export class StatisticTrackService {
     }
     await this.statisticTrackRepository.setProgress(statsTrack, progress);
   }
+
+  async getStatsByUserIdAndTrackId(
+    userId: number,
+    trackId: number,
+  ): Promise<StatisticTrack | undefined> {
+    return this.statisticTrackRepository.findByUserIdAndTrackId(
+      userId,
+      trackId,
+    );
+  }
 }

@@ -33,11 +33,15 @@ export class FastSupportService {
     return this.fastSupportRepository.findByTrackId(id);
   }
 
-  async getFastSupportById(id: number): Promise<GetFastSupportResponseDto> {
+  async getFastSupportById(
+    userId: number,
+    id: number,
+  ): Promise<GetFastSupportResponseDto> {
     const fastSupport: FastSupport = await this.getById(id);
     ErrorIf.isEmpty(fastSupport, OBJECT_NOT_FOUND);
 
     const track: TrackWithStatsResponseDto = await this.trackService.getTrackWithStatsById(
+      userId,
       fastSupport.trackId,
     );
 

@@ -19,6 +19,8 @@ import {
 import { GetRequestId } from '../../lib/get.request.id.decorator';
 import { IdRequestDto } from '../dto/id.request.dto';
 import { CourseService } from '../service/course.service';
+import { GetUser } from '../../user/get.user.decorator';
+import { User } from '../../user/user.entity';
 
 @Controller('courses')
 @ApiUseTags('courses')
@@ -35,9 +37,11 @@ export class CourseController {
   })
   async getCourseById(
     @GetRequestId() requestId,
+    @GetUser() user: User,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<GetCourseByIdResponse> {
     const course: GetCourseByIdResponseDto = await this.courseService.getCourseById(
+      user.id,
       idRequestDto.id,
     );
     return new GetCourseByIdResponse(requestId, course);

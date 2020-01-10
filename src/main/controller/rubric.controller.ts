@@ -20,6 +20,8 @@ import {
 import { GetRequestId } from '../../lib/get.request.id.decorator';
 import { RubricService } from '../service/rubric.service';
 import { IdRequestDto } from '../dto/id.request.dto';
+import { GetUser } from '../../user/get.user.decorator';
+import { User } from '../../user/user.entity';
 
 @Controller('rubrics')
 @ApiUseTags('rubrics')
@@ -43,9 +45,11 @@ export class RubricController {
   @ApiOperation({ title: 'Загрузка экрана определённой рубрики' })
   async getById(
     @GetRequestId() requestId,
+    @GetUser() user: User,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<GetRubricByIdResponse> {
     const rubric: GetRubricByIdResponseDto = await this.rubricService.getRubricById(
+      user.id,
       idRequestDto.id,
     );
 
