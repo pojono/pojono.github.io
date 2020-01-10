@@ -73,6 +73,14 @@ export class TrackService {
       tracks.push(await this.getTrackWithStatsById(userId, trackId));
     }
 
+    const lessonAlreadyListen: boolean = tracks.some(
+      track => track.trackStats.maxProgress > 0,
+    );
+
+    if (lessonAlreadyListen) {
+      return tracks.filter(track => track.trackStats.maxProgress > 0);
+    }
+
     return tracks;
   }
 }
