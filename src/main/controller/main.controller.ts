@@ -9,7 +9,6 @@ import { GetMainResponse } from '../response/get.main.response';
 import { MainService } from '../main.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRequestId } from '../../lib/get.request.id.decorator';
-import { mockData } from './main.mock.data';
 import { GetUser } from '../../user/get.user.decorator';
 import { User } from '../../user/user.entity';
 
@@ -19,26 +18,6 @@ import { User } from '../../user/user.entity';
 @ApiBearerAuth()
 export class MainController {
   constructor(private mainService: MainService) {}
-
-  /*
-  @Get('/')
-  @ApiResponse({ status: 200, type: GetMainResponse })
-  @ApiOperation({
-    title: 'Загрузка главного экрана приложения (замоканные данные)',
-    deprecated: true,
-  })
-  async main(@GetRequestId() requestId, @GetUser() user: User): Promise<any> {
-    const response = mockData;
-
-    if (user.phone === '79025666777') {
-      response.topCourse.courseInfo.beginnerCourse = true;
-    }
-    if (user.phone === '79027666555') {
-      response.topCourse.courseInfo.beginnerCourse = false;
-    }
-
-    return new GetMainResponse(requestId, response);
-  }*/
 
   @Get('/')
   @ApiResponse({ status: 200, type: GetMainResponse })
