@@ -15,6 +15,7 @@ import { CourseStatsResponseDto } from '../response/dto/course.stats.response';
 import { ErrorIf } from '../../lib/error.if';
 import { BEGINNER_COURSE_NOT_FOUND } from '../../lib/errors';
 import { User } from '../../user/user.entity';
+import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
 
@@ -55,7 +56,7 @@ export class CourseService {
     const challenge: ChallengeResponseDto = await this.challengeService.getChallengeByCourseId(
       id,
     );
-    const videoAdvice: VideoAdviceWithStatsResponseDto[] = await this.videoAdviceService.getVideoAdvicesWithStatsByCourseId(
+    const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesWithStatsByCourseId(
       id,
     );
     return {
