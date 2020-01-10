@@ -36,7 +36,7 @@ export class VideoAdviceService {
     return this.videoAdviceRepository.findForMainPage();
   }
 
-  async getVideoAdviceStats(
+  /*async getVideoAdviceStats(
     courseId: number,
     videoAdviceId: number,
   ): Promise<VideoAdviceStatsResponseDto> {
@@ -50,9 +50,10 @@ export class VideoAdviceService {
     return {
       showAfterLessonIndex,
     };
-  }
+  }*/
 
-  async getVideoAdviceWithStatsById(
+  // async getVideoAdviceWithStatsById(
+  async getVideoAdviceById(
     courseId: number,
     videoAdviceId: number,
   ): Promise<VideoAdviceResponseDto> {
@@ -64,21 +65,20 @@ export class VideoAdviceService {
     };*/
   }
 
-  async getVideoAdvicesWithStatsByCourseId(
+  // async getVideoAdvicesWithStatsByCourseId(
+  async getVideoAdvicesByCourseId(
     courseId: number,
   ): Promise<VideoAdviceResponseDto[]> {
     const videoAdviceIds: number[] = await this.courseToVideoAdviceService.getByCourseId(
       courseId,
     );
 
-    const videoAdvicesWithStats: VideoAdviceResponseDto[] = [];
+    const videoAdvices: VideoAdviceResponseDto[] = [];
 
     for (const videoAdviceId of videoAdviceIds) {
-      videoAdvicesWithStats.push(
-        await this.getVideoAdviceWithStatsById(courseId, videoAdviceId),
-      );
+      videoAdvices.push(await this.getVideoAdviceById(courseId, videoAdviceId));
     }
 
-    return videoAdvicesWithStats;
+    return videoAdvices;
   }
 }

@@ -56,7 +56,7 @@ export class CourseService {
     const challenge: ChallengeResponseDto = await this.challengeService.getChallengeByCourseId(
       id,
     );
-    const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesWithStatsByCourseId(
+    const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesByCourseId(
       id,
     );
     return {
