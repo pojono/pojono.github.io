@@ -24,4 +24,10 @@ module.exports = {
   },
   daysForNewBadge: 7,
   sessionIdleDuration: 10,
+  iap: {
+    androidPackageName: 'com.mobile.prostoapp',
+    googleServiceAccountEmail: '',
+    googleServiceAccountPrivateKey: '',
+    appleSharedSecret: 'b66c14a5404944e0afbae43da689fb0e',
+  },
 };
