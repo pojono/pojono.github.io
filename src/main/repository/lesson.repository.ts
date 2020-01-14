@@ -12,6 +12,11 @@ export class LessonRepository extends Repository<Lesson> {
   }
 
   async findByCourseId(courseId: number): Promise<Lesson[]> {
-    return Lesson.find({ where: { courseId } });
+    return Lesson.find({
+      where: { courseId },
+      order: {
+        orderIndex: 'ASC',
+      },
+    });
   }
 }
