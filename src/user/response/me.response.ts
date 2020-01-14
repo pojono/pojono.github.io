@@ -86,6 +86,9 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
   public readonly subscriptionIsCancelled: boolean;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  public readonly subscriptionLastValidation: Date;
 }
 
 export class MeResponse extends CustomResponse {

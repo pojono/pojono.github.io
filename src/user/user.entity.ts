@@ -78,6 +78,6 @@ export class User extends BaseEntity {
   @Column({ nullable: false, default: false })
   subscriptionIsCancelled: boolean;
 
-  @Column({ nullable: true, default: false })
-  subscriptionLastValidation: boolean;
+  @Column({ nullable: true })
+  subscriptionLastValidation: Date;
 }
