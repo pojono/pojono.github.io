@@ -14,6 +14,9 @@ export class CourseResponseDto {
   public readonly picture: string;
 
   @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly video: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
   public readonly durationOfLessons: string;
 
   @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })

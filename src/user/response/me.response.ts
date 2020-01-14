@@ -1,6 +1,8 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
 import { User } from '../user.entity';
+import { AppTypeEnum } from '../app.type.enum';
+import { StoreEnviromentEnum } from '../store.environment.enum';
 
 class MeResponseDto {
   @ApiModelProperty({ type: 'number', nullable: false })
@@ -41,6 +43,49 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
   public readonly sessionsDuration: number;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    default: 0,
+    example: -180,
+  })
+  public readonly utcDiff: number;
+
+  @ApiModelProperty({
+    type: AppTypeEnum,
+    nullable: true,
+    enum: [AppTypeEnum.ANDROID, AppTypeEnum.IOS],
+  })
+  public readonly subscriptionPlatform: string;
+
+  @ApiModelProperty({
+    type: StoreEnviromentEnum,
+    nullable: true,
+    enum: [StoreEnviromentEnum.SANDBOX, StoreEnviromentEnum.PRODUCTION],
+  })
+  public readonly subscriptionEnvironment: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly subscriptionProductId: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly subscriptionTransactionId: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly subscriptionLatestReceipt: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly subscriptionValidationResponse: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  public readonly subscriptionStartDate: Date;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  public readonly subscriptionEndDate: Date;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  public readonly subscriptionIsCancelled: boolean;
 }
 
 export class MeResponse extends CustomResponse {

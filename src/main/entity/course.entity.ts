@@ -15,6 +15,9 @@ export class Course extends BaseEntity {
   picture: string;
 
   @Column({ nullable: true })
+  video: string;
+
+  @Column({ nullable: true })
   durationOfLessons: string;
 
   @Column({ nullable: true })

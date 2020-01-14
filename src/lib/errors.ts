@@ -26,3 +26,8 @@ export const BEGINNER_COURSE_NOT_FOUND: StandardRestApiError = StandardRestApiEr
   1005,
   'Beginner course not found',
 );
+
+export const PURCHASE_VALIDATION_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1006,
+  'Purchase validation error',
+);

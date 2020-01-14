@@ -50,4 +50,34 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false, default: 0 })
   utcDiff: number;
+
+  @Column({ nullable: true })
+  subscriptionPlatform: string;
+
+  @Column({ nullable: true })
+  subscriptionEnvironment: string;
+
+  @Column({ nullable: true })
+  subscriptionProductId: string;
+
+  @Column({ nullable: true })
+  subscriptionTransactionId: string;
+
+  @Column({ nullable: true })
+  subscriptionLatestReceipt: string;
+
+  @Column({ nullable: true })
+  subscriptionValidationResponse: string;
+
+  @Column({ nullable: true })
+  subscriptionStartDate: Date;
+
+  @Column({ nullable: true })
+  subscriptionEndDate: Date;
+
+  @Column({ nullable: false, default: false })
+  subscriptionIsCancelled: boolean;
+
+  @Column({ nullable: true, default: false })
+  subscriptionLastValidation: boolean;
 }

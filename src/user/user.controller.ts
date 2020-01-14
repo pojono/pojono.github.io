@@ -28,6 +28,9 @@ import { GetRequestId } from '../lib/get.request.id.decorator';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { SettingsResponse } from './response/settings.response';
 import { GetStatatisticMeResponse } from '../main/response/get.statistic.me.response';
+import { ReceiptResponse } from './response/receipt.response';
+import { ReceiptUpdateDto } from './dto/receipt.update.dto';
+import { AppTypeEnum } from './app.type.enum';
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
@@ -109,5 +112,24 @@ export class UserController {
     return new SettingsResponse(requestId, {
       daysForNewBadge: config.get('daysForNewBadge'),
     });
+  }
+
+  @Put('/receipt')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: ReceiptResponse })
+  @ApiOperation({ title: 'Отправка чека о покупке на сервер для валидации' })
+  async updateReceipt(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+    @Body(ValidationPipe) receiptUpdateDto: ReceiptUpdateDto,
+  ): Promise<ReceiptResponse> {
+    await this.userService.processPurchase(
+      user,
+      receiptUpdateDto.iosPurchase,
+      receiptUpdateDto.androidPurchase,
+    );
+
+    return new ReceiptResponse(requestId, null);
   }
 }

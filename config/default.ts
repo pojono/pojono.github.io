@@ -29,5 +29,7 @@ module.exports = {
     googleServiceAccountEmail: '',
     googleServiceAccountPrivateKey: '',
     appleSharedSecret: 'b66c14a5404944e0afbae43da689fb0e',
+    testMode: true,
+    debugLogs: true,
   },
 };

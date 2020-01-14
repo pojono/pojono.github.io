@@ -6,6 +6,7 @@ import { UserRepository } from './user.repository';
 import {
   AMAZON_COGNITO_ERROR,
   INVALID_CREDENTIALS,
+  PURCHASE_VALIDATION_ERROR,
   SMS_TOO_OFTEN,
 } from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
@@ -17,6 +18,8 @@ import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import * as config from 'config';
 import { UserUpdateDto } from './dto/user.update.dto';
 import * as moment from 'moment';
+import { AndroidPurchase, IosPurchase } from './dto/receipt.update.dto';
+import { AppTypeEnum } from './app.type.enum';
 
 // TODO: move to config
 AWS.config.update({
@@ -32,6 +35,11 @@ const clientId = '1sm0t6a4ml5keiqtmvb3mnkqlf';
 const userPoolId = 'eu-west-1_Zpp22BnuX';
 
 const phonePlus = phone => '+' + phone;
+
+import * as iap from 'in-app-purchase';
+import { JWT } from 'google-auth-library';
+import { google } from 'googleapis';
+import { StoreEnviromentEnum } from './store.environment.enum';
 
 @Injectable()
 export class UserService {
@@ -313,6 +321,133 @@ export class UserService {
     } else {
       this.logger.log('Last Activity was so far. Session counter +1');
       await this.userRepository.incrementSession(user);
+    }
+  }
+
+  async processPurchase(
+    user: User,
+    iosPurchase: IosPurchase | undefined,
+    androidPurchase: AndroidPurchase | undefined,
+  ): Promise<void> {
+    if (iosPurchase) {
+      const appType: AppTypeEnum = AppTypeEnum.IOS;
+      const iosReceipt = iosPurchase.transactionReceipt;
+      await this.validatePurchase(user, appType, iosReceipt);
+    }
+    if (androidPurchase) {
+      const appType: AppTypeEnum = AppTypeEnum.ANDROID;
+      const androidReceipt = {
+        packageName: config.get('iap.androidPackageName'),
+        productId: androidPurchase.productId,
+        purchaseToken: androidPurchase.purchaseToken,
+        subscription: true,
+      };
+      await this.validatePurchase(user, appType, androidReceipt);
+    }
+  }
+
+  async validatePurchase(
+    user: User,
+    appType: AppTypeEnum,
+    receipt,
+  ): Promise<void> {
+    iap.config({
+      // If you want to exclude old transaction, set this to true. Default is false:
+      // appleExcludeOldTransactions: true,
+      applePassword: config.get('iap.appleSharedSecret'),
+
+      googleServiceAccount: {
+        clientEmail: config.get('iap.googleServiceAccountEmail'),
+        privateKey: config.get('iap.googleServiceAccountPrivateKey'),
+      },
+
+      /* Configurations all platforms */
+      test: config.get('iap.testMode'), // For Apple and Google Play to force Sandbox validation only
+      verbose: config.get('iap.debugLogs'), // Output debug logs to stdout stream
+    });
+
+    google.options({
+      auth: new JWT(
+        config.get('iap.googleServiceAccountEmail'),
+        null,
+        config.get('iap.googleServiceAccountPrivateKey'),
+        ['https://www.googleapis.com/auth/androidpublisher'],
+      ),
+    });
+
+    const androidGoogleApi = google.androidpublisher({ version: 'v3' });
+
+    await iap.setup();
+    const validationResponse = await iap.validate(receipt);
+
+    ErrorIf.isFalse(
+      appType === AppTypeEnum.ANDROID &&
+        validationResponse.service === 'google',
+      PURCHASE_VALIDATION_ERROR,
+    );
+    ErrorIf.isFalse(
+      appType === AppTypeEnum.IOS && validationResponse.service === 'apple',
+      PURCHASE_VALIDATION_ERROR,
+    );
+
+    const purchaseData = iap.getPurchaseData(validationResponse);
+    const firstPurchaseItem = purchaseData[0];
+
+    const isCancelled = iap.isCanceled(firstPurchaseItem);
+    // const isExpired = iap.isExpired(firstPurchaseItem);
+
+    const { productId } = firstPurchaseItem;
+
+    const origTxId =
+      appType === AppTypeEnum.IOS
+        ? firstPurchaseItem.originalTransactionId
+        : firstPurchaseItem.transactionId;
+    const latestReceipt =
+      appType === AppTypeEnum.IOS
+        ? validationResponse.latest_receipt
+        : JSON.stringify(receipt);
+    const startDate =
+      appType === AppTypeEnum.IOS
+        ? new Date(firstPurchaseItem.originalPurchaseDateMs)
+        : new Date(parseInt(firstPurchaseItem.startTimeMillis, 10));
+    const endDate =
+      appType === AppTypeEnum.IOS
+        ? new Date(firstPurchaseItem.expiresDateMs)
+        : new Date(parseInt(firstPurchaseItem.expiryTimeMillis, 10));
+
+    let environment = '';
+    // validationResponse contains sandbox: true/false for Apple and Amazon
+    // Android we don't know if it was a sandbox account
+    if (appType === AppTypeEnum.IOS) {
+      environment = validationResponse.sandbox
+        ? StoreEnviromentEnum.SANDBOX
+        : StoreEnviromentEnum.PRODUCTION;
+    }
+
+    await this.userRepository.updateSubscription(user, {
+      appType,
+      environment,
+      productId,
+      origTxId,
+      latestReceipt,
+      validationResponse,
+      startDate,
+      endDate,
+      isCancelled,
+    });
+
+    // From https://developer.android.com/google/play/billing/billing_library_overview:
+    // You must acknowledge all purchases within three days.
+    // Failure to properly acknowledge purchases results in those purchases being refunded.
+    if (
+      appType === AppTypeEnum.ANDROID &&
+      validationResponse.acknowledgementState === 0
+    ) {
+      await androidGoogleApi.purchases.subscriptions.acknowledge({
+        packageName: config.get('iap.androidPackageName'),
+        subscriptionId: productId,
+        token: receipt.purchaseToken,
+      });
     }
   }
 }

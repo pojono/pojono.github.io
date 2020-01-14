@@ -81,4 +81,18 @@ export class UserRepository extends Repository<User> {
     user.currentStrike = 1;
     await user.save();
   }
+
+  async updateSubscription(user: User, subscriptionDto): Promise<void> {
+    user.subscriptionPlatform = subscriptionDto.appType;
+    user.subscriptionEnvironment = subscriptionDto.environment;
+    user.subscriptionProductId = subscriptionDto.productId;
+    user.subscriptionTransactionId = subscriptionDto.origTxId;
+    user.subscriptionLatestReceipt = subscriptionDto.latestReceipt;
+    user.subscriptionValidationResponse = subscriptionDto.validationResponse;
+    user.subscriptionStartDate = subscriptionDto.startDate;
+    user.subscriptionEndDate = subscriptionDto.endDate;
+    user.subscriptionIsCancelled = subscriptionDto.isCancelled;
+
+    await user.save();
+  }
 }
