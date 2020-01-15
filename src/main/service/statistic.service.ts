@@ -75,6 +75,7 @@ export class StatisticService {
       if (lesson.isLatest && progress >= FINISH_EDGE) {
         await this.statisticCourseService.finishCourse(user.id, course.id);
       }
+      await this.userService.updateLatestCourse(user, course.id);
     }
 
     await this.userService.updateStrike(user, utcDiff);
