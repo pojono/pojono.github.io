@@ -6,6 +6,7 @@ import {
   ValidationPipe,
   Body,
   Put,
+  Logger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -31,6 +32,9 @@ import { GetStatatisticMeResponse } from '../main/response/get.statistic.me.resp
 import { ReceiptResponse } from './response/receipt.response';
 import { ReceiptUpdateDto } from './dto/receipt.update.dto';
 import { AppTypeEnum } from './app.type.enum';
+import { ErrorIf } from '../lib/error.if';
+import { PURCHASE_VALIDATION_ERROR } from '../lib/errors';
+const logger = new Logger('UserController');
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
@@ -124,11 +128,16 @@ export class UserController {
     @GetUser() user: User,
     @Body(ValidationPipe) receiptUpdateDto: ReceiptUpdateDto,
   ): Promise<ReceiptResponse> {
-    await this.userService.processPurchase(
-      user,
-      receiptUpdateDto.iosPurchase,
-      receiptUpdateDto.androidPurchase,
-    );
+    try {
+      await this.userService.processPurchase(
+        user,
+        receiptUpdateDto.iosPurchase,
+        receiptUpdateDto.androidPurchase,
+      );
+    } catch (err) {
+      ErrorIf.isTrue(true, PURCHASE_VALIDATION_ERROR);
+      logger.error(JSON.stringify(err), requestId);
+    }
 
     return new ReceiptResponse(requestId, null);
   }

@@ -31,3 +31,13 @@ export const PURCHASE_VALIDATION_ERROR: StandardRestApiError = StandardRestApiEr
   1006,
   'Purchase validation error',
 );
+
+export const SUBSCRIPRITON_IS_EXPIRED: StandardRestApiError = StandardRestApiError.create(
+  1007,
+  'Subscription is expired',
+);
+
+export const SUBSCRIPRITON_IS_CANCELLED: StandardRestApiError = StandardRestApiError.create(
+  1008,
+  'Subscription is cancelled',
+);

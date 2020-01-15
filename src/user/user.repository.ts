@@ -49,7 +49,12 @@ export class UserRepository extends Repository<User> {
   }
 
   async updateLastActivity(user: User): Promise<void> {
-    user.lastActivity = moment().toDate();
+    user.lastActivity = moment.utc().toDate();
+    await user.save();
+  }
+
+  async updateLastSubscriptionValidation(user: User): Promise<void> {
+    user.subscriptionLastValidation = moment.utc().toDate();
     await user.save();
   }
 

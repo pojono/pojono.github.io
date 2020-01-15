@@ -109,6 +109,16 @@ export class StatisticService {
     await this.userService.updateLastActivity(user);
 
     await this.userService.updateUtcDiff(user, utcDiff);
+
+    await this.userService.subscriptionIsExpired(user);
+
+    const shouldCheckSubscription: boolean = await this.userService.shouldCheckSubscriptionAgain(
+      user,
+    );
+
+    if (shouldCheckSubscription) {
+      await this.userService.updateSubscriptionStatus(user);
+    }
   }
 
   async calculateAverageSessionTime(user: User): Promise<number> {

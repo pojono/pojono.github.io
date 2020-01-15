@@ -8,6 +8,8 @@ import {
   INVALID_CREDENTIALS,
   PURCHASE_VALIDATION_ERROR,
   SMS_TOO_OFTEN,
+  SUBSCRIPRITON_IS_CANCELLED,
+  SUBSCRIPRITON_IS_EXPIRED,
 } from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
@@ -35,6 +37,7 @@ const clientId = '1sm0t6a4ml5keiqtmvb3mnkqlf';
 const userPoolId = 'eu-west-1_Zpp22BnuX';
 
 const phonePlus = phone => '+' + phone;
+const logger = new Logger('UserService');
 
 import * as iap from 'in-app-purchase';
 import { JWT } from 'google-auth-library';
@@ -452,6 +455,49 @@ export class UserService {
         subscriptionId: productId,
         token: receipt.purchaseToken,
       });
+    }
+  }
+
+  async shouldCheckSubscriptionAgain(user: User): Promise<boolean> {
+    const dayAgoMoment: moment.Moment = moment.utc().subtract(24, 'hour');
+    return (
+      !user.subscriptionLastValidation ||
+      moment(user.subscriptionLastValidation).isBefore(dayAgoMoment)
+    );
+  }
+
+  async subscriptionIsExpired(user: User): Promise<void> {
+    ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
+
+    ErrorIf.isTrue(
+      moment(user.subscriptionEndDate).isValid() &&
+        moment(user.subscriptionEndDate).isBefore(moment.utc()),
+      SUBSCRIPRITON_IS_EXPIRED,
+    );
+  }
+
+  async updateSubscriptionStatus(user: User): Promise<void> {
+    try {
+      if (user.subscriptionPlatform === AppTypeEnum.IOS) {
+        await this.validatePurchase(
+          user,
+          AppTypeEnum.IOS,
+          user.subscriptionLatestReceipt,
+        );
+        await this.userRepository.updateLastSubscriptionValidation(user);
+      }
+      if (user.subscriptionPlatform === AppTypeEnum.ANDROID) {
+        await this.validatePurchase(
+          user,
+          AppTypeEnum.ANDROID,
+          JSON.parse(user.subscriptionLatestReceipt),
+        );
+        await this.userRepository.updateLastSubscriptionValidation(user);
+      }
+    } catch (err) {
+      // ErrorIf.isTrue(true, PURCHASE_VALIDATION_ERROR);
+      logger.error('Purchase validation error with user.id =' + user.id);
+      logger.error(JSON.stringify(err));
     }
   }
 }
