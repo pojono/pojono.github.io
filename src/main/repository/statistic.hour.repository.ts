@@ -29,7 +29,12 @@ export class StatisticHourRepository extends Repository<StatisticHour> {
   }
 
   async addDuration(stats, duration): Promise<void> {
-    stats.duration = stats.duration + duration;
+    stats.duration += duration;
+    await stats.save();
+  }
+
+  async addDurationSleep(stats, durationSleep): Promise<void> {
+    stats.durationSleep += durationSleep;
     await stats.save();
   }
 

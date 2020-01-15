@@ -31,6 +31,10 @@ export class RubricService {
     });
   }
 
+  async getById(rubricId: number): Promise<Rubric | undefined> {
+    return this.rubricRepository.findById(rubricId);
+  }
+
   async getRubricById(
     userId: number,
     id: number,

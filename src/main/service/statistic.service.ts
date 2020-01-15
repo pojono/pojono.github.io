@@ -17,6 +17,8 @@ import { Course } from '../entity/course.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
 import { StatisticTrackService } from './statistic.track.service';
+import { Rubric } from '../entity/rubric.entity';
+import { RubricService } from './rubric.service';
 
 export const FINISH_EDGE: number = 90;
 
@@ -32,6 +34,7 @@ export class StatisticService {
     private statisticCourseService: StatisticCourseService,
     private statisticLessonService: StatisticLessonService,
     private statisticTrackService: StatisticTrackService,
+    private rubricService: RubricService,
   ) {}
 
   async updateStatisticTrack(
@@ -56,6 +59,18 @@ export class StatisticService {
     let course: Course | undefined;
     if (lesson) {
       course = await this.courseService.getById(lesson.courseId);
+    }
+
+    let rubric: Rubric | undefined;
+    if (course) {
+      const rubricId:
+        | number
+        | undefined = await this.courseService.getOneRubricIdByCourseId(
+        course.id,
+      );
+      if (rubricId) {
+        rubric = await this.rubricService.getById(rubricId);
+      }
     }
 
     if (course) {
@@ -84,8 +99,12 @@ export class StatisticService {
 
     await this.userService.addTotalListenTime(user, deltaListenTime);
 
-    // TODO: add sleep time
-    await this.statisticHourService.addDuration(user.id, deltaListenTime);
+    const isSleep = rubric && rubric.isSleep;
+    await this.statisticHourService.addDuration(
+      user.id,
+      deltaListenTime,
+      isSleep,
+    );
 
     await this.userService.updateLastActivity(user);
 

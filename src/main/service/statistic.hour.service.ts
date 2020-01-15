@@ -38,7 +38,11 @@ export class StatisticHourService {
     return this.statisticHourRepository.sumAfterDate(date, forSleep);
   }
 
-  async addDuration(userId: number, duration: number): Promise<void> {
+  async addDuration(
+    userId: number,
+    duration: number,
+    isSleep: boolean,
+  ): Promise<void> {
     const currentHour = moment
       .utc()
       .startOf('hour')
@@ -54,5 +58,8 @@ export class StatisticHourService {
       );
     }
     await this.statisticHourRepository.addDuration(stats, duration);
+    if (isSleep) {
+      await this.statisticHourRepository.addDurationSleep(stats, duration);
+    }
   }
 }

@@ -6,4 +6,10 @@ export class RubricToCourseRepository extends Repository<RubricToCourse> {
   async findByRubricId(rubricId: number): Promise<RubricToCourse[]> {
     return RubricToCourse.find({ where: { rubricId } });
   }
+
+  async findOneRubricToCourseByCourseId(
+    courseId: number,
+  ): Promise<RubricToCourse | undefined> {
+    return RubricToCourse.findOne({ where: { courseId } });
+  }
 }
