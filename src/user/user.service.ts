@@ -82,6 +82,12 @@ export class UserService {
           await this.userRepository.updateSession(user, result.Session);
           ErrorIf.isTrue(true, INVALID_CREDENTIALS);
         }
+      } else if (user.phone === config.get('sms.phoneWithoutSms')) {
+        // BACKDOOR
+        ErrorIf.isFalse(
+          signInRequestDto.code === config.get('sms.codeWithoutSms'),
+          INVALID_CREDENTIALS,
+        );
       } else {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
@@ -106,6 +112,11 @@ export class UserService {
     }
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
+
+    // BACKDOOR
+    if (phone === config.get('sms.phoneWithoutSms')) {
+      return;
+    }
 
     if (config.get('sms.useCognito')) {
       try {

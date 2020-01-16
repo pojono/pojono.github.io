@@ -21,6 +21,8 @@ module.exports = {
     codeLifetime: 5 * 60000,
     notRandom: '1234',
     useCognito: false,
+    phoneWithoutSms: '73141592653',
+    codeWithoutSms: '0112',
   },
   daysForNewBadge: 7,
   sessionIdleDuration: 10,
