@@ -17,16 +17,7 @@ export class RubricToCourseService {
     return rubricToCourses.map(element => element.courseId);
   }
 
-  async getOneRubricIdByCourseId(
-    courseId: number,
-  ): Promise<number | undefined> {
-    const rubricToCourse:
-      | RubricToCourse
-      | undefined = await this.rubricToCourseRepository.findOneRubricToCourseByCourseId(
-      courseId,
-    );
-    if (rubricToCourse) {
-      return rubricToCourse.rubricId;
-    }
+  async getRubricIdsByCourseId(courseId: number): Promise<number[]> {
+    return this.rubricToCourseRepository.findRubricIdsByCourseId(courseId);
   }
 }

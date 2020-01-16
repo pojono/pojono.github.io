@@ -61,15 +61,13 @@ export class StatisticService {
       course = await this.courseService.getById(lesson.courseId);
     }
 
-    let rubric: Rubric | undefined;
+    let isSleep: boolean = false;
     if (course) {
-      const rubricId:
-        | number
-        | undefined = await this.courseService.getOneRubricIdByCourseId(
+      const rubricIds: number[] = await this.courseService.getRubricIdsByCourseId(
         course.id,
       );
-      if (rubricId) {
-        rubric = await this.rubricService.getById(rubricId);
+      if (rubricIds.length) {
+        isSleep = await this.rubricService.isAnySleepRubricByIds(rubricIds);
       }
     }
 
@@ -99,7 +97,6 @@ export class StatisticService {
 
     await this.userService.addTotalListenTime(user, deltaListenTime);
 
-    const isSleep = rubric && rubric.isSleep;
     await this.statisticHourService.addDuration(
       user.id,
       deltaListenTime,

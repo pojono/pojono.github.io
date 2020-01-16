@@ -7,9 +7,10 @@ export class RubricToCourseRepository extends Repository<RubricToCourse> {
     return RubricToCourse.find({ where: { rubricId } });
   }
 
-  async findOneRubricToCourseByCourseId(
-    courseId: number,
-  ): Promise<RubricToCourse | undefined> {
-    return RubricToCourse.findOne({ where: { courseId } });
+  async findRubricIdsByCourseId(courseId: number): Promise<number[]> {
+    const rubricToCourses: RubricToCourse[] = await RubricToCourse.find({
+      where: { courseId },
+    });
+    return rubricToCourses.map(rubricToCourse => rubricToCourse.rubricId);
   }
 }

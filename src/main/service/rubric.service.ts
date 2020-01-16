@@ -35,6 +35,14 @@ export class RubricService {
     return this.rubricRepository.findById(rubricId);
   }
 
+  async isAnySleepRubricByIds(rubricIds: number[]): Promise<boolean> {
+    const rubricsCount: number = await this.rubricRepository.countRubricsByIds(
+      rubricIds,
+      true,
+    );
+    return Boolean(rubricsCount);
+  }
+
   async getRubricById(
     userId: number,
     id: number,

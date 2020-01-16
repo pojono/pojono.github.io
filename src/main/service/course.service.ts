@@ -148,9 +148,7 @@ export class CourseService {
     return this.getCoursesWithStatsByIds(userId, courseIds);
   }
 
-  async getOneRubricIdByCourseId(
-    courseId: number,
-  ): Promise<number | undefined> {
-    return this.rubricToCourseService.getOneRubricIdByCourseId(courseId);
+  async getRubricIdsByCourseId(courseId: number): Promise<number[]> {
+    return this.rubricToCourseService.getRubricIdsByCourseId(courseId);
   }
 }
