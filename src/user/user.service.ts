@@ -69,7 +69,10 @@ export class UserService {
     }
 
     try {
-      if (config.get('sms.useCognito')) {
+      if (
+        config.get('sms.useCognito') /* BACKDOOR START */ &&
+        user.phone !== config.get('sms.phoneWithoutSms') /* BACKDOOR FINISH */
+      ) {
         const result: CognitoIdentityServiceProvider.Types.AdminRespondToAuthChallengeResponse = await this.respondToAuthChallenge(
           signInRequestDto.code,
           user.session,
@@ -82,12 +85,13 @@ export class UserService {
           await this.userRepository.updateSession(user, result.Session);
           ErrorIf.isTrue(true, INVALID_CREDENTIALS);
         }
+        /* BACKDOOR START */
       } else if (user.phone === config.get('sms.phoneWithoutSms')) {
-        // BACKDOOR
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.codeWithoutSms'),
           INVALID_CREDENTIALS,
         );
+        /* BACKDOOR FINISH */
       } else {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
@@ -113,10 +117,11 @@ export class UserService {
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
 
-    // BACKDOOR
+    // BACKDOOR START
     if (phone === config.get('sms.phoneWithoutSms')) {
       return;
     }
+    // BACKDOOR FINISH
 
     if (config.get('sms.useCognito')) {
       try {
