@@ -46,6 +46,7 @@ import { StatisticTrackService } from './service/statistic.track.service';
 import { StatisticCourseRepository } from './repository/statistic.course.repository';
 import { StatisticLessonRepository } from './repository/statistic.lesson.repository';
 import { StatisticTrackRepository } from './repository/statistic.track.repository';
+import { EventController } from './controller/event.controller';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { StatisticTrackRepository } from './repository/statistic.track.repositor
     LessonController,
     StatisticController,
     FastSupportController,
+    EventController,
   ],
   providers: [
     MainService,
