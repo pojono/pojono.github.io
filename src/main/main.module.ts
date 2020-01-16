@@ -47,6 +47,8 @@ import { StatisticCourseRepository } from './repository/statistic.course.reposit
 import { StatisticLessonRepository } from './repository/statistic.lesson.repository';
 import { StatisticTrackRepository } from './repository/statistic.track.repository';
 import { EventController } from './controller/event.controller';
+import { EventService } from './service/event.service';
+import { EventRepository } from './repository/event.repository';
 
 @Module({
   imports: [
@@ -69,6 +71,7 @@ import { EventController } from './controller/event.controller';
       StatisticCourseRepository,
       StatisticLessonRepository,
       StatisticTrackRepository,
+      EventRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -107,6 +110,7 @@ import { EventController } from './controller/event.controller';
     StatisticHourService,
     StatisticCourseService,
     StatisticTrackService,
+    EventService,
   ],
 })
 export class MainModule {}

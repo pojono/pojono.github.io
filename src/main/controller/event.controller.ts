@@ -1,4 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   ApiUseTags,
   ApiResponse,
@@ -10,13 +17,15 @@ import { GetRequestId } from '../../lib/get.request.id.decorator';
 import { GetUser } from '../../user/get.user.decorator';
 import { User } from '../../user/user.entity';
 import { GetEventResponse } from '../response/get.event.response';
+import { EventService } from '../service/event.service';
+import { EventRequestDto } from '../dto/event.request.dto';
 
 @Controller('events')
 @ApiUseTags('events')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 export class EventController {
-  // constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService) {}
 
   @Get('/')
   @ApiResponse({ status: 200, type: GetEventResponse })
@@ -27,8 +36,9 @@ export class EventController {
   async getEvent(
     @GetRequestId() requestId,
     @GetUser() user: User,
+    @Query(ValidationPipe) eventRequestDto: EventRequestDto,
   ): Promise<GetEventResponse> {
-    // const response = await this.eventService.event(user);
-    return new GetEventResponse(requestId, null /*response*/);
+    const quizId: number = await this.eventService.getEvent(eventRequestDto);
+    return new GetEventResponse(requestId, { quizId });
   }
 }

@@ -4,10 +4,10 @@ import CustomResponse from '../../lib/custom.response';
 export class GetEventResponseDto {
   @ApiModelProperty({
     type: 'number',
-    nullable: false,
+    nullable: true,
     isArray: false,
   })
-  public readonly quizId: number;
+  public readonly quizId: number | null;
 }
 
 export class GetEventResponse extends CustomResponse {
