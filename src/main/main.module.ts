@@ -49,6 +49,9 @@ import { StatisticTrackRepository } from './repository/statistic.track.repositor
 import { EventController } from './controller/event.controller';
 import { EventService } from './service/event.service';
 import { EventRepository } from './repository/event.repository';
+import { QuizRepository } from './repository/quiz.repository';
+import { QuizController } from './controller/quizzes.controller';
+import { QuizService } from './service/quiz.service';
 
 @Module({
   imports: [
@@ -72,6 +75,7 @@ import { EventRepository } from './repository/event.repository';
       StatisticLessonRepository,
       StatisticTrackRepository,
       EventRepository,
+      QuizRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -88,6 +92,7 @@ import { EventRepository } from './repository/event.repository';
     StatisticController,
     FastSupportController,
     EventController,
+    QuizController,
   ],
   providers: [
     MainService,
@@ -111,6 +116,7 @@ import { EventRepository } from './repository/event.repository';
     StatisticCourseService,
     StatisticTrackService,
     EventService,
+    QuizService,
   ],
 })
 export class MainModule {}
