@@ -6,6 +6,7 @@ import * as config from 'config';
 import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
+import { Telegram } from './lib/telegram';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -56,7 +57,17 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.log(`App started on port ${port} on ${process.env.NODE_ENV} env`);
+  const startMessage: string = `App started port: ${port} env: ${process.env.NODE_ENV} build: ${process.env.TAG}`;
+
+  logger.log(startMessage);
+
+  try {
+    if (process.env.NODE_ENV !== 'development') {
+      await Telegram.sendMessage(startMessage);
+    }
+  } catch (err) {
+    logger.error(JSON.stringify(err));
+  }
 }
 
 (async () => {
