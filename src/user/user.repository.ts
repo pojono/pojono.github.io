@@ -41,6 +41,10 @@ export class UserRepository extends Repository<User> {
       user.lastName = userUpdateDto.lastName;
     }
 
+    if (dtoKeys.includes('pushesTime')) {
+      user.pushesTime = userUpdateDto.pushesTime;
+    }
+
     return await user.save();
   }
 

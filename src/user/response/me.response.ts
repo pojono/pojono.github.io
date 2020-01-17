@@ -3,6 +3,7 @@ import CustomResponse from '../../lib/custom.response';
 import { User } from '../user.entity';
 import { AppTypeEnum } from '../app.type.enum';
 import { StoreEnviromentEnum } from '../store.environment.enum';
+import { Column } from 'typeorm';
 
 class MeResponseDto {
   @ApiModelProperty({ type: 'number', nullable: false })
@@ -89,6 +90,12 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
   public readonly subscriptionLastValidation: Date;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  isPushesSkipped: boolean;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  pushesTime: string;
 }
 
 export class MeResponse extends CustomResponse {

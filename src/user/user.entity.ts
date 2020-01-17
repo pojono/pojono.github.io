@@ -80,4 +80,10 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   subscriptionLastValidation: Date;
+
+  @Column({ nullable: false, default: false })
+  isPushesSkipped: boolean;
+
+  @Column({ nullable: true })
+  pushesTime: string;
 }

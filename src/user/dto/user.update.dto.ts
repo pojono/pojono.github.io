@@ -19,4 +19,13 @@ export class UserUpdateDto {
     required: false,
   })
   lastName: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiModelProperty({
+    type: 'string',
+    example: '08:30',
+    required: false,
+  })
+  pushesTime: string;
 }
