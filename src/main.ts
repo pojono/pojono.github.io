@@ -7,10 +7,35 @@ import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { Telegram } from './lib/telegram';
+const logger = new Logger('Bootstrap');
+
+process.on('SIGTERM', async function onSigterm() {
+  const message: string = `⚠ Got SIGTERM! Build ${process.env.TAG} on ${process.env.NODE_ENV} env`;
+  logger.log(message);
+  await Telegram.sendMessage(message);
+});
+
+process.on('SIGINT', async function onSigint() {
+  const message: string = `⚠ Got SIGINT! Build ${process.env.TAG} on ${process.env.NODE_ENV} env`;
+  logger.log(message);
+  await Telegram.sendMessage(message);
+});
+
+process.on('uncaughtException', async function uncaughtException(err) {
+  const message: string = `⚠ Got uncaughtException! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
+  logger.log(message);
+  await Telegram.sendMessage(message);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', async err => {
+  const message: string = `⚠ Got uncaughtException! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
+  logger.log(message);
+  await Telegram.sendMessage(message);
+  process.exit(1);
+});
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-
   const app = await NestFactory.create(AppModule);
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
@@ -53,11 +78,11 @@ async function bootstrap() {
 
   const port: number = Number(process.env.PORT) || config.get('server.port');
   app.enableCors();
-  // app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(port);
 
-  const startMessage: string = `App started port: ${port} env: ${process.env.NODE_ENV} build: ${process.env.TAG}`;
+  const startMessage: string = `✅ ${process.env.TAG} on ${process.env.NODE_ENV} env started!`;
 
   logger.log(startMessage);
 

@@ -1,16 +1,22 @@
 import * as rp from 'request-promise-native';
 import * as config from 'config';
+import { Logger } from '@nestjs/common';
 
 const token: string = config.get('telegram.token');
 const chatId: string = config.get('telegram.chatId');
 
 export class Telegram {
-  public static async sendMessage(message) {
+  public static async sendMessage(message, requestId = null) {
     const options = {
       method: 'POST',
       url: `https://api.telegram.org/bot${token}/sendMessage`,
       qs: { chat_id: chatId, text: message },
     };
-    await rp(options);
+    try {
+      await rp(options);
+    } catch (err) {
+      const logger = new Logger(requestId);
+      logger.error('Telegram sending error');
+    }
   }
 }

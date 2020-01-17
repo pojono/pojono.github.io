@@ -16,7 +16,7 @@ export class StatisticTrackDto {
   progress: number;
 
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @Max(100)
   @ApiModelProperty({
     type: 'number',

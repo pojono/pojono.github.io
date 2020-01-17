@@ -14,12 +14,10 @@ import { APP_FILTER } from '@nestjs/core';
   controllers: [AppController],
   providers: [
     AppService,
-    /*
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
-    */
   ],
 })
 export class AppModule implements NestModule {

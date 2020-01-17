@@ -1,27 +1,33 @@
 const HTTP_CODE_DESCRIPTION: string = `
 
-HTTP STATUS: 200 и 201 - всё хорошо. В поле data может быть null, массив или запрашиваемый объект.
-    "success": true,
-    "timestamp": "2019-11-14T10:06:14.109Z",
-    "requestId": "jcMhP42G5CT2Y7F0",
-    "data": null
+Поля, присутствующие во всех ответах сервера:
 
-HTTP STATUS: 400 - ошибка валидации. statusCode всегда 400.
-    "statusCode": 400,
-    "error": "Bad Request",
-    "message": [ /* Подробное описание ошибки валидации */ ]
+    success: BOOLEAN,
+    timestamp: DATETIME,
+    requestId: STRING,
+    statusCode: NUMBER,
 
-HTTP STATUS: 400 - неправильный запрос. Ниже список всех возможных ошибок.
-    "statusCode": 1003,
-    "error": "Sms request too often"
+Для различных statusCode будут отправлены дополнительные поля:
 
-HTTP STATUS: 401 - неправильный Bearer токен.
-    "statusCode": 401,
-    "error": "Unauthorized"
+    statusCode = 200 | 201
+    
+      data - содержит запрашиваемую информацию или NULL
+    
+    statusCode = 400 | 401 | 500 | >1000
+    
+      error - содержит информацию об ошибке (STRING)
+    
+    statusCode = 400 && error = 'Validation Error' 
+    
+      message - содержит информацию о валидации (ARRAY)
 
-HTTP STATUS: 500 - серверу плохо.
-    "statusCode": 500,
-    "message": "Internal server error"
+Далее описаны все возможные statusCode:
+      
+    200. OK
+    201. Created
+    400. Validation Error
+    401. Unauthorized
+    500. Internal Server Error      
   `;
 
 export default HTTP_CODE_DESCRIPTION;

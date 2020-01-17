@@ -32,15 +32,15 @@ pipeline {
             }
         }
 
-        stage('pull') {
-            steps {
-                sh "docker pull ${ecRegistry}/${repositoryName}:${INPUT_PARAMS.IMAGE_NAME}"
-            }
-        }
-
         stage("start") {
             steps {
                 sh "ENV=${INPUT_PARAMS.ENV} TAG=${INPUT_PARAMS.IMAGE_NAME} docker-compose up -d"
+            }
+        }
+
+        stage("notify") {
+            steps {
+                telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n\n${INPUT_PARAMS}"
             }
         }
     }
