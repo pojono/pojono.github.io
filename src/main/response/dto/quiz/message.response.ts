@@ -30,4 +30,11 @@ export class MessageResponseDto {
     isArray: false,
   })
   public readonly entityId: number;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    isArray: false,
+  })
+  public readonly quizId: number;
 }

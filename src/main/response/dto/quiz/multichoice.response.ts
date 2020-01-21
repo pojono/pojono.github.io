@@ -14,5 +14,5 @@ export class MultichoiceResponseDto {
     nullable: false,
     isArray: true,
   })
-  public readonly choices: ChoiceForMultichoiceResponseDto;
+  public readonly choices: ChoiceForMultichoiceResponseDto[];
 }

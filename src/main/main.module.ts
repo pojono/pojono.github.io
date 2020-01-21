@@ -50,8 +50,11 @@ import { EventController } from './controller/event.controller';
 import { EventService } from './service/event.service';
 import { EventRepository } from './repository/event.repository';
 import { QuizRepository } from './repository/quiz.repository';
-import { QuizController } from './controller/quizzes.controller';
+import { QuizController } from './controller/quiz.controller';
 import { QuizService } from './service/quiz.service';
+import { QuizMessageRepository } from './repository/quiz.message.repository';
+import { QuizChoiceRepository } from './repository/quiz.choice.repository';
+import { QuizMultichoiceRepository } from './repository/quiz.multichoice.repository';
 
 @Module({
   imports: [
@@ -76,6 +79,9 @@ import { QuizService } from './service/quiz.service';
       StatisticTrackRepository,
       EventRepository,
       QuizRepository,
+      QuizMessageRepository,
+      QuizChoiceRepository,
+      QuizMultichoiceRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),

@@ -28,7 +28,7 @@ export class QuizResponseDto {
     nullable: true,
     isArray: true,
   })
-  public readonly choice: ChoiceResponseDto;
+  public readonly choice: ChoiceResponseDto[];
 
   @ApiModelProperty({
     type: MultichoiceResponseDto,

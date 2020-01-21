@@ -43,6 +43,7 @@ import * as iap from 'in-app-purchase';
 import { JWT } from 'google-auth-library';
 import { google } from 'googleapis';
 import { StoreEnviromentEnum } from './store.environment.enum';
+import { Telegram } from '../lib/telegram';
 
 @Injectable()
 export class UserService {
@@ -62,7 +63,10 @@ export class UserService {
     return this.userRepository.updateUser(user, userUpdateDto);
   }
 
-  async signIn(signInRequestDto: SignInRequestDto): Promise<{ token: string }> {
+  async signIn(
+    requestId: number,
+    signInRequestDto: SignInRequestDto,
+  ): Promise<{ token: string }> {
     const user = await this.getUserByPhone(signInRequestDto.phone);
     if (!user) {
       ErrorIf.isTrue(true, INVALID_CREDENTIALS);
@@ -101,19 +105,28 @@ export class UserService {
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
+      await Telegram.sendMessage('▶ Success auth +' + user.phone, requestId);
+
       return { token };
     } catch (err) {
       ErrorIf.isTrue(true, INVALID_CREDENTIALS);
     }
   }
 
-  async sendSms(smsRequestDto: SmsRequestDto): Promise<void> {
+  async sendSms(
+    requestId: number,
+    smsRequestDto: SmsRequestDto,
+  ): Promise<void> {
     const { phone } = smsRequestDto;
 
     let user: User | undefined = await this.getUserByPhone(phone);
     if (!user) {
       user = await this.createUserByPhone(phone);
+      await Telegram.sendMessage('😃 New user +' + phone, requestId);
     }
+
+    await Telegram.sendMessage('📱 Sms request from +' + phone, requestId);
+
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
 

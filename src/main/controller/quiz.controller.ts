@@ -26,7 +26,7 @@ import { IdRequestDto } from '../dto/id.request.dto';
 export class QuizController {
   constructor(private quizService: QuizService) {}
 
-  @Get('/')
+  @Get('/:id')
   @ApiResponse({ status: 200, type: GetQuizResponse })
   @ApiOperation({
     title: 'Получение сообщения в мессенджере',
@@ -37,6 +37,9 @@ export class QuizController {
     @GetUser() user: User,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<GetQuizResponse> {
-    return new GetQuizResponse(requestId, null);
+    return new GetQuizResponse(
+      requestId,
+      await this.quizService.getQuiz(idRequestDto.id),
+    );
   }
 }

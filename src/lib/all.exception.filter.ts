@@ -56,6 +56,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       stack += `\n\n${JSON.stringify(messageObject.message)}`;
     }
 
+    if (statusCodeResponse === 404) {
+      responseObject.error = 'Not Found';
+    }
+
     // FOR TELEGRAM
     const body =
       request.body && Object.keys(request.body).length > 0
@@ -73,13 +77,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     logger(responseObject.requestId).error(codeAndError);
     logger(responseObject.requestId).error(stack);
 
-    const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId} [${responseObject.requestId}] `;
+    const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId}`;
 
     (async () => {
       await Telegram.sendMessage(telegramMessage, responseObject.requestId);
     })();
 
-    // logger(responseObject.requestId).log(telegramMessage);
+    logger(responseObject.requestId).log(telegramMessage);
 
     response.status(status).json(responseObject);
   }

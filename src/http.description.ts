@@ -13,7 +13,7 @@ const HTTP_CODE_DESCRIPTION: string = `
     
       data - содержит запрашиваемую информацию или NULL
     
-    statusCode = 400 | 401 | 500 | >1000
+    statusCode = 400 | 401 | 404 | 500 | >1000
     
       error - содержит информацию об ошибке (STRING)
     
@@ -27,6 +27,7 @@ const HTTP_CODE_DESCRIPTION: string = `
     201. Created
     400. Validation Error
     401. Unauthorized
+    404. Not Found
     500. Internal Server Error      
   `;
 

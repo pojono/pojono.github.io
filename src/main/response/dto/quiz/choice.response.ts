@@ -6,6 +6,13 @@ export class ChoiceResponseDto {
     nullable: false,
     isArray: false,
   })
+  public readonly id: number;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    isArray: false,
+  })
   public readonly answerId: number;
 
   @ApiModelProperty({
@@ -14,4 +21,11 @@ export class ChoiceResponseDto {
     isArray: false,
   })
   public readonly text: string;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    isArray: false,
+  })
+  public readonly quizId: number;
 }
