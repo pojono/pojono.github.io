@@ -31,7 +31,7 @@ node {
       }
 
       stage("Start") {
-        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ` ` `#${remoteImageTag}` ` ` \n${env.JOB_URL} \n${sendChangeLogs()}"
+        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` \n\n${env.JOB_URL} \n${sendChangeLogs()}"
       }
 
       stage("Docker build") {
@@ -45,11 +45,11 @@ node {
       }
 
       stage("notify") {
-        telegramSend "🛠✅️ Build №${env.BUILD_NUMBER}: Finish ` ` `#${remoteImageTag}` ` `"
+        telegramSend "🛠✅️ Build №${env.BUILD_NUMBER}: Finish ```#${remoteImageTag}```"
       }
 
     } catch(e) {
-      telegramSend "🛠❌️ Build №${env.BUILD_NUMBER}: Error ` ` `#${remoteImageTag}` ` ` \n${e}"
+      telegramSend "🛠❌️ Build №${env.BUILD_NUMBER}: Error ```#${remoteImageTag}``` \n${e}"
       throw e
     }
 }
