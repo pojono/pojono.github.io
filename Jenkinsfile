@@ -31,7 +31,7 @@ node {
       }
 
       stage("Start") {
-        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` \n${env.JOB_URL} \n${sendChangeLogs()}"
+        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` \n${env.JOB_URL} ${sendChangeLogs()}"
       }
 
       stage("Docker build") {
