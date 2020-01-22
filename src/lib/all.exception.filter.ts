@@ -44,7 +44,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const requestId: string =
       request && request.locals && request.locals.requestId
         ? request.locals.requestId
-        : 'EXCFILERR';
+        : 'EXCFILTERERR';
 
     const responseObject: any = {
       success: false,
@@ -54,10 +54,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       error: errorMessage,
     };
 
+    let validationError: string = '';
     // Validation
     if (messageObject.message) {
       responseObject.message = messageObject.message;
       responseObject.error = 'Validation Error';
+      validationError =
+        Object.prototype.toString.call(messageObject.message) ===
+        '[object String]'
+          ? ` (${messageObject.message})`
+          : '';
       stack += `\n\n${JSON.stringify(messageObject.message)}`;
     }
 
@@ -82,7 +88,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     logger(responseObject.requestId).error(codeAndError);
     logger(responseObject.requestId).error(stack);
 
-    const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId}`;
+    const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId}${validationError}`;
 
     (async () => {
       await Telegram.sendMessage(telegramMessage, responseObject.requestId);

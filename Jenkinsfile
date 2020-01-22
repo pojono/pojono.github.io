@@ -24,6 +24,10 @@ node {
       def remoteImageTag
       def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
 
+      stage("Start") {
+        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start #${remoteImageTag} \n${env.JOB_URL} \n${sendChangeLogs()}"
+      }
+
       stage("Checkout") {
         checkout scm
         def commit_hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
@@ -41,11 +45,11 @@ node {
       }
 
       stage("notify") {
-        telegramSend "✅ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n\n${remoteImageTag} \n${sendChangeLogs()}"
+        telegramSend "🛠✅️ Build №${env.BUILD_NUMBER}: Finish #${remoteImageTag}"
       }
 
     } catch(e) {
-      telegramSend "⚠ №${env.BUILD_NUMBER} ${env.JOB_NAME} #jenkins ${env.JOB_URL} \n${sendChangeLogs()}"
+      telegramSend "🛠❌️ Build №${env.BUILD_NUMBER}: Error #${remoteImageTag} \n${e}"
       throw e
     }
 }
