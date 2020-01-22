@@ -35,7 +35,7 @@ node {
       }
 
       stage("Docker build") {
-        sh "docker build -t ${repositoryName}:${remoteImageTag} ."
+        sh "docker_err build -t ${repositoryName}:${remoteImageTag} ."
       }
 
       stage("Docker push") {
