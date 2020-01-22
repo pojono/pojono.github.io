@@ -25,7 +25,7 @@ pipeline {
         stage('clone') {
             steps {
 
-                telegramSend "🚀☑️️ Deploy №${env.BUILD_NUMBER}: Start ```#${INPUT_PARAMS.IMAGE_NAME}``` \n<${INPUT_PARAMS.ENV}> \n${env.JOB_URL} "
+                telegramSend "🚀☑️️ Deploy №${env.BUILD_NUMBER}: Start ```#${INPUT_PARAMS.IMAGE_NAME}```<${INPUT_PARAMS.ENV}> \n\n${env.JOB_URL} "
 
                 git branch: "${INPUT_PARAMS.BRANCH_NAME}",
                     credentialsId: 'bitbucket',
@@ -43,7 +43,7 @@ pipeline {
 
         stage("notify") {
             steps {
-                telegramSend "🚀☑️️ Deploy №${env.BUILD_NUMBER}: Finish ```#${INPUT_PARAMS.IMAGE_NAME}``` \n<${INPUT_PARAMS.ENV}>"
+                telegramSend "🚀✅️️ Deploy №${env.BUILD_NUMBER}: Finish ```#${INPUT_PARAMS.IMAGE_NAME}```<${INPUT_PARAMS.ENV}>"
             }
         }
     }
