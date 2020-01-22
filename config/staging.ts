@@ -3,7 +3,7 @@ module.exports = {
     scheme: 'https',
   },
   sms: {
-    useCognito: true,
+    useCognito: false,
   },
   aws: {
     cognito: {
