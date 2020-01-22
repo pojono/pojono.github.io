@@ -41,10 +41,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const errorMessage: string = message || 'Internal Server Error';
     const statusCodeResponse: number = statusCode || status;
 
+    const requestId: string =
+      request && request.locals && request.locals.requestId
+        ? request.locals.requestId
+        : 'EXCFILERR';
+
     const responseObject: any = {
       success: false,
       timestamp: new Date(),
-      requestId: request.locals.requestId,
+      requestId,
       statusCode: statusCodeResponse,
       error: errorMessage,
     };

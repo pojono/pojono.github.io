@@ -21,16 +21,18 @@ process.on('SIGINT', async function onSigint() {
   await Telegram.sendMessage(message);
 });
 
-process.on('uncaughtException', async function uncaughtException(err) {
+process.on('uncaughtException', async err => {
   const message: string = `⚠ Got uncaughtException! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
-  logger.log(message);
+  logger.error(message);
+  logger.error(err.stack);
   await Telegram.sendMessage(message);
   process.exit(1);
 });
 
-process.on('unhandledRejection', async err => {
-  const message: string = `⚠ Got uncaughtException! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
-  logger.log(message);
+process.on('unhandledRejection', async (err: any) => {
+  const message: string = `⚠ Got uncaughtRejection! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
+  logger.error(message);
+  logger.error(err.stack || err);
   await Telegram.sendMessage(message);
   process.exit(1);
 });
