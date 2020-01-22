@@ -32,11 +32,11 @@ node {
       }
 
       stage("Start") {
-        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` ${env.JOB_URL} ${sendChangeLogs()}"
+        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` \n${env.JOB_URL} ${sendChangeLogs()}"
       }
 
       stage("Docker build") {
-        sh "docker_err build -t ${repositoryName}:${remoteImageTag} ."
+        sh "docker build -t ${repositoryName}:${remoteImageTag} ."
       }
 
       stage("Docker push") {
