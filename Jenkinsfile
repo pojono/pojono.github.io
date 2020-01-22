@@ -12,6 +12,8 @@ def sendChangeLogs() {
     return commitMessages
 }
 
+def remoteImageTag
+
 node {
     try {
 
@@ -21,7 +23,6 @@ node {
       def credentialsName = "iam-cred"
 
       def imageTag        = env.BRANCH_NAME
-      def remoteImageTag
       def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
 
       stage("Checkout") {
@@ -31,7 +32,7 @@ node {
       }
 
       stage("Start") {
-        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` \n${env.JOB_URL} ${sendChangeLogs()}"
+        telegramSend "🛠☑️ Build №${env.BUILD_NUMBER}: Start ```#${remoteImageTag}``` ${env.JOB_URL} ${sendChangeLogs()}"
       }
 
       stage("Docker build") {
