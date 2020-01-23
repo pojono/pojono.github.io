@@ -116,13 +116,13 @@ async function bootstrap() {
     const health: any = await checkOutside();
 
     const healthMessage: string =
-      '⚡️❇️ Network: #' +
+      '⚡️❇️ Network. Up: ' +
+      health.data.uptime +
+      ' #' +
       process.env.TAG +
       ' <' +
       process.env.NODE_ENV +
-      '> ' +
-      'Up: ' +
-      health.data.uptime;
+      '>';
 
     await Telegram.sendMessage(healthMessage);
   } catch (error) {
