@@ -1,4 +1,7 @@
 module.exports = {
+  server: {
+    url: 'https://production.prostoapp.com/',
+  },
   swagger: {
     enable: false,
   },

@@ -1,4 +1,7 @@
 module.exports = {
+  server: {
+    url: 'https://staging.prostoapp.com/',
+  },
   swagger: {
     scheme: 'https',
   },

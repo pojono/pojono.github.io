@@ -16,7 +16,7 @@ export class AppController {
     title: 'Время работы сервера с момента последнего запуска',
   })
   getRoot(@GetRequestId() requestId): RootResponse {
-    logger(requestId).log('get uptime by id');
+    // logger(requestId).log('get uptime by id');
     return new RootResponse(requestId, this.appService.getUptime());
   }
 }

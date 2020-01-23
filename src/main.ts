@@ -8,34 +8,27 @@ import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { Telegram } from './lib/telegram';
 const logger = new Logger('Bootstrap');
+import * as rp from 'request-promise-native';
 
 process.on('SIGTERM', async function onSigterm() {
   const message: string =
-    '⚡️️❗️ SIGTERM: ```#' +
-    process.env.TAG +
-    '``` <' +
-    process.env.NODE_ENV +
-    '>';
+    '⚡️️❗️ SIGTERM: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
   logger.log(message);
   await Telegram.sendImportantMessage(message);
 });
 
 process.on('SIGINT', async function onSigint() {
   const message: string =
-    '⚡⭕️️ SIGINT: ```#' +
-    process.env.TAG +
-    '``` <' +
-    process.env.NODE_ENV +
-    '>';
+    '⚡⭕️️ SIGINT: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
   logger.log(message);
   await Telegram.sendImportantMessage(message);
 });
 
 process.on('uncaughtException', async err => {
   const message: string =
-    '⚡🆘 uncaughtException: ```#' +
+    '⚡🆘 uncaughtException: #' +
     process.env.TAG +
-    '``` <' +
+    ' <' +
     process.env.NODE_ENV +
     '> ' +
     err;
@@ -47,9 +40,9 @@ process.on('uncaughtException', async err => {
 
 process.on('unhandledRejection', async (err: any) => {
   const message: string =
-    '⚡️⛔️ unhandledRejection: ```#' +
+    '⚡️⛔️ unhandledRejection: #' +
     process.env.TAG +
-    '``` <' +
+    ' <' +
     process.env.NODE_ENV +
     '> ' +
     err;
@@ -58,6 +51,13 @@ process.on('unhandledRejection', async (err: any) => {
   await Telegram.sendImportantMessage(message);
   process.exit(1);
 });
+
+async function checkOutside() {
+  return rp.get({
+    uri: config.get('server.url'),
+    json: true,
+  });
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -90,9 +90,9 @@ async function bootstrap() {
           new Date().toISOString() +
           ' (UTC) \n' +
           HTTP_CODE_DESCRIPTION +
-          ' \n ``` \n' +
+          ' \n  \n' +
           errors +
-          '```',
+          '',
       )
       .setVersion(process.env.TAG || 'PLEASE SET ENV TAG')
       .setSchemes(scheme)
@@ -108,21 +108,41 @@ async function bootstrap() {
   await app.listen(port);
 
   const startMessage: string =
-    '⚡️✅ Start: ```#' +
-    process.env.TAG +
-    '``` <' +
-    process.env.NODE_ENV +
-    '>';
+    '⚡️✅ Start: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
 
   await Telegram.sendMessage(startMessage);
+
+  try {
+    const health: any = await checkOutside();
+
+    const healthMessage: string =
+      '⚡️❇️ Network: #' +
+      process.env.TAG +
+      ' <' +
+      process.env.NODE_ENV +
+      '> ' +
+      'Up: ' +
+      health.data.uptime;
+
+    await Telegram.sendMessage(healthMessage);
+  } catch (error) {
+    const message: string =
+      '⚡️❌️ NetworkError: #' +
+      process.env.TAG +
+      ' <' +
+      process.env.NODE_ENV +
+      '> ' +
+      error;
+    await Telegram.sendImportantMessage(message);
+  }
 }
 
 (async () => {
   bootstrap().catch(async err => {
     const message: string =
-      '⚡️📛️ bootstrapError: ```#' +
+      '⚡️📛️ BootstrapError: #' +
       process.env.TAG +
-      '``` <' +
+      ' <' +
       process.env.NODE_ENV +
       '> ' +
       err;

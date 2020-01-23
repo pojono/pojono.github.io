@@ -1,6 +1,7 @@
 module.exports = {
   server: {
     port: 3001,
+    url: 'http://localhost:3001',
   },
   jwt: {
     expiresIn: 3600000,
