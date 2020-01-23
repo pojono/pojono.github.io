@@ -3,4 +3,5 @@ export enum EntityEnum {
   COURSE = 'COURSE',
   HOME = 'HOME',
   RUBRIC = 'RUBRIC',
+  ONBOARDING = 'ONBOARDING',
 }

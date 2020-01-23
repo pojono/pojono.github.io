@@ -1,4 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { EventEnum } from '../event.enum';
 
 @Entity('event')
 export class Event extends BaseEntity {
@@ -6,7 +7,7 @@ export class Event extends BaseEntity {
   id: number;
 
   @Column({ nullable: true })
-  event: string;
+  event: EventEnum;
 
   @Column({ nullable: true })
   value: number;
