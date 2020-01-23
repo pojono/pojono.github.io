@@ -105,7 +105,7 @@ export class UserService {
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
-      await Telegram.sendMessage('▶ Success auth +' + user.phone, requestId);
+      await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
 
       return { token };
     } catch (err) {
@@ -122,10 +122,10 @@ export class UserService {
     let user: User | undefined = await this.getUserByPhone(phone);
     if (!user) {
       user = await this.createUserByPhone(phone);
-      await Telegram.sendMessage('😃 New user +' + phone, requestId);
+      await Telegram.sendMessage('🙋 New user +' + phone, requestId);
     }
 
-    await Telegram.sendMessage('📱 Sms request from +' + phone, requestId);
+    await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);

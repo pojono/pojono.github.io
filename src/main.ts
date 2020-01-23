@@ -10,30 +10,52 @@ import { Telegram } from './lib/telegram';
 const logger = new Logger('Bootstrap');
 
 process.on('SIGTERM', async function onSigterm() {
-  const message: string = `⚠ Got SIGTERM! Build ${process.env.TAG} on ${process.env.NODE_ENV} env`;
+  const message: string =
+    '⚡️️❗️ SIGTERM: ```#' +
+    process.env.TAG +
+    '``` <' +
+    process.env.NODE_ENV +
+    '>';
   logger.log(message);
-  await Telegram.sendMessage(message);
+  await Telegram.sendImportantMessage(message);
 });
 
 process.on('SIGINT', async function onSigint() {
-  const message: string = `⚠ Got SIGINT! Build ${process.env.TAG} on ${process.env.NODE_ENV} env`;
+  const message: string =
+    '⚡⭕️️ SIGINT: ```#' +
+    process.env.TAG +
+    '``` <' +
+    process.env.NODE_ENV +
+    '>';
   logger.log(message);
-  await Telegram.sendMessage(message);
+  await Telegram.sendImportantMessage(message);
 });
 
 process.on('uncaughtException', async err => {
-  const message: string = `⚠ Got uncaughtException! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
+  const message: string =
+    '⚡🆘 uncaughtException: ```#' +
+    process.env.TAG +
+    '``` <' +
+    process.env.NODE_ENV +
+    '> ' +
+    err;
   logger.error(message);
   logger.error(err.stack);
-  await Telegram.sendMessage(message);
+  await Telegram.sendImportantMessage(message);
   process.exit(1);
 });
 
 process.on('unhandledRejection', async (err: any) => {
-  const message: string = `⚠ Got uncaughtRejection! Build ${process.env.TAG} on ${process.env.NODE_ENV} env. Message: ${err}`;
+  const message: string =
+    '⚡️⛔️ unhandledRejection: ```#' +
+    process.env.TAG +
+    '``` <' +
+    process.env.NODE_ENV +
+    '> ' +
+    err;
   logger.error(message);
   logger.error(err.stack || err);
-  await Telegram.sendMessage(message);
+  await Telegram.sendImportantMessage(message);
   process.exit(1);
 });
 
@@ -61,6 +83,7 @@ async function bootstrap() {
       .addTag('statistics', 'Статистика по приложению')
       .addTag('quizzes', 'Диалоги в псевдо-мессенджере')
       .addTag('events', 'Ивенты о происходящем в приложении')
+      .addTag('onboardings', 'Онбоардинги')
       .addTag('root', 'Системная информация о сервере')
       .setDescription(
         'Server started at: ' +
@@ -84,19 +107,28 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  const startMessage: string = `✅ ${process.env.TAG} on ${process.env.NODE_ENV} env started!`;
+  const startMessage: string =
+    '⚡️✅ Start: ```#' +
+    process.env.TAG +
+    '``` <' +
+    process.env.NODE_ENV +
+    '>';
 
-  logger.log(startMessage);
-
-  try {
-    if (process.env.NODE_ENV !== 'development') {
-      await Telegram.sendMessage(startMessage);
-    }
-  } catch (err) {
-    logger.error(JSON.stringify(err));
-  }
+  await Telegram.sendMessage(startMessage);
 }
 
 (async () => {
-  await bootstrap();
+  bootstrap().catch(async err => {
+    const message: string =
+      '⚡️📛️ bootstrapError: ```#' +
+      process.env.TAG +
+      '``` <' +
+      process.env.NODE_ENV +
+      '> ' +
+      err;
+    logger.error(message);
+    logger.error(err.stack || err);
+    await Telegram.sendImportantMessage(message);
+    process.exit(1);
+  });
 })();
