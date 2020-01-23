@@ -11,6 +11,9 @@ import { ChoiceForMultichoiceResponseDto } from '../response/dto/quiz/choice.for
 import { QuizMessageRepository } from '../repository/quiz.message.repository';
 import { QuizChoiceRepository } from '../repository/quiz.choice.repository';
 import { QuizMultichoiceRepository } from '../repository/quiz.multichoice.repository';
+import { PostQuizResponseDto } from '../response/post.quiz.response';
+import { QuizAnswerDto } from '../dto/quiz.answer.dto';
+import { User } from '../../user/user.entity';
 
 @Injectable()
 export class QuizService {
@@ -27,6 +30,13 @@ export class QuizService {
     @InjectRepository(QuizMultichoiceRepository)
     private quizMultichoiceRepository: QuizMultichoiceRepository,
   ) {}
+
+  async postQuiz(
+    user: User,
+    quizAnswerDto: QuizAnswerDto,
+  ): Promise<PostQuizResponseDto> {
+    return { quizId: null };
+  }
 
   async getQuiz(quizId: number): Promise<GetQuizResponseDto> {
     const quiz: Quiz | undefined = await this.quizRepository.findById(quizId);
