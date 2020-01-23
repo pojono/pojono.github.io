@@ -14,6 +14,9 @@ import { QuizMultichoiceRepository } from '../repository/quiz.multichoice.reposi
 import { PostQuizResponseDto } from '../response/post.quiz.response';
 import { QuizAnswerDto } from '../dto/quiz.answer.dto';
 import { User } from '../../user/user.entity';
+import { AnswerRepository } from '../repository/answer.repository';
+import { Answer } from '../entity/answer.entity';
+import { AnswerActionEnum } from '../answer.action.enum';
 
 @Injectable()
 export class QuizService {
@@ -29,13 +32,25 @@ export class QuizService {
 
     @InjectRepository(QuizMultichoiceRepository)
     private quizMultichoiceRepository: QuizMultichoiceRepository,
+
+    @InjectRepository(AnswerRepository)
+    private answerRepository: AnswerRepository,
   ) {}
 
   async postQuiz(
     user: User,
     quizAnswerDto: QuizAnswerDto,
   ): Promise<PostQuizResponseDto> {
-    return { quizId: null };
+    const answer: Answer | undefined = await this.answerRepository.findByQuizId(
+      quizAnswerDto.answerId,
+    );
+    ErrorIf.isEmpty(answer, OBJECT_NOT_FOUND);
+
+    if (answer.answerAction === AnswerActionEnum.SET_NAME) {
+      // TODO:
+    }
+
+    return { quizId: answer.quizId };
   }
 
   async getQuiz(quizId: number): Promise<GetQuizResponseDto> {

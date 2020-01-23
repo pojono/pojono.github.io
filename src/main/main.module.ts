@@ -58,6 +58,7 @@ import { QuizMultichoiceRepository } from './repository/quiz.multichoice.reposit
 import { OnboardingRepository } from './repository/onboarding.repository';
 import { OnboardingController } from './controller/onboarding.controller';
 import { OnboardingService } from './service/onboarding.service';
+import { AnswerRepository } from './repository/answer.repository';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { OnboardingService } from './service/onboarding.service';
       QuizChoiceRepository,
       QuizMultichoiceRepository,
       OnboardingRepository,
+      AnswerRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
