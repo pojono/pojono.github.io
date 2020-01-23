@@ -55,6 +55,9 @@ import { QuizService } from './service/quiz.service';
 import { QuizMessageRepository } from './repository/quiz.message.repository';
 import { QuizChoiceRepository } from './repository/quiz.choice.repository';
 import { QuizMultichoiceRepository } from './repository/quiz.multichoice.repository';
+import { OnboardingRepository } from './repository/onboarding.repository';
+import { OnboardingController } from './controller/onboarding.controller';
+import { OnboardingService } from './service/onboarding.service';
 
 @Module({
   imports: [
@@ -82,6 +85,7 @@ import { QuizMultichoiceRepository } from './repository/quiz.multichoice.reposit
       QuizMessageRepository,
       QuizChoiceRepository,
       QuizMultichoiceRepository,
+      OnboardingRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -99,6 +103,7 @@ import { QuizMultichoiceRepository } from './repository/quiz.multichoice.reposit
     FastSupportController,
     EventController,
     QuizController,
+    OnboardingController,
   ],
   providers: [
     MainService,
@@ -123,6 +128,7 @@ import { QuizMultichoiceRepository } from './repository/quiz.multichoice.reposit
     StatisticTrackService,
     EventService,
     QuizService,
+    OnboardingService,
   ],
 })
 export class MainModule {}

@@ -1,15 +1,18 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('event')
-export class Event extends BaseEntity {
+@Entity('onboarding')
+export class Onboarding extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: true })
-  event: string;
+  title: string;
 
   @Column({ nullable: true })
-  value: number;
+  description: string;
+
+  @Column({ nullable: true })
+  picture: string;
 
   @Column({ nullable: false })
   quizId: number;
