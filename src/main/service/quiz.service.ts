@@ -17,6 +17,8 @@ import { User } from '../../user/user.entity';
 import { AnswerRepository } from '../repository/answer.repository';
 import { Answer } from '../entity/answer.entity';
 import { AnswerActionEnum } from '../answer.action.enum';
+import { UserService } from '../../user/user.service';
+import { UserUpdateDto } from '../../user/dto/user.update.dto';
 
 @Injectable()
 export class QuizService {
@@ -35,19 +37,23 @@ export class QuizService {
 
     @InjectRepository(AnswerRepository)
     private answerRepository: AnswerRepository,
+
+    private userService: UserService,
   ) {}
 
   async postQuiz(
     user: User,
     quizAnswerDto: QuizAnswerDto,
   ): Promise<PostQuizResponseDto> {
-    const answer: Answer | undefined = await this.answerRepository.findByQuizId(
+    const answer: Answer | undefined = await this.answerRepository.findById(
       quizAnswerDto.answerId,
     );
     ErrorIf.isEmpty(answer, OBJECT_NOT_FOUND);
 
     if (answer.answerAction === AnswerActionEnum.SET_NAME) {
-      // TODO:
+      const userUpdate = new UserUpdateDto();
+      userUpdate.firstName = quizAnswerDto.input;
+      await this.userService.editMyself(user, userUpdate);
     }
 
     return { quizId: answer.quizId };

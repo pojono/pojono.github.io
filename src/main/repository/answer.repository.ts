@@ -11,6 +11,7 @@ export class AnswerRepository extends Repository<Answer> {
     return Answer.findOne(id);
   }
 
+  /*
   async findByQuizId(quizId: number): Promise<Answer | undefined> {
     return Answer.findOne({
       where: {
@@ -18,4 +19,5 @@ export class AnswerRepository extends Repository<Answer> {
       },
     });
   }
+  */
 }
