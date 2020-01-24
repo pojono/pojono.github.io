@@ -104,8 +104,8 @@ export class UserService {
       }
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
-
-      await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
+      // TODO: telegram
+      // await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
 
       return { token };
     } catch (err) {
@@ -122,10 +122,12 @@ export class UserService {
     let user: User | undefined = await this.getUserByPhone(phone);
     if (!user) {
       user = await this.createUserByPhone(phone);
-      await Telegram.sendMessage('🙋 New user +' + phone, requestId);
+      // TODO: telegram
+      // await Telegram.sendMessage('🙋 New user +' + phone, requestId);
     }
 
-    await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
+    // TODO: telegram
+    // await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
@@ -316,26 +318,27 @@ export class UserService {
       'hour',
     );
 
-    this.logger.log('lastActivity ' + lastActivity.toISOString());
-    this.logger.log('serverTime ' + serverTime.toISOString());
-    this.logger.log('userTime ' + userTime.toISOString());
-    this.logger.log('userStartToday ' + userStartToday.toISOString());
-    this.logger.log('userStartYesterday ' + userStartYesterday.toISOString());
+    // TODO: load test
+    // this.logger.log('lastActivity ' + lastActivity.toISOString());
+    // this.logger.log('serverTime ' + serverTime.toISOString());
+    // this.logger.log('userTime ' + userTime.toISOString());
+    // this.logger.log('userStartToday ' + userStartToday.toISOString());
+    // this.logger.log('userStartYesterday ' + userStartYesterday.toISOString());
 
-    if (lastActivity.isAfter(userStartToday)) {
-      this.logger.log('Last Activity is Today. Strike does not change');
-    }
+    // if (lastActivity.isAfter(userStartToday)) {
+    //   this.logger.log('Last Activity is Today. Strike does not change');
+    // }
 
     if (
       lastActivity.isAfter(userStartYesterday) &&
       lastActivity.isBefore(userStartToday)
     ) {
-      this.logger.log('Last Activity was yesterday. Strike +1');
+      // this.logger.log('Last Activity was yesterday. Strike +1');
       await this.userRepository.incrementStrike(user);
     }
 
     if (lastActivity.isBefore(userStartYesterday)) {
-      this.logger.log('LastActivity was before yesterday. Strike = 1');
+      // this.logger.log('LastActivity was before yesterday. Strike = 1');
       await this.userRepository.resetStrike(user);
     }
   }
@@ -347,15 +350,16 @@ export class UserService {
       .utc()
       .subtract(maxSessionIdleTime, 'minutes');
 
-    this.logger.log('lastActivity ' + lastActivity.toISOString());
-    this.logger.log('sessionEdgeTime ' + sessionEdgeTime.toISOString());
+    // TODO: load test
+    // this.logger.log('lastActivity ' + lastActivity.toISOString());
+    // this.logger.log('sessionEdgeTime ' + sessionEdgeTime.toISOString());
 
     if (lastActivity.isAfter(sessionEdgeTime)) {
-      this.logger.log(
-        'Last Activity is not so far. Session counter does not change',
-      );
+      // this.logger.log(
+      //   'Last Activity is not so far. Session counter does not change',
+      // );
     } else {
-      this.logger.log('Last Activity was so far. Session counter +1');
+      // this.logger.log('Last Activity was so far. Session counter +1');
       await this.userRepository.incrementSession(user);
     }
   }
