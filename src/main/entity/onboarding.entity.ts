@@ -19,4 +19,7 @@ export class Onboarding extends BaseEntity {
 
   @Column({ nullable: false, default: false })
   forStart: boolean;
+
+  @Column({ nullable: false, default: 0 })
+  orderIndex: number;
 }

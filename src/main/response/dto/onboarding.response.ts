@@ -44,4 +44,12 @@ export class OnboardingResponseDto {
     description: 'Для онбоардингов без авторизации',
   })
   public readonly forStart: boolean;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    description: 'Порядковый номер онбоардинга',
+    default: 0,
+  })
+  public readonly orderIndex: number;
 }

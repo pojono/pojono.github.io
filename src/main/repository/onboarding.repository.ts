@@ -16,6 +16,9 @@ export class OnboardingRepository extends Repository<Onboarding> {
       where: {
         quizId,
       },
+      order: {
+        orderIndex: 'ASC',
+      },
     });
   }
 
@@ -23,6 +26,9 @@ export class OnboardingRepository extends Repository<Onboarding> {
     return Onboarding.find({
       where: {
         forStart,
+      },
+      order: {
+        orderIndex: 'ASC',
       },
     });
   }
