@@ -31,8 +31,17 @@ export class OnboardingResponseDto {
 
   @ApiModelProperty({
     type: 'number',
-    nullable: false,
+    nullable: true,
     isArray: false,
   })
   public readonly quizId: number;
+
+  @ApiModelProperty({
+    type: 'boolean',
+    nullable: false,
+    isArray: false,
+    default: false,
+    description: 'Для онбоардингов без авторизации',
+  })
+  public readonly forStart: boolean;
 }

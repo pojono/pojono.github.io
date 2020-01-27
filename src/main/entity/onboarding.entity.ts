@@ -14,6 +14,9 @@ export class Onboarding extends BaseEntity {
   @Column({ nullable: true })
   picture: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   quizId: number;
+
+  @Column({ nullable: false, default: false })
+  forStart: boolean;
 }

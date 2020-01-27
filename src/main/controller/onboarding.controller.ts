@@ -22,11 +22,26 @@ import { IdRequestDto } from '../dto/id.request.dto';
 
 @Controller('onboardings')
 @ApiUseTags('onboardings')
-@UseGuards(AuthGuard())
-@ApiBearerAuth()
 export class OnboardingController {
   constructor(private onboardingService: OnboardingService) {}
 
+  @Get('/start')
+  @ApiResponse({ status: 200, type: GetOnboardingResponse })
+  @ApiOperation({
+    title: 'Получение массива стартовых онбоардингов',
+    deprecated: false,
+  })
+  async getStartOnboarding(
+    @GetRequestId() requestId,
+  ): Promise<GetOnboardingResponse> {
+    return new GetOnboardingResponse(
+      requestId,
+      await this.onboardingService.getStartOnboarding(true),
+    );
+  }
+
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get('/:id')
   @ApiResponse({ status: 200, type: GetOnboardingResponse })
   @ApiOperation({

@@ -18,4 +18,12 @@ export class OnboardingRepository extends Repository<Onboarding> {
       },
     });
   }
+
+  async findStart(forStart: boolean): Promise<Onboarding[]> {
+    return Onboarding.find({
+      where: {
+        forStart,
+      },
+    });
+  }
 }

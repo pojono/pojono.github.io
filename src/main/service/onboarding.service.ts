@@ -13,4 +13,10 @@ export class OnboardingService {
   async getOnboarding(quizId: number): Promise<GetOnboardingResponseDto> {
     return { onboarding: await this.onboardingRepository.findByQuizId(quizId) };
   }
+
+  async getStartOnboarding(
+    forStart: boolean = false,
+  ): Promise<GetOnboardingResponseDto> {
+    return { onboarding: await this.onboardingRepository.findStart(forStart) };
+  }
 }
