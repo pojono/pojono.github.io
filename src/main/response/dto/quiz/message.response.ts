@@ -37,4 +37,12 @@ export class MessageResponseDto {
     isArray: false,
   })
   public readonly quizId: number;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    description: 'Порядковый номер сообщения',
+    default: 0,
+  })
+  public readonly orderIndex: number;
 }

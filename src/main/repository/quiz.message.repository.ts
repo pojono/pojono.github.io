@@ -16,6 +16,9 @@ export class QuizMessageRepository extends Repository<QuizMessage> {
       where: {
         quizId,
       },
+      order: {
+        orderIndex: 'ASC',
+      },
     });
   }
 }
