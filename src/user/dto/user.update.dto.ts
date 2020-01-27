@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsBoolean } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class UserUpdateDto {
@@ -28,4 +28,13 @@ export class UserUpdateDto {
     required: false,
   })
   pushesTime: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiModelProperty({
+    type: 'string',
+    example: true,
+    required: false,
+  })
+  firstQuizFinished: boolean;
 }

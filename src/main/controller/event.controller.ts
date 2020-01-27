@@ -38,7 +38,10 @@ export class EventController {
     @GetUser() user: User,
     @Query(ValidationPipe) eventRequestDto: EventRequestDto,
   ): Promise<GetEventResponse> {
-    const quizId: number = await this.eventService.getEvent(eventRequestDto);
+    const quizId: number = await this.eventService.getEvent(
+      user,
+      eventRequestDto,
+    );
     return new GetEventResponse(requestId, { quizId });
   }
 }

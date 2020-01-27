@@ -12,7 +12,7 @@ export class EventRequestDto {
       EventEnum.LESSON_FINISHED,
       EventEnum.COURSE_FINISHED,
       EventEnum.AUTHORIZATION_FINISHED,
-      EventEnum.APP_STARTED,
+      // EventEnum.APP_STARTED,
     ],
   })
   event: number;

@@ -86,4 +86,7 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   pushesTime: string;
+
+  @Column({ nullable: false, default: false })
+  firstQuizFinished: boolean;
 }

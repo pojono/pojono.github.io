@@ -45,6 +45,10 @@ export class UserRepository extends Repository<User> {
       user.pushesTime = userUpdateDto.pushesTime;
     }
 
+    if (dtoKeys.includes('firstQuizFinished')) {
+      user.firstQuizFinished = userUpdateDto.firstQuizFinished;
+    }
+
     return await user.save();
   }
 

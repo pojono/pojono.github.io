@@ -96,6 +96,9 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true })
   pushesTime: string;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  firstQuizFinished: boolean;
 }
 
 export class MeResponse extends CustomResponse {

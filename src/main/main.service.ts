@@ -12,7 +12,7 @@ import { FastSupportService } from './service/fast.support.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { StatisticHourService } from './service/statistic.hour.service';
-import { StatisticCourseService } from './service/statistic.course.service';
+// import { StatisticCourseService } from './service/statistic.course.service';
 
 @Injectable()
 export class MainService {

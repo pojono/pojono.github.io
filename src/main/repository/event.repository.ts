@@ -12,7 +12,9 @@ export class EventRepository extends Repository<Event> {
     return Event.findOne(id);
   }
 
-  async findEvent(eventRequestDto: EventRequestDto): Promise<number | null> {
+  async findEvent(
+    eventRequestDto: EventRequestDto,
+  ): Promise<Event | undefined> {
     const search: any = {
       event: eventRequestDto.event,
     };
@@ -21,8 +23,6 @@ export class EventRepository extends Repository<Event> {
       search.value = eventRequestDto.id;
     }
 
-    const event: Event = await Event.findOne({ where: search });
-
-    return event ? event.quizId : null;
+    return Event.findOne({ where: search });
   }
 }

@@ -56,6 +56,12 @@ export class QuizService {
       await this.userService.editMyself(user, userUpdate);
     }
 
+    if (answer.answerAction === AnswerActionEnum.FIRST_QUIZ_FINISHED) {
+      const userUpdate = new UserUpdateDto();
+      userUpdate.firstQuizFinished = true;
+      await this.userService.editMyself(user, userUpdate);
+    }
+
     return { quizId: answer.quizId };
   }
 
