@@ -23,6 +23,12 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true })
   affirmation: string;
 
+  @Column({ nullable: true })
+  affirmationForShare: string;
+
+  @Column({ nullable: true })
+  affirmationText: string;
+
   @Column({ nullable: false })
   orderIndex: number;
 }

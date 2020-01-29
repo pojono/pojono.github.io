@@ -1,4 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
+import { Column } from 'typeorm';
 
 export class LessonResponseDto {
   @ApiModelProperty({ type: 'number', nullable: false })
@@ -19,8 +20,26 @@ export class LessonResponseDto {
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly colour: string;
 
-  @ApiModelProperty({ type: 'string', nullable: true })
+  @ApiModelProperty({
+    type: 'string',
+    nullable: true,
+    description: 'Картинка для аффирмации без текста',
+  })
   public readonly affirmation: string;
+
+  @ApiModelProperty({
+    type: 'string',
+    nullable: true,
+    description: 'Картинка с уже наложенным текстом',
+  })
+  affirmationForShare: string;
+
+  @ApiModelProperty({
+    type: 'string',
+    nullable: true,
+    description: 'Текст аффирмации для наложения на картинку',
+  })
+  affirmationText: string;
 
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly orderIndex: number;
