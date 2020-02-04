@@ -25,6 +25,14 @@ module.exports = {
     phoneWithoutSms: '73141592653',
     codeWithoutSms: '0112',
   },
+  aws: {
+    bucketName: '',
+    accessKeyId: '',
+    secretAccessKey: '',
+    localSimulation: '',
+    endpoint: '',
+    region: '',
+  },
   daysForNewBadge: 7,
   sessionIdleDuration: 10,
   iap: {

@@ -36,6 +36,7 @@
     "config": "3.2.4",
     "google-auth-library": "5.8.0",
     "googleapis": "46.0.0",
+    "jimp": "0.8.4",
     "in-app-purchase": "1.11.4",
     "moment": "2.24.0",
     "passport": "0.4.0",

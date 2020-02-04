@@ -7,11 +7,6 @@ import {
   Body,
   Put,
   Logger,
-  UseInterceptors,
-  UploadedFile,
-  Param,
-  Res,
-  Next,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,8 +17,6 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiConsumes,
-  ApiImplicitFile,
 } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { SmsRequestDto } from './dto/sms.request.dto';
@@ -39,15 +32,12 @@ import { ReceiptResponse } from './response/receipt.response';
 import { ReceiptUpdateDto } from './dto/receipt.update.dto';
 import { ErrorIf } from '../lib/error.if';
 import { PURCHASE_VALIDATION_ERROR } from '../lib/errors';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { NextFunction } from 'express';
-import { UploadPhotoResponse } from './response/upload.photo.response';
-import { Response } from 'express';
-const logger = new Logger('UserController');
 
 @ApiUseTags('users')
 @Controller('user') // TODO: change to userS
 export class UserController {
+  private logger = new Logger('UserController');
+
   constructor(private userService: UserService) {}
 
   @Post('/sms')
@@ -145,69 +135,9 @@ export class UserController {
       );
     } catch (err) {
       ErrorIf.isTrue(true, PURCHASE_VALIDATION_ERROR);
-      logger.error(JSON.stringify(err), requestId);
+      this.logger.error(JSON.stringify(err), requestId);
     }
 
     return new ReceiptResponse(requestId, null);
-  }
-
-  @Post('/photo')
-  @ApiOperation({ title: 'Upload user photo', deprecated: true })
-  @ApiResponse({ status: 200, type: UploadPhotoResponse })
-  @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({
-    name: 'file',
-    required: true,
-    description: 'Upload photo file',
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadPhoto(
-    @GetRequestId() requestId,
-    @GetUser() user: User,
-    @UploadedFile() file,
-  ): Promise<UploadPhotoResponse> {
-    /*
-    const pictureWidth: number = config.get('picture.width');
-    const resizedImage: Buffer = await SharedFunctions.resizePicture(
-        file.buffer,
-        pictureWidth,
-    );
-
-    const filename: string = SharedFunctions.generateRandomFileName(file).name;
-    const uploadParams: S3.Types.PutObjectRequest = {
-      Key: filename,
-      Body: resizedImage,
-      Bucket: AWS_S3_BUCKET_NAME,
-    };
-
-    await s3.upload(uploadParams).promise();
-    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
-    await this.photoService.createPhoto(filename, user.id);
-    */
-    return new UploadPhotoResponse(requestId, null);
-  }
-
-  @Get('/:photoId')
-  @ApiOperation({ title: 'Get photo file by photo ID', deprecated: true })
-  @ApiResponse({ status: 200, description: 'Return photo file' })
-  async download(
-    @Param('photoId') id: string,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ): Promise<void> {
-    /*
-    const s3Params: S3.Types.GetObjectRequest = {
-      Bucket: AWS_S3_BUCKET_NAME,
-      Key: id,
-    };
-    s3.getObject(s3Params, (err, data) => {
-      if (err) {
-        next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
-      } else {
-        res.attachment(id);
-        res.send(data.Body);
-      }
-    });*/
-    await res.json();
   }
 }
