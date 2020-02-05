@@ -37,6 +37,9 @@ export class User extends BaseEntity {
   picture: string;
 
   @Column({ nullable: false, default: 0 })
+  pictureZoom: number;
+
+  @Column({ nullable: false, default: 0 })
   currentStrike: number;
 
   @Column({ nullable: false, default: 0 })
