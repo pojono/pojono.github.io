@@ -64,4 +64,13 @@ export class UserUpdateDto {
     required: false,
   })
   pictureZoom: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiModelProperty({
+    type: 'boolean',
+    example: false,
+    required: false,
+  })
+  receivePush: number;
 }

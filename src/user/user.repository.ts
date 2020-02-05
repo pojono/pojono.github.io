@@ -53,6 +53,14 @@ export class UserRepository extends Repository<User> {
       user.picture = userUpdateDto.picture;
     }
 
+    if (dtoKeys.includes('pictureZoom')) {
+      user.pictureZoom = userUpdateDto.pictureZoom;
+    }
+
+    if (dtoKeys.includes('receivePush')) {
+      user.receivePush = userUpdateDto.receivePush;
+    }
+
     return await user.save();
   }
 

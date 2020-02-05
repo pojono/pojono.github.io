@@ -87,6 +87,9 @@ export class User extends BaseEntity {
   @Column({ nullable: false, default: false })
   isPushesSkipped: boolean;
 
+  @Column({ nullable: false, default: false })
+  receivePush: boolean;
+
   @Column({ nullable: true })
   pushesTime: string;
 
