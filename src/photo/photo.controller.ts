@@ -5,6 +5,7 @@ import {
   Next,
   Param,
   Logger,
+  UseGuards,
   Controller,
   UploadedFile,
   UseInterceptors,
@@ -14,9 +15,11 @@ import {
   ApiResponse,
   ApiConsumes,
   ApiOperation,
+  ApiBearerAuth,
   ApiImplicitFile,
 } from '@nestjs/swagger';
 import { Response, NextFunction } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as config from 'config';
 import * as AWS from 'aws-sdk';
@@ -45,8 +48,10 @@ if (config.get('aws.localSimulation')) {
 
 const s3 = new AWS.S3(s3Options);
 
-@ApiUseTags('photos')
 @Controller('photos')
+@ApiUseTags('photos')
+@ApiBearerAuth()
+@UseGuards(AuthGuard())
 export class PhotoController {
   private logger = new Logger();
 
@@ -84,7 +89,7 @@ export class PhotoController {
     this.logger.log(`File ${file.originalname} was uploaded succesfully`);
     await this.photoService.createPhoto(filename, user.id);
 
-    return new UploadPhotoResponse(requestId, null);
+    return new UploadPhotoResponse(requestId, { photoId: filename });
   }
 
   @Get('/:photoId')
