@@ -37,4 +37,13 @@ export class UserUpdateDto {
     required: false,
   })
   firstQuizFinished: boolean;
+
+  @IsOptional()
+  @IsString()
+  @ApiModelProperty({
+    type: 'string',
+    example: 'a7104da483c76954eb4c1f7be13db7841.jpg',
+    required: false,
+  })
+  picture: string;
 }
