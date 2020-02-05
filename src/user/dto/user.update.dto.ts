@@ -59,8 +59,8 @@ export class UserUpdateDto {
   @Min(0)
   @Max(100)
   @ApiModelProperty({
-    type: 'string',
-    example: 'a7104da483c76954eb4c1f7be13db7841.jpg',
+    type: 'number',
+    example: 55,
     required: false,
   })
   pictureZoom: number;
@@ -72,5 +72,5 @@ export class UserUpdateDto {
     example: false,
     required: false,
   })
-  receivePush: number;
+  receivePush: boolean;
 }
