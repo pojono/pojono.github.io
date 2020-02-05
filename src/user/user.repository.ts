@@ -57,8 +57,8 @@ export class UserRepository extends Repository<User> {
       user.pictureZoom = userUpdateDto.pictureZoom;
     }
 
-    if (dtoKeys.includes('receivePush')) {
-      user.receivePush = userUpdateDto.receivePush;
+    if (dtoKeys.includes('isPushesReminded')) {
+      user.isPushesReminded = userUpdateDto.isPushesReminded;
     }
 
     return await user.save();

@@ -72,5 +72,5 @@ export class UserUpdateDto {
     example: false,
     required: false,
   })
-  receivePush: boolean;
+  isPushesReminded: boolean;
 }
