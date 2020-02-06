@@ -33,7 +33,19 @@ import { GetRequestId } from '../lib/get.request.id.decorator';
 import { PhotoService } from './photo.service';
 import { UploadPhotoResponse } from './response/upload.photo.response';
 
+const AWS_S3_ACL: string = config.get('aws.acl');
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
+const AWS_S3_CONTENT_TYPE: string = config.get('aws.contentType');
+const AWS_S3_CONTENT_LENGTH: number = config.get('aws.contentLength');
+
+/*
+    TO DO
+    
+    https://github.com/expressjs/multer
+    https://github.com/nestjs/nest/issues/437
+
+    И переработать контроллер, чтобы всё было вынесено в сервисы
+*/
 
 const s3Options: S3.Types.ClientConfiguration = {
   accessKeyId: process.env.AWS_ACCESS_KEY || config.get('aws.accessKeyId'),
@@ -80,9 +92,12 @@ export class PhotoController {
 
     const filename: string = SharedFunctions.generateRandomFileName(file).name;
     const uploadParams: S3.Types.PutObjectRequest = {
+      ACL: AWS_S3_ACL,
       Key: filename,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
+      ContentType: AWS_S3_CONTENT_TYPE,
+      ContentLength: AWS_S3_CONTENT_LENGTH,
     };
 
     await s3.upload(uploadParams).promise();

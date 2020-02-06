@@ -4,7 +4,7 @@ import CustomResponse from '../../lib/custom.response';
 class UploadPhotoResponseDataModel {
   @ApiModelProperty({
     type: 'string',
-    example: '9275cc7f1d4e9b00e13e42a51c89a2e1.jpg',
+    example: 'example.jpg',
   })
   photoId: string;
 }
