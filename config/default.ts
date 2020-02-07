@@ -37,7 +37,6 @@ module.exports = {
     accessKeyId: 'minio',
     secretAccessKey: 'minio125',
     acl: '',
-    contentType: 'image/jpeg',
     contentLength: 20000000,
     localSimulation: true,
     endpoint: 'http://127.0.0.1:9000',

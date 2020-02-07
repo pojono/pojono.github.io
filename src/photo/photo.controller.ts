@@ -35,7 +35,6 @@ import { UploadPhotoResponse } from './response/upload.photo.response';
 
 const AWS_S3_ACL: string = config.get('aws.acl');
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
-const AWS_S3_CONTENT_TYPE: string = config.get('aws.contentType');
 const AWS_S3_CONTENT_LENGTH: number = config.get('aws.contentLength');
 
 /*
@@ -43,6 +42,8 @@ const AWS_S3_CONTENT_LENGTH: number = config.get('aws.contentLength');
     
     https://github.com/expressjs/multer
     https://github.com/nestjs/nest/issues/437
+
+    add contentType parameter
 
     И переработать контроллер, чтобы всё было вынесено в сервисы
 */
@@ -59,7 +60,17 @@ if (config.get('aws.localSimulation')) {
 }
 
 const s3 = new AWS.S3(s3Options);
-
+/*
+const ff = function fileFilter(req, file, cb) {
+  const validator = new Validator();
+  if (!validator.isEnum(file.mimetype, globals.FiletypeEnum)) {
+      req.fileValidationError = 'unsupported mime type';
+      cb(null, false);
+  } else {
+      cb(null, true);
+  }
+};
+*/
 @Controller('photos')
 @ApiUseTags('photos')
 @ApiBearerAuth()
@@ -78,7 +89,17 @@ export class PhotoController {
     required: true,
     description: 'Upload photo file',
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        files: 1,
+        fileSize: AWS_S3_CONTENT_LENGTH,
+      },
+      /*
+      fileFilter: ff,
+      */
+    }),
+  )
   async uploadPhoto(
     @GetRequestId() requestId,
     @GetUser() user: User,
@@ -96,7 +117,6 @@ export class PhotoController {
       Key: filename,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
-      ContentType: AWS_S3_CONTENT_TYPE,
       ContentLength: AWS_S3_CONTENT_LENGTH,
     };
 
