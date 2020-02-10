@@ -90,15 +90,18 @@ export class PhotoController {
     description: 'Upload photo file',
   })
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor(
+      'file',
+      /*
+    {
       limits: {
         files: 1,
         fileSize: AWS_S3_CONTENT_LENGTH,
       },
-      /*
       fileFilter: ff,
-      */
-    }),
+    }
+    */
+    ),
   )
   async uploadPhoto(
     @GetRequestId() requestId,
@@ -106,12 +109,14 @@ export class PhotoController {
     @UploadedFile() file,
   ): Promise<UploadPhotoResponse> {
     const pictureWidth: number = config.get('picture.width');
+
     const resizedImage: Buffer = await SharedFunctions.resizePicture(
       file.buffer,
       pictureWidth,
     );
 
     const filename: string = SharedFunctions.generateRandomFileName(file).name;
+
     const uploadParams: S3.Types.PutObjectRequest = {
       ACL: AWS_S3_ACL,
       Key: filename,
