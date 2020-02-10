@@ -93,7 +93,7 @@ export class PhotoController {
     FileInterceptor(
       'file',
       /*
-    {
+    ,{
       limits: {
         files: 1,
         fileSize: AWS_S3_CONTENT_LENGTH,
@@ -117,8 +117,10 @@ export class PhotoController {
 
     const filename: string = SharedFunctions.generateRandomFileName(file).name;
 
-    const uploadParams: S3.Types.PutObjectRequest = {
+    /*
       ACL: AWS_S3_ACL,
+    */
+    const uploadParams: S3.Types.PutObjectRequest = {
       Key: filename,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
