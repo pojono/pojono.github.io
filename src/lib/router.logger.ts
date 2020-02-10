@@ -12,6 +12,8 @@ export function routerLogger(req, res, next) {
     req.body && Object.keys(req.body).length > 0
       ? JSON.stringify(req.body)
       : '';
+  const headers = JSON.stringify(req.headers);
+  logger.log(`Headers: ${headers}`);
   logger.log(`${req.method} ${req.originalUrl} ${body}`);
 
   next();
