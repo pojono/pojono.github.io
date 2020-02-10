@@ -122,7 +122,6 @@ export class PhotoController {
       Key: filename,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
-      ContentLength: AWS_S3_CONTENT_LENGTH,
     };
 
     await s3.upload(uploadParams).promise();
