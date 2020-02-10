@@ -2,6 +2,9 @@ module.exports = {
   server: {
     url: 'https://staging.prostoapp.com/',
   },
+  logs: {
+    showHeaders: true,
+  },
   swagger: {
     scheme: 'https',
   },

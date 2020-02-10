@@ -3,6 +3,9 @@ module.exports = {
     port: 3001,
     url: 'http://localhost:3001',
   },
+  logs: {
+    showHeaders: false,
+  },
   jwt: {
     expiresIn: 3600000,
     secret: 'TopSecret',
