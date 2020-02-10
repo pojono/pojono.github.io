@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsNumber,
+  Min,
+  Max,
+} from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class UserUpdateDto {
@@ -46,4 +53,24 @@ export class UserUpdateDto {
     required: false,
   })
   picture: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  @ApiModelProperty({
+    type: 'number',
+    example: 55,
+    required: false,
+  })
+  pictureZoom: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiModelProperty({
+    type: 'boolean',
+    example: false,
+    required: false,
+  })
+  isPushesReminded: boolean;
 }

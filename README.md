@@ -13,6 +13,10 @@ Production - продакшен сервер.
 ##Start local database:
 docker run --name postgres -p 5454:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=prostoapp -d postgres:11.5
 
+##Start minio:
+cd minio && docker-compose up -d
+Minio UI: URL: http://localhost:9000/ Login: minio Pass: minio125
+
 ##Сборка на Jenkins:
 http://jenkins.prostoapp.com/
 
@@ -22,8 +26,8 @@ http://jenkins.prostoapp.com/
 b) diff - сколько % трека было прослушано с момента последней отправки статистики (в %)
 c) utcDiff - разница в минутах между UTC и местным временем пользователя
 d) trackId - id прослушиваемого трека
-  
- На основании этих данных вычисляется следующее:
+
+На основании этих данных вычисляется следующее:
 ListenTime = diff \* Track.duration / 100 (в секундах) - длительность прослушанного отрезка
 Определяется lessonId и courseId, если этот трек относится к занятию
 Если нет записи в StatisticTrack, то она создаётся

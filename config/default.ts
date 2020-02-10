@@ -33,9 +33,11 @@ module.exports = {
     codeWithoutSms: '0112',
   },
   aws: {
-    bucketName: 'dexy',
+    bucketName: 'prostoapp',
     accessKeyId: 'minio',
     secretAccessKey: 'minio125',
+    acl: '',
+    contentLength: 20000000,
     localSimulation: true,
     endpoint: 'http://127.0.0.1:9000',
     region: 'eu-west-1',

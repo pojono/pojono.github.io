@@ -5,7 +5,7 @@ export class IdPhotoDto {
   @IsString()
   @ApiModelProperty({
     type: 'string',
-    example: 'adsflksdjfaklsf.jpg',
+    example: 'example.jpg',
     required: true,
   })
   photoId: string;
