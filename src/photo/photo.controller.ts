@@ -133,22 +133,17 @@ export class PhotoController {
   @Get('/:photoId')
   @ApiOperation({ title: 'Get photo file by photo ID' })
   @ApiResponse({ status: 200, description: 'Return photo file' })
-  async download(
+  async findOne(
     @Param('photoId') id: string,
     @Res() res: Response,
     @Next() next: NextFunction,
   ): Promise<void> {
-    const s3Params: S3.Types.GetObjectRequest = {
-      Bucket: AWS_S3_BUCKET_NAME,
-      Key: id,
-    };
-    s3.getObject(s3Params, (err, data) => {
-      if (err) {
-        next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
-      } else {
-        res.attachment(id);
-        res.send(data.Body);
-      }
-    });
+    try {
+      const buffer = await this.photoService.getPhotoById(id);
+      res.attachment(id);
+      res.send(buffer);
+    } catch (error) {
+      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
+    }
   }
 }
