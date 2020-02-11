@@ -1,6 +1,7 @@
 import * as config from 'config';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
+import { NextFunction } from 'express';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
@@ -33,7 +34,11 @@ export class PhotoService {
     private photoRepository: PhotoRepository,
   ) {}
 
-  async createPhoto(file: any, userId: number): Promise<string> {
+  async createPhoto(
+    file: any,
+    userId: number,
+    next: NextFunction,
+  ): Promise<string> {
     try {
       const fileName: string = SharedFunctions.generateRandomFileName(file)
         .name;
@@ -56,11 +61,11 @@ export class PhotoService {
 
       return fileName;
     } catch (error) {
-      RestApiError.createHttpException(UPLOAD_ERROR);
+      next(RestApiError.createHttpException(UPLOAD_ERROR));
     }
   }
 
-  async getPhotoById(id: string): Promise<Buffer> {
+  async getPhotoById(id: string, next: NextFunction): Promise<Buffer> {
     try {
       const s3Params: S3.Types.GetObjectRequest = {
         Key: id,
@@ -68,13 +73,11 @@ export class PhotoService {
       };
 
       const data = await s3.getObject(s3Params).promise();
-      this.logger.log(data);
       const buffer: any = data.Body;
 
       return buffer;
     } catch (error) {
-      this.logger.log('ERORORORORROORORORO');
-      RestApiError.createHttpException(PHOTO_NOT_FOUND);
+      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
     }
   }
 }

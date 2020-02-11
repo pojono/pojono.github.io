@@ -22,8 +22,6 @@ import * as config from 'config';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, NextFunction } from 'express';
-import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
-import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { User } from '../user/user.entity';
 import { GetUser } from '../user/get.user.decorator';
@@ -96,7 +94,11 @@ export class PhotoController {
     @UploadedFile() file,
     @Next() next: NextFunction,
   ): Promise<UploadPhotoResponse> {
-    const fileName: string = await this.photoService.createPhoto(file, user.id);
+    const fileName: string = await this.photoService.createPhoto(
+      file,
+      user.id,
+      next,
+    );
 
     this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
@@ -109,14 +111,13 @@ export class PhotoController {
   async getPhotoById(
     @Param('photoId') id: string,
     @Res() res: Response,
+    @Next() next: NextFunction,
   ): Promise<void> {
-    const buffer = await this.photoService.getPhotoById(id);
+    const buffer = await this.photoService.getPhotoById(id, next);
 
     this.logger.log(`Get photo file ${id}`);
 
     res.attachment(id);
     res.send(buffer);
   }
-
-  private;
 }
