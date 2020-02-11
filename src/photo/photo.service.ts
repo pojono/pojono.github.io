@@ -3,6 +3,8 @@ import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
+import { RestApiError } from '../lib/rest.api.error';
 import SharedFunctions from '../lib/shared.functions';
 import { PhotoRepository } from './photo.repository';
 
@@ -54,7 +56,7 @@ export class PhotoService {
 
       return fileName;
     } catch (error) {
-      return error;
+      RestApiError.createHttpException(UPLOAD_ERROR);
     }
   }
 
@@ -70,7 +72,7 @@ export class PhotoService {
 
       return buffer;
     } catch (error) {
-      return error;
+      RestApiError.createHttpException(PHOTO_NOT_FOUND);
     }
   }
 }

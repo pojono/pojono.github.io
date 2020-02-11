@@ -96,18 +96,11 @@ export class PhotoController {
     @UploadedFile() file,
     @Next() next: NextFunction,
   ): Promise<UploadPhotoResponse> {
-    try {
-      const fileName: string = await this.photoService.createPhoto(
-        file,
-        user.id,
-      );
+    const fileName: string = await this.photoService.createPhoto(file, user.id);
 
-      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
+    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-      return new UploadPhotoResponse(requestId, { photoId: fileName });
-    } catch (error) {
-      next(RestApiError.createHttpException(UPLOAD_ERROR));
-    }
+    return new UploadPhotoResponse(requestId, { photoId: fileName });
   }
 
   @Get('/:photoId')
@@ -116,18 +109,13 @@ export class PhotoController {
   async getPhotoById(
     @Param('photoId') id: string,
     @Res() res: Response,
-    @Next() next: NextFunction,
   ): Promise<void> {
-    try {
-      const buffer = await this.photoService.getPhotoById(id);
+    const buffer = await this.photoService.getPhotoById(id);
 
-      this.logger.log(`Get photo file ${id}`);
+    this.logger.log(`Get photo file ${id}`);
 
-      res.attachment(id);
-      res.send(buffer);
-    } catch (error) {
-      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
-    }
+    res.attachment(id);
+    res.send(buffer);
   }
 
   private;
