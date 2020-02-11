@@ -68,10 +68,12 @@ export class PhotoService {
       };
 
       const data = await s3.getObject(s3Params).promise();
+      this.logger.log(data);
       const buffer: any = data.Body;
 
       return buffer;
     } catch (error) {
+      this.logger.log('ERORORORORROORORORO');
       RestApiError.createHttpException(PHOTO_NOT_FOUND);
     }
   }
