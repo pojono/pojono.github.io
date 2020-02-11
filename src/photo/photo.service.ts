@@ -30,7 +30,7 @@ export class PhotoService {
     return this.photoRepository.createPhoto(key, ownerId);
   }
 
-  async getPhotoById(id: string): Promise<void> {
+  async getPhotoById(id: string): Promise<Buffer> {
     try {
       const s3Params: S3.Types.GetObjectRequest = {
         Bucket: AWS_S3_BUCKET_NAME,
@@ -38,9 +38,10 @@ export class PhotoService {
       };
 
       const data = await s3.getObject(s3Params).promise();
-      const file: any = data.Body.toString('utf-8');
+      const file: string = data.Body.toString('utf-8');
+      const buffer: Buffer = Buffer.from(file, 'utf8');
 
-      return file;
+      return buffer;
     } catch (error) {
       return error;
     }
