@@ -71,12 +71,6 @@ export class PhotoController {
   @UseInterceptors(
     FileInterceptor(
       'file',
-      {
-        limits: {
-          files: 1,
-          fileSize: AWS_S3_CONTENT_SIZE,
-        },
-      },
       /*
     {
       limits: {
