@@ -18,10 +18,11 @@ import {
   ApiBearerAuth,
   ApiImplicitFile,
 } from '@nestjs/swagger';
+import * as config from 'config';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, NextFunction } from 'express';
-import { PHOTO_NOT_FOUND } from '../lib/errors';
+import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
 import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { User } from '../user/user.entity';
@@ -49,6 +50,8 @@ const ff = function fileFilter(req, file, cb) {
   }
 };
 */
+const AWS_S3_CONTENT_SIZE: number = config.get('aws.contentSize');
+
 @Controller('photos')
 @ApiUseTags('photos')
 @ApiBearerAuth()
@@ -70,11 +73,17 @@ export class PhotoController {
   @UseInterceptors(
     FileInterceptor(
       'file',
+      {
+        limits: {
+          files: 1,
+          fileSize: AWS_S3_CONTENT_SIZE,
+        },
+      },
       /*
     {
       limits: {
         files: 1,
-        fileSize: AWS_S3_CONTENT_LENGTH,
+        fileSize: AWS_S3_CONTENT_SIZE,
       },
       fileFilter: ff,
     }
@@ -85,12 +94,20 @@ export class PhotoController {
     @GetRequestId() requestId,
     @GetUser() user: User,
     @UploadedFile() file,
+    @Next() next: NextFunction,
   ): Promise<UploadPhotoResponse> {
-    const fileName: string = await this.photoService.createPhoto(file, user.id);
+    try {
+      const fileName: string = await this.photoService.createPhoto(
+        file,
+        user.id,
+      );
 
-    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
+      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-    return new UploadPhotoResponse(requestId, { photoId: fileName });
+      return new UploadPhotoResponse(requestId, { photoId: fileName });
+    } catch (error) {
+      next(RestApiError.createHttpException(UPLOAD_ERROR));
+    }
   }
 
   @Get('/:photoId')
@@ -112,4 +129,6 @@ export class PhotoController {
       next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
     }
   }
+
+  private;
 }

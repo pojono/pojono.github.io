@@ -19,7 +19,7 @@ module.exports = {
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
     acl: '',
-    contentLength: 20000000,
+    contentSize: 50000000,
     localSimulation: false,
     region: 'eu-west-1',
   },
