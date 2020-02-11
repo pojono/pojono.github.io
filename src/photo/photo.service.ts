@@ -10,6 +10,7 @@ import SharedFunctions from '../lib/shared.functions';
 import { PhotoRepository } from './photo.repository';
 
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
+const AWS_S3_ACL: string = config.get('aws.acl');
 const pictureWidth: number = config.get('picture.width');
 
 const s3Options: S3.Types.ClientConfiguration = {
@@ -50,6 +51,7 @@ export class PhotoService {
 
       const uploadParams: S3.Types.PutObjectRequest = {
         Key: fileName,
+        ACL: AWS_S3_ACL,
         Body: resizedImage,
         Bucket: AWS_S3_BUCKET_NAME,
       };

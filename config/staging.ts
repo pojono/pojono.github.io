@@ -18,7 +18,7 @@ module.exports = {
     bucketName: 'prosto-photo',
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
-    acl: '',
+    acl: '2615fc25b468d319ff6caa88c1e6307ad962c16b551344c3bf15968c30dc6d13',
     contentSize: 50000000,
     localSimulation: false,
     region: 'eu-west-1',
