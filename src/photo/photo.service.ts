@@ -51,7 +51,6 @@ export class PhotoService {
 
       const uploadParams: S3.Types.PutObjectRequest = {
         Key: fileName,
-        ACL: AWS_S3_ACL,
         Body: resizedImage,
         Bucket: AWS_S3_BUCKET_NAME,
       };
