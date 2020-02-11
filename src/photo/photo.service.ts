@@ -38,8 +38,7 @@ export class PhotoService {
       };
 
       const data = await s3.getObject(s3Params).promise();
-      const body: string = data.Body.toString('utf-8');
-      const buffer: Buffer = Buffer.from(body, 'utf8');
+      const buffer: any = data.Body;
 
       return buffer;
     } catch (error) {
