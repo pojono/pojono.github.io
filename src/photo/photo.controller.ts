@@ -107,7 +107,7 @@ export class PhotoController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ): Promise<void> {
-    const buffer = await this.photoService.getPhotoById(id, next);
+    const buffer = await this.photoService.getPhotoByIdCloudfront(id, next);
 
     this.logger.log(`Get photo file ${id}`);
 
