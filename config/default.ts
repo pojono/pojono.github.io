@@ -39,8 +39,6 @@ module.exports = {
     bucketName: 'prostoapp',
     accessKeyId: 'minio',
     secretAccessKey: 'minio125',
-    acl: '',
-    contentSize: 50000000,
     localSimulation: true,
     endpoint: 'http://127.0.0.1:9000',
     region: 'eu-west-1',

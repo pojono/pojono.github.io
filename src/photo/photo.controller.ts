@@ -18,7 +18,6 @@ import {
   ApiBearerAuth,
   ApiImplicitFile,
 } from '@nestjs/swagger';
-import * as config from 'config';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, NextFunction } from 'express';
@@ -35,21 +34,9 @@ import { UploadPhotoResponse } from './response/upload.photo.response';
     https://github.com/nestjs/nest/issues/437
 
     add contentType parameter
-*/
 
-/*
-const ff = function fileFilter(req, file, cb) {
-  const validator = new Validator();
-  if (!validator.isEnum(file.mimetype, globals.FiletypeEnum)) {
-      req.fileValidationError = 'unsupported mime type';
-      cb(null, false);
-  } else {
-      cb(null, true);
-  }
-};
+    add limits in decorators
 */
-const AWS_S3_CONTENT_SIZE: number = config.get('aws.contentSize');
-
 @Controller('photos')
 @ApiUseTags('photos')
 @ApiBearerAuth()
@@ -68,20 +55,7 @@ export class PhotoController {
     required: true,
     description: 'Upload photo file',
   })
-  @UseInterceptors(
-    FileInterceptor(
-      'file',
-      /*
-    {
-      limits: {
-        files: 1,
-        fileSize: AWS_S3_CONTENT_SIZE,
-      },
-      fileFilter: ff,
-    }
-    */
-    ),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   async createPhoto(
     @GetRequestId() requestId,
     @GetUser() user: User,
@@ -107,7 +81,7 @@ export class PhotoController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ): Promise<void> {
-    const buffer = await this.photoService.getPhotoByIdCloudfront(id, next);
+    const buffer = await this.photoService.getPhotoById(id, next);
 
     this.logger.log(`Get photo file ${id}`);
 

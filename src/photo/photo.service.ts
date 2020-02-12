@@ -1,6 +1,5 @@
 import * as config from 'config';
 import * as AWS from 'aws-sdk';
-import * as cloudfront from 'aws-cloudfront-sign';
 import { S3 } from 'aws-sdk';
 import { NextFunction } from 'express';
 import { Injectable, Logger } from '@nestjs/common';
@@ -10,26 +9,13 @@ import { RestApiError } from '../lib/rest.api.error';
 import SharedFunctions from '../lib/shared.functions';
 import { PhotoRepository } from './photo.repository';
 
-const AWS_S3_BUCKET_NAME: string =
-  process.env.S3_BUCKET_NAME || config.get('aws.bucketName');
-const AWS_CLOUDFRONT_URL: string =
-  process.env.CLOUDFRONT_URL || config.get('aws.cloudfrontUrl');
-const AWS_S3_ACL: string = config.get('aws.acl');
+const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
 const pictureWidth: number = config.get('picture.width');
 
 const s3Options: S3.Types.ClientConfiguration = {
   accessKeyId: process.env.S3_ACCESS_KEY_ID || config.get('aws.accessKeyId'),
   secretAccessKey:
     process.env.S3_SECRET_ACCESS_KEY || config.get('aws.secretAccessKey'),
-};
-
-const cloudfrontOptions: S3.Types.ClientConfiguration = {
-  accessKeyId:
-    process.env.CLOUDFRONT_ACCESS_KEY_ID ||
-    config.get('aws.cloudfrontAccessKeyId'),
-  secretAccessKey:
-    process.env.CLOUDFRONT_PRIVATE_KEY_PATH ||
-    config.get('aws.cloudfrontSecretAccessKey'),
 };
 
 if (config.get('aws.localSimulation')) {
@@ -90,23 +76,6 @@ export class PhotoService {
       const buffer: any = data.Body;
 
       return buffer;
-    } catch (error) {
-      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
-    }
-  }
-
-  async getPhotoByIdCloudfront(
-    id: string,
-    next: NextFunction,
-  ): Promise<Buffer> {
-    try {
-      return new Promise(resolve => {
-        const signedUrl = cloudfront.getSignedUrl(
-          AWS_CLOUDFRONT_URL + id,
-          cloudfrontOptions,
-        );
-        resolve(signedUrl);
-      });
     } catch (error) {
       next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
     }
