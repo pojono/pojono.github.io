@@ -21,6 +21,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, NextFunction } from 'express';
+import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
+import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { User } from '../user/user.entity';
 import { GetUser } from '../user/get.user.decorator';
@@ -62,15 +64,18 @@ export class PhotoController {
     @UploadedFile() file,
     @Next() next: NextFunction,
   ): Promise<UploadPhotoResponse> {
-    const fileName: string = await this.photoService.createPhoto(
-      file,
-      user.id,
-      next,
-    );
+    try {
+      const fileName: string = await this.photoService.createPhoto(
+        file,
+        user.id,
+      );
 
-    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
+      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-    return new UploadPhotoResponse(requestId, { photoId: fileName });
+      return new UploadPhotoResponse(requestId, { photoId: fileName });
+    } catch (error) {
+      next(RestApiError.createHttpException(UPLOAD_ERROR));
+    }
   }
 
   @Get('/:photoId')
@@ -81,11 +86,15 @@ export class PhotoController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ): Promise<void> {
-    const buffer = await this.photoService.getPhotoById(id, next);
+    try {
+      const buffer = await this.photoService.getPhotoById(id);
 
-    this.logger.log(`Get photo file ${id}`);
+      this.logger.log(`Get photo file ${id}`);
 
-    res.attachment(id);
-    res.send(buffer);
+      res.attachment(id);
+      res.send(buffer);
+    } catch (error) {
+      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
+    }
   }
 }

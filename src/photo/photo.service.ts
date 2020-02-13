@@ -1,11 +1,8 @@
 import * as config from 'config';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
-import { NextFunction } from 'express';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
-import { RestApiError } from '../lib/rest.api.error';
 import SharedFunctions from '../lib/shared.functions';
 import { PhotoRepository } from './photo.repository';
 
@@ -34,11 +31,7 @@ export class PhotoService {
     private photoRepository: PhotoRepository,
   ) {}
 
-  async createPhoto(
-    file: any,
-    userId: number,
-    next: NextFunction,
-  ): Promise<string> {
+  async createPhoto(file: any, userId: number): Promise<string> {
     try {
       const fileName: string = SharedFunctions.generateRandomFileName(file)
         .name;
@@ -61,11 +54,11 @@ export class PhotoService {
 
       return fileName;
     } catch (error) {
-      next(RestApiError.createHttpException(UPLOAD_ERROR));
+      throw new Error();
     }
   }
 
-  async getPhotoById(id: string, next: NextFunction): Promise<Buffer> {
+  async getPhotoById(id: string): Promise<Buffer> {
     try {
       const s3Params: S3.Types.GetObjectRequest = {
         Key: id,
@@ -77,7 +70,7 @@ export class PhotoService {
 
       return buffer;
     } catch (error) {
-      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
+      throw new Error();
     }
   }
 }
