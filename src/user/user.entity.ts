@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import * as moment from 'moment';
 
 @Entity()
 @Unique(['phone'])
@@ -89,4 +90,12 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false, default: false })
   firstQuizFinished: boolean;
+
+  public subscriptionIsNotActive(): boolean {
+    return (
+      (moment(this.subscriptionEndDate).isValid() &&
+        moment(this.subscriptionEndDate).isBefore(moment.utc())) ||
+      this.subscriptionIsCancelled
+    );
+  }
 }

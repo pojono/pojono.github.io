@@ -21,22 +21,39 @@ export class EventService {
       eventRequestDto,
     );
 
+    // нет подписки
+    // первый квиз закончен
+    // ==> 7 на экран подписки (если выйти из приложения на экране с подпиской или если подписка истечет или будет отменена)
+
+    // есть подписка
+    // первый квиз закончен
+    // ==> 1 на главный экран (стандартное поведение у пользователя который оплатил и пользуется)
+
+    // нет подписки
+    // первый квиз НЕ закончен
+    // ==> 2 на квиз (первый запуск приложения или пользователь вышел посреди квиза)
+
+    // есть подписка
+    // первый квиз НЕ закончен
+    // ==> такого быть не должно. Но пока отправим 1
+
     if (event) {
-      if (
-        event.event === EventEnum.AUTHORIZATION_FINISHED &&
-        user.firstQuizFinished
-      ) {
-        return 1; // TODO: quizId which GOTO HOME
+      if (event.event === EventEnum.AUTHORIZATION_FINISHED) {
+        if (user.subscriptionIsNotActive() && user.firstQuizFinished) {
+          return 7; // TODO: hard code
+        }
+        if (!user.subscriptionIsNotActive() && user.firstQuizFinished) {
+          return 1; // TODO: hard code
+        }
+        if (user.subscriptionIsNotActive() && !user.firstQuizFinished) {
+          return 2; // TODO: hard code
+        }
+        if (!user.subscriptionIsNotActive() && !user.firstQuizFinished) {
+          return 1; // IMPOSSIBLE
+        }
       }
-      if (
-        event.event === EventEnum.AUTHORIZATION_FINISHED &&
-        !user.firstQuizFinished
-      ) {
-        return 2; // TODO: quizId which GOTO FIRST QUIZ
-      }
-      return event.quizId;
-    } else {
-      return null;
     }
+
+    return null;
   }
 }
