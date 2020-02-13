@@ -5,12 +5,15 @@ import { EventRequestDto } from '../dto/event.request.dto';
 import { Event } from '../entity/event.entity';
 import { EventEnum } from '../event.enum';
 import { User } from '../../user/user.entity';
+import { StatisticLessonService } from './statistic.lesson.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository,
+
+    private statisticLessonService: StatisticLessonService,
   ) {}
 
   async getEvent(
@@ -50,6 +53,15 @@ export class EventService {
         }
         if (!user.subscriptionIsNotActive() && !user.firstQuizFinished) {
           return 1; // IMPOSSIBLE
+        }
+      }
+
+      if (event.event === EventEnum.LESSON_FINISHED) {
+        const finishedLessons: number = await this.statisticLessonService.countFinishedByUserId(
+          user.id,
+        );
+        if (finishedLessons === 1) {
+          return 8;
         }
       }
     }
