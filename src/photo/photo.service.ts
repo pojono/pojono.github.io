@@ -7,6 +7,7 @@ import SharedFunctions from '../lib/shared.functions';
 import { PhotoRepository } from './photo.repository';
 
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
+const CDN_URL: string = config.get('aws.cloudfrontUrl');
 const pictureWidth: number = config.get('picture.width');
 
 const s3Options: S3.Types.ClientConfiguration = {
@@ -43,6 +44,7 @@ export class PhotoService {
       Key: fileName,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
+      ContentType: file.mimetype,
     };
 
     await s3.upload(uploadParams).promise();
@@ -53,19 +55,11 @@ export class PhotoService {
     return fileName;
   }
 
-  async getPhotoById(id: string): Promise<Buffer> {
-    try {
-      const s3Params: S3.Types.GetObjectRequest = {
-        Key: id,
-        Bucket: AWS_S3_BUCKET_NAME,
-      };
+  async getPhotoById(userId: number, photoId: string): Promise<string> {
+    const photoFile = await this.photoRepository.getPhotoById(userId, photoId);
 
-      const data = await s3.getObject(s3Params).promise();
-      const buffer: any = data.Body;
+    const url: string = CDN_URL + photoFile.key;
 
-      return buffer;
-    } catch (error) {
-      throw new Error();
-    }
+    return url;
   }
 }

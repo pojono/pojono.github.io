@@ -1,8 +1,6 @@
 import {
-  Res,
   Get,
   Post,
-  Next,
   Param,
   Logger,
   UseGuards,
@@ -20,26 +18,15 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Response, NextFunction } from 'express';
-import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
+import { PHOTO_NOT_FOUND, UPLOAD_ERROR, EXTENSION_ERROR } from '../lib/errors';
 import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { ErrorIf } from '../lib/error.if';
 import { User } from '../user/user.entity';
 import { GetUser } from '../user/get.user.decorator';
 import { PhotoService } from './photo.service';
+import { LinkPhotoResponse } from './response/link.photo.response';
 import { UploadPhotoResponse } from './response/upload.photo.response';
-
-/*
-    TO DO
-    
-    https://github.com/expressjs/multer
-    https://github.com/nestjs/nest/issues/437
-
-    add contentType parameter
-
-    add limits in decorators
-*/
 
 @Controller('photos')
 @ApiUseTags('photos')
@@ -59,7 +46,20 @@ export class PhotoController {
     required: true,
     description: 'Upload photo file',
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        files: 1,
+      },
+      fileFilter: (req: Request, file: any, cb: any) => {
+        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+          cb(null, true);
+        } else {
+          return cb(RestApiError.createHttpException(EXTENSION_ERROR), false);
+        }
+      },
+    }),
+  )
   async createPhoto(
     @GetRequestId() requestId,
     @GetUser() user: User,
@@ -81,21 +81,18 @@ export class PhotoController {
 
   @Get('/:photoId')
   @ApiOperation({ title: 'Get photo file by photo ID' })
-  @ApiResponse({ status: 200, description: 'Return photo file' })
+  @ApiResponse({ status: 200, type: LinkPhotoResponse })
   async getPhotoById(
-    @Param('photoId') id: string,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ): Promise<void> {
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+    @Param('photoId') photoId: string,
+  ): Promise<LinkPhotoResponse> {
     try {
-      const buffer = await this.photoService.getPhotoById(id);
+      const url = await this.photoService.getPhotoById(user.id, photoId);
 
-      this.logger.log(`Get photo file ${id}`);
-
-      res.attachment(id);
-      res.send(buffer);
+      return new LinkPhotoResponse(requestId, { link: url });
     } catch (error) {
-      next(RestApiError.createHttpException(PHOTO_NOT_FOUND));
+      ErrorIf.isEmpty(null, PHOTO_NOT_FOUND);
     }
   }
 }

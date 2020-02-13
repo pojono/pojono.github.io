@@ -51,3 +51,8 @@ export const UPLOAD_ERROR: StandardRestApiError = StandardRestApiError.create(
   1010,
   'Upload error',
 );
+
+export const EXTENSION_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1011,
+  'Extension error',
+);
