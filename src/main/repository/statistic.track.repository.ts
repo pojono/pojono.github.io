@@ -26,10 +26,18 @@ export class StatisticTrackRepository extends Repository<StatisticTrack> {
     statsTrack: StatisticTrack,
     progress: number,
   ): Promise<void> {
+    const MAX_PROGRESS: number = 100;
+
     statsTrack.lastProgress = progress;
+
     if (statsTrack.lastProgress > statsTrack.maxProgress) {
       statsTrack.maxProgress = statsTrack.lastProgress;
     }
+
+    if (statsTrack.lastProgress >= MAX_PROGRESS) {
+      statsTrack.lastProgress = 0;
+    }
+
     await statsTrack.save();
   }
 }
