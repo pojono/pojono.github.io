@@ -36,13 +36,11 @@ module.exports = {
     codeWithoutSms: '0112',
   },
   aws: {
-    cognito: {
-      userPoolId: 'eu-west-1_65Op52Obc',
-    },
-    bucketName: 'prosto-photo',
-    accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
-    secretAccessKey: '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',
-    localSimulation: false,
+    bucketName: 'prostoapp',
+    accessKeyId: 'minio',
+    secretAccessKey: 'minio125',
+    localSimulation: true,
+    endpoint: 'http://127.0.0.1:9000',
     region: 'eu-west-1',
   },
   picture: {
