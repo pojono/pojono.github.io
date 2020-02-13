@@ -32,30 +32,25 @@ export class PhotoService {
   ) {}
 
   async createPhoto(file: any, userId: number): Promise<string> {
-    try {
-      const fileName: string = SharedFunctions.generateRandomFileName(file)
-        .name;
+    const fileName: string = SharedFunctions.generateRandomFileName(file).name;
 
-      const resizedImage: Buffer = await SharedFunctions.resizePicture(
-        file.buffer,
-        pictureWidth,
-      );
+    const resizedImage: Buffer = await SharedFunctions.resizePicture(
+      file.buffer,
+      pictureWidth,
+    );
 
-      const uploadParams: S3.Types.PutObjectRequest = {
-        Key: fileName,
-        Body: resizedImage,
-        Bucket: AWS_S3_BUCKET_NAME,
-      };
+    const uploadParams: S3.Types.PutObjectRequest = {
+      Key: fileName,
+      Body: resizedImage,
+      Bucket: AWS_S3_BUCKET_NAME,
+    };
 
-      await s3.upload(uploadParams).promise();
-      await this.photoRepository.createPhoto(fileName, userId);
+    await s3.upload(uploadParams).promise();
+    await this.photoRepository.createPhoto(fileName, userId);
 
-      this.logger.log(`Create photo file ${fileName} by ${userId}`);
+    this.logger.log(`Create photo file ${fileName} by ${userId}`);
 
-      return fileName;
-    } catch (error) {
-      throw new Error();
-    }
+    return fileName;
   }
 
   async getPhotoById(id: string): Promise<Buffer> {

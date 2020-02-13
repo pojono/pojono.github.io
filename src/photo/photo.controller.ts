@@ -63,20 +63,12 @@ export class PhotoController {
     @GetRequestId() requestId,
     @GetUser() user: User,
     @UploadedFile() file,
-    @Next() next: NextFunction,
   ): Promise<UploadPhotoResponse> {
-    try {
-      const fileName: string = await this.photoService.createPhoto(
-        file,
-        user.id,
-      );
+    const fileName: string = await this.photoService.createPhoto(file, user.id);
 
-      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
+    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-      return new UploadPhotoResponse(requestId, { photoId: fileName });
-    } catch (error) {
-      next(RestApiError.createHttpException(UPLOAD_ERROR));
-    }
+    return new UploadPhotoResponse(requestId, { photoId: fileName });
   }
 
   @Get('/:photoId')
