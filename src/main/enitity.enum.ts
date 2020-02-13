@@ -4,4 +4,6 @@ export enum EntityEnum {
   HOME = 'HOME',
   RUBRIC = 'RUBRIC',
   ONBOARDING = 'ONBOARDING',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  SET_PUSHES = 'SET_PUSHES',
 }
