@@ -21,7 +21,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, NextFunction } from 'express';
-import { PHOTO_NOT_FOUND } from '../lib/errors';
+import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
 import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { User } from '../user/user.entity';
@@ -36,19 +36,10 @@ import { UploadPhotoResponse } from './response/upload.photo.response';
     https://github.com/nestjs/nest/issues/437
 
     add contentType parameter
+
+    add limits in decorators
 */
 
-/*
-const ff = function fileFilter(req, file, cb) {
-  const validator = new Validator();
-  if (!validator.isEnum(file.mimetype, globals.FiletypeEnum)) {
-      req.fileValidationError = 'unsupported mime type';
-      cb(null, false);
-  } else {
-      cb(null, true);
-  }
-};
-*/
 @Controller('photos')
 @ApiUseTags('photos')
 @ApiBearerAuth()
@@ -67,20 +58,7 @@ export class PhotoController {
     required: true,
     description: 'Upload photo file',
   })
-  @UseInterceptors(
-    FileInterceptor(
-      'file',
-      /*
-    {
-      limits: {
-        files: 1,
-        fileSize: AWS_S3_CONTENT_LENGTH,
-      },
-      fileFilter: ff,
-    }
-    */
-    ),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   async createPhoto(
     @GetRequestId() requestId,
     @GetUser() user: User,
