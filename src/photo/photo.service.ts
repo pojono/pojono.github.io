@@ -10,9 +10,9 @@ const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
 const pictureWidth: number = config.get('picture.width');
 
 const s3Options: S3.Types.ClientConfiguration = {
-  accessKeyId: process.env.AWS_ACCESS_KEY || config.get('aws.accessKeyId'),
+  accessKeyId: process.env.S3_ACCESS_KEY_ID || config.get('aws.accessKeyId'),
   secretAccessKey:
-    process.env.AWS_SECRET_KEY || config.get('aws.secretAccessKey'),
+    process.env.S3_SECRET_ACCESS_KEY || config.get('aws.secretAccessKey'),
 };
 
 if (config.get('aws.localSimulation')) {
@@ -32,25 +32,30 @@ export class PhotoService {
   ) {}
 
   async createPhoto(file: any, userId: number): Promise<string> {
-    const fileName: string = SharedFunctions.generateRandomFileName(file).name;
+    try {
+      const fileName: string = SharedFunctions.generateRandomFileName(file)
+        .name;
 
-    const resizedImage: Buffer = await SharedFunctions.resizePicture(
-      file.buffer,
-      pictureWidth,
-    );
+      const resizedImage: Buffer = await SharedFunctions.resizePicture(
+        file.buffer,
+        pictureWidth,
+      );
 
-    const uploadParams: S3.Types.PutObjectRequest = {
-      Key: fileName,
-      Body: resizedImage,
-      Bucket: AWS_S3_BUCKET_NAME,
-    };
+      const uploadParams: S3.Types.PutObjectRequest = {
+        Key: fileName,
+        Body: resizedImage,
+        Bucket: AWS_S3_BUCKET_NAME,
+      };
 
-    await s3.upload(uploadParams).promise();
-    await this.photoRepository.createPhoto(fileName, userId);
+      await s3.upload(uploadParams).promise();
+      await this.photoRepository.createPhoto(fileName, userId);
 
-    this.logger.log(`Create photo file ${fileName} by ${userId}`);
+      this.logger.log(`Create photo file ${fileName} by ${userId}`);
 
-    return fileName;
+      return fileName;
+    } catch (error) {
+      throw new Error();
+    }
   }
 
   async getPhotoById(id: string): Promise<Buffer> {
@@ -65,7 +70,7 @@ export class PhotoService {
 
       return buffer;
     } catch (error) {
-      return error;
+      throw new Error();
     }
   }
 }
