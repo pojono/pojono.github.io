@@ -24,6 +24,7 @@ import { Response, NextFunction } from 'express';
 import { PHOTO_NOT_FOUND, UPLOAD_ERROR } from '../lib/errors';
 import { RestApiError } from '../lib/rest.api.error';
 import { GetRequestId } from '../lib/get.request.id.decorator';
+import { ErrorIf } from '../lib/error.if';
 import { User } from '../user/user.entity';
 import { GetUser } from '../user/get.user.decorator';
 import { PhotoService } from './photo.service';
@@ -64,11 +65,18 @@ export class PhotoController {
     @GetUser() user: User,
     @UploadedFile() file,
   ): Promise<UploadPhotoResponse> {
-    const fileName: string = await this.photoService.createPhoto(file, user.id);
+    try {
+      const fileName: string = await this.photoService.createPhoto(
+        file,
+        user.id,
+      );
 
-    this.logger.log(`File ${file.originalname} was uploaded succesfully`);
+      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-    return new UploadPhotoResponse(requestId, { photoId: fileName });
+      return new UploadPhotoResponse(requestId, { photoId: fileName });
+    } catch (error) {
+      ErrorIf.isEmpty(null, UPLOAD_ERROR);
+    }
   }
 
   @Get('/:photoId')
