@@ -14,8 +14,7 @@
     "arrow-parens": false,
     "max-classes-per-file": false,
     "no-trailing-whitespace": false,
-    "object-literal-sort-keys": false,
-    "no-var-requires": false
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": [],
   "no-var-requires": false

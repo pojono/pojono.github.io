@@ -1,4 +1,4 @@
-const Jimp = require('jimp');
+import Jimp from 'jimp';
 import { extname } from 'path';
 import { Logger } from '@nestjs/common';
 import { Assert } from './assert';
