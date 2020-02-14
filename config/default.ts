@@ -39,10 +39,12 @@ module.exports = {
     bucketName: 'prostoapp',
     accessKeyId: 'minio',
     secretAccessKey: 'minio125',
-    cloudfrontUrl: '',
     localSimulation: true,
     endpoint: 'http://127.0.0.1:9000',
     region: 'eu-west-1',
+    link: {
+      photos: '',
+    },
   },
   picture: {
     width: 6000,

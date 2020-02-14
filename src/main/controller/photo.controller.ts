@@ -1,7 +1,5 @@
 import {
-  Get,
   Post,
-  Param,
   Logger,
   UseGuards,
   Controller,
@@ -18,15 +16,14 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PHOTO_NOT_FOUND, UPLOAD_ERROR, EXTENSION_ERROR } from '../lib/errors';
-import { RestApiError } from '../lib/rest.api.error';
-import { GetRequestId } from '../lib/get.request.id.decorator';
-import { ErrorIf } from '../lib/error.if';
-import { User } from '../user/user.entity';
-import { GetUser } from '../user/get.user.decorator';
-import { PhotoService } from './photo.service';
-import { LinkPhotoResponse } from './response/link.photo.response';
-import { UploadPhotoResponse } from './response/upload.photo.response';
+import { UPLOAD_ERROR, EXTENSION_ERROR } from '../../lib/errors';
+import { RestApiError } from '../../lib/rest.api.error';
+import { GetRequestId } from '../../lib/get.request.id.decorator';
+import { ErrorIf } from '../../lib/error.if';
+import { User } from '../../user/user.entity';
+import { GetUser } from '../../user/get.user.decorator';
+import { PhotoService } from '../service/photo.service';
+import { UploadPhotoResponse } from '../response/upload.photo.response';
 
 @Controller('photos')
 @ApiUseTags('photos')
@@ -66,33 +63,16 @@ export class PhotoController {
     @UploadedFile() file,
   ): Promise<UploadPhotoResponse> {
     try {
-      const fileName: string = await this.photoService.createPhoto(
+      const linkPhoto: string = await this.photoService.createPhoto(
         file,
         user.id,
       );
 
       this.logger.log(`File ${file.originalname} was uploaded succesfully`);
 
-      return new UploadPhotoResponse(requestId, { photoId: fileName });
+      return new UploadPhotoResponse(requestId, { link: linkPhoto });
     } catch (error) {
       ErrorIf.isEmpty(null, UPLOAD_ERROR);
-    }
-  }
-
-  @Get('/:photoId')
-  @ApiOperation({ title: 'Get photo file by photo ID' })
-  @ApiResponse({ status: 200, type: LinkPhotoResponse })
-  async getPhotoById(
-    @GetRequestId() requestId,
-    @GetUser() user: User,
-    @Param('photoId') photoId: string,
-  ): Promise<LinkPhotoResponse> {
-    try {
-      const url = await this.photoService.getPhotoById(user.id, photoId);
-
-      return new LinkPhotoResponse(requestId, { link: url });
-    } catch (error) {
-      ErrorIf.isEmpty(null, PHOTO_NOT_FOUND);
     }
   }
 }

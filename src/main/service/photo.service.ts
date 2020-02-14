@@ -3,12 +3,12 @@ import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import SharedFunctions from '../lib/shared.functions';
-import { PhotoRepository } from './photo.repository';
+import { PhotoRepository } from '../repository/photo.repository';
+import SharedFunctions from '../../lib/shared.functions';
 
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
-const CDN_URL: string = config.get('aws.cloudfrontUrl');
 const pictureWidth: number = config.get('picture.width');
+const URL_PHOTOS: string = config.get('aws.link.photos');
 
 const s3Options: S3.Types.ClientConfiguration = {
   accessKeyId: process.env.S3_ACCESS_KEY_ID || config.get('aws.accessKeyId'),
@@ -52,14 +52,8 @@ export class PhotoService {
 
     this.logger.log(`Create photo file ${fileName} by ${userId}`);
 
-    return fileName;
-  }
+    const link: string = URL_PHOTOS + fileName;
 
-  async getPhotoById(userId: number, photoId: string): Promise<string> {
-    const photoFile = await this.photoRepository.getPhotoById(userId, photoId);
-
-    const url: string = CDN_URL + photoFile.key;
-
-    return url;
+    return link;
   }
 }

@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { PhotoModule } from './photo/photo.module';
 import { typeOrmConfig } from './typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MainModule } from './main/main.module';
@@ -11,12 +10,7 @@ import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { APP_FILTER } from '@nestjs/core';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
-    UserModule,
-    PhotoModule,
-    MainModule,
-  ],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), UserModule, MainModule],
   controllers: [AppController],
   providers: [
     AppService,

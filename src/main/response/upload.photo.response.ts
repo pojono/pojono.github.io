@@ -4,9 +4,9 @@ import CustomResponse from '../../lib/custom.response';
 class UploadPhotoResponseDataModel {
   @ApiModelProperty({
     type: 'string',
-    example: 'example.jpg',
+    example: 'example.com/example.jpg',
   })
-  photoId: string;
+  link: string;
 }
 
 export class UploadPhotoResponse extends CustomResponse {

@@ -18,9 +18,11 @@ module.exports = {
     bucketName: 'prosto-photo',
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
-    cloudfrontUrl: 'https://photos.prostoapp.com/',
     localSimulation: false,
     region: 'eu-west-1',
+    link: {
+      photos: 'https://photos.prostoapp.com/',
+    },
   },
   db: {
     port: '5432',
