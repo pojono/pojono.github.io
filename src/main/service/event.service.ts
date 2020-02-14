@@ -6,6 +6,8 @@ import { Event } from '../entity/event.entity';
 import { EventEnum } from '../event.enum';
 import { User } from '../../user/user.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
+import { QuizService } from './quiz.service';
+import { EventDescriptionEnum } from '../event.description.enum';
 
 @Injectable()
 export class EventService {
@@ -14,6 +16,7 @@ export class EventService {
     private eventRepository: EventRepository,
 
     private statisticLessonService: StatisticLessonService,
+    private quizService: QuizService,
   ) {}
 
   async getEvent(
@@ -43,16 +46,36 @@ export class EventService {
     if (event) {
       if (event.event === EventEnum.AUTHORIZATION_FINISHED) {
         if (user.subscriptionIsNotActive() && user.firstQuizFinished) {
-          return 7; // TODO: hard code
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_SUBSCRIPTION,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
         if (!user.subscriptionIsNotActive() && user.firstQuizFinished) {
-          return 1; // TODO: hard code
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_HOME,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
         if (user.subscriptionIsNotActive() && !user.firstQuizFinished) {
-          return 2; // TODO: hard code
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_FIRST_QUIZ,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
         if (!user.subscriptionIsNotActive() && !user.firstQuizFinished) {
-          return 1; // IMPOSSIBLE
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_HOME,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
       }
 
@@ -61,7 +84,12 @@ export class EventService {
           user.id,
         );
         if (finishedLessons === 1) {
-          return 8;
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_PUSHES,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
       }
     }

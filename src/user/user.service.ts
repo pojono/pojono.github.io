@@ -420,15 +420,19 @@ export class UserService {
     await iap.setup();
     const validationResponse = await iap.validate(receipt);
 
-    ErrorIf.isFalse(
-      appType === AppTypeEnum.ANDROID &&
+    if (appType === AppTypeEnum.ANDROID) {
+      ErrorIf.isFalse(
         validationResponse.service === 'google',
-      PURCHASE_VALIDATION_ERROR,
-    );
-    ErrorIf.isFalse(
-      appType === AppTypeEnum.IOS && validationResponse.service === 'apple',
-      PURCHASE_VALIDATION_ERROR,
-    );
+        PURCHASE_VALIDATION_ERROR,
+      );
+    }
+
+    if (appType === AppTypeEnum.IOS) {
+      ErrorIf.isFalse(
+        validationResponse.service === 'apple',
+        PURCHASE_VALIDATION_ERROR,
+      );
+    }
 
     const purchaseData = iap.getPurchaseData(validationResponse);
     const firstPurchaseItem = purchaseData[0];
@@ -483,11 +487,15 @@ export class UserService {
       appType === AppTypeEnum.ANDROID &&
       validationResponse.acknowledgementState === 0
     ) {
-      await androidGoogleApi.purchases.subscriptions.acknowledge({
-        packageName: config.get('iap.androidPackageName'),
-        subscriptionId: productId,
-        token: receipt.purchaseToken,
-      });
+      try {
+        await androidGoogleApi.purchases.subscriptions.acknowledge({
+          packageName: config.get('iap.androidPackageName'),
+          subscriptionId: productId,
+          token: receipt.purchaseToken,
+        });
+      } catch (err) {
+        this.logger.error(err);
+      }
     }
   }
 

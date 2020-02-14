@@ -1,0 +1,6 @@
+export enum EventDescriptionEnum {
+  GO_TO_FIRST_QUIZ = 'GO_TO_FIRST_QUIZ',
+  GO_TO_SUBSCRIPTION = 'GO_TO_SUBSCRIPTION',
+  GO_TO_HOME = 'GO_TO_HOME',
+  GO_TO_PUSHES = 'GO_TO_PUSHES',
+}

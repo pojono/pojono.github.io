@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { EntityEnum } from '../enitity.enum';
 import { ActionNamesEnum } from '../action.names.enum';
 import { ActionTypesEnum } from '../action.types.enum';
+import { EventDescriptionEnum } from '../event.description.enum';
 
 @Entity('quiz')
 export class Quiz extends BaseEntity {
@@ -40,4 +41,7 @@ export class Quiz extends BaseEntity {
 
   @Column({ nullable: true })
   gotoEntityId: number;
+
+  @Column({ nullable: true })
+  eventDescription: EventDescriptionEnum;
 }

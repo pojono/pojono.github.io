@@ -19,6 +19,7 @@ import { Answer } from '../entity/answer.entity';
 import { AnswerActionEnum } from '../answer.action.enum';
 import { UserService } from '../../user/user.service';
 import { UserUpdateDto } from '../../user/dto/user.update.dto';
+import { EventDescriptionEnum } from '../event.description.enum';
 
 @Injectable()
 export class QuizService {
@@ -40,6 +41,12 @@ export class QuizService {
 
     private userService: UserService,
   ) {}
+
+  async getByEventDescription(
+    eventDescription: EventDescriptionEnum,
+  ): Promise<Quiz | undefined> {
+    return this.quizRepository.findByEventDescription(eventDescription);
+  }
 
   async postQuiz(
     user: User,

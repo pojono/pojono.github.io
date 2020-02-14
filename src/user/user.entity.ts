@@ -29,6 +29,9 @@ export class User extends BaseEntity {
   lastCode: Date;
 
   @Column({ nullable: true })
+  smsCode: string;
+
+  @Column({ nullable: true })
   latestCourseId: number;
 
   @Column({ nullable: false })
