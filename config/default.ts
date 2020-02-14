@@ -28,17 +28,6 @@ module.exports = {
     phoneWithoutSms: '73141592653',
     codeWithoutSms: '0112',
   },
-  aws: {
-    bucketName: 'prostoapp',
-    accessKeyId: 'minio',
-    secretAccessKey: 'minio125',
-    localSimulation: true,
-    endpoint: 'http://127.0.0.1:9000',
-    region: 'eu-west-1',
-    link: {
-      photos: '',
-    },
-  },
   picture: {
     width: 6000,
   },
