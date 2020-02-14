@@ -22,6 +22,7 @@ import { UserUpdateDto } from './dto/user.update.dto';
 import * as moment from 'moment';
 import { AndroidPurchase, IosPurchase } from './dto/receipt.update.dto';
 import { AppTypeEnum } from './app.type.enum';
+import * as rp from 'request-promise-native';
 
 // TODO: move to config
 AWS.config.update({
@@ -96,6 +97,12 @@ export class UserService {
           INVALID_CREDENTIALS,
         );
         /* BACKDOOR FINISH */
+      } else if (config.get('sms.useIqSms')) {
+        ErrorIf.isFalse(
+          signInRequestDto.code === user.smsCode,
+          INVALID_CREDENTIALS,
+        );
+        await this.userRepository.resetSmsCode(user);
       } else {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
@@ -105,12 +112,18 @@ export class UserService {
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
       // TODO: telegram
-      // await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
+      await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
 
       return { token };
     } catch (err) {
       ErrorIf.isTrue(true, INVALID_CREDENTIALS);
     }
+  }
+
+  async generateSmsCode(): Promise<string> {
+    const min = 1000; // TODO: move to config
+    const max = 9999; // TODO: move to config
+    return Math.round(min - 0.5 + Math.random() * (max - min + 1)).toString();
   }
 
   async sendSms(
@@ -123,11 +136,11 @@ export class UserService {
     if (!user) {
       user = await this.createUserByPhone(phone);
       // TODO: telegram
-      // await Telegram.sendMessage('🙋 New user +' + phone, requestId);
+      await Telegram.sendMessage('🙋 New user +' + phone, requestId);
     }
 
     // TODO: telegram
-    // await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
+    await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
@@ -155,6 +168,30 @@ export class UserService {
         await this.userRepository.updateSession(user, authData.Session);
       } catch {
         ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
+      }
+    } else if (config.get('sms.useIqSms')) {
+      const code: string = await this.generateSmsCode();
+      await this.userRepository.updateSmsCode(user, code);
+      const url: string = 'http://json.gate.iqsms.ru/send/';
+      logger.log('On phone ' + phone + ' sent sms message: ' + code);
+      try {
+        await rp({
+          url,
+          method: 'POST',
+          json: {
+            login: 'z1581587763535',
+            password: '450520',
+            messages: [
+              {
+                phone: user.phone,
+                clientId: 1,
+                text: `code: ${code}`,
+              },
+            ],
+          },
+        });
+      } catch (err) {
+        logger.error(err);
       }
     }
   }

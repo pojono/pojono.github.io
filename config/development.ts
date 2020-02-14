@@ -1,6 +1,7 @@
 module.exports = {
   sms: {
     useCognito: false,
+    useIqSms: true,
   },
   aws: {
     cognito: {

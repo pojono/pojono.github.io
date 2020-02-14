@@ -112,6 +112,16 @@ export class UserRepository extends Repository<User> {
     await user.save();
   }
 
+  async resetSmsCode(user: User): Promise<void> {
+    user.smsCode = null;
+    await user.save();
+  }
+
+  async updateSmsCode(user: User, smsCode: string): Promise<void> {
+    user.smsCode = smsCode;
+    await user.save();
+  }
+
   async updateSubscription(user: User, subscriptionDto): Promise<void> {
     user.subscriptionPlatform = subscriptionDto.appType;
     user.subscriptionEnvironment = subscriptionDto.environment;
