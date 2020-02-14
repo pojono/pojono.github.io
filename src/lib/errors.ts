@@ -41,3 +41,18 @@ export const SUBSCRIPRITON_IS_CANCELLED: StandardRestApiError = StandardRestApiE
   1008,
   'Subscription is cancelled',
 );
+
+export const PHOTO_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1009,
+  'Photo not found',
+);
+
+export const UPLOAD_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1010,
+  'Upload error',
+);
+
+export const EXTENSION_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1011,
+  'Extension error',
+);

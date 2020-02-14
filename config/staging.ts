@@ -2,6 +2,9 @@ module.exports = {
   server: {
     url: 'https://staging.prostoapp.com/',
   },
+  logs: {
+    showHeaders: true,
+  },
   swagger: {
     scheme: 'https',
   },
@@ -11,6 +14,14 @@ module.exports = {
   aws: {
     cognito: {
       userPoolId: 'eu-west-1_65Op52Obc',
+    },
+    bucketName: 'prosto-photo',
+    accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
+    secretAccessKey: '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',
+    localSimulation: false,
+    region: 'eu-west-1',
+    link: {
+      photos: 'https://photos.prostoapp.com/',
     },
   },
   db: {

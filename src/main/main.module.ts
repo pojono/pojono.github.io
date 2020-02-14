@@ -35,6 +35,9 @@ import { UserService } from '../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
 import { JwtStrategy } from '../user/jwt.strategy';
+import { PhotoService } from './service/photo.service';
+import { PhotoRepository } from './repository/photo.repository';
+import { PhotoController } from './controller/photo.controller';
 import { StatisticService } from './service/statistic.service';
 import { StatisticController } from './controller/statistic.controller';
 import { FastSupportController } from './controller/fast.support.controller';
@@ -77,6 +80,7 @@ import { AnswerRepository } from './repository/answer.repository';
       ChallengeRepository,
       CourseToVideoAdviceRepository,
       UserRepository,
+      PhotoRepository,
       StatisticHourRepository,
       StatisticCourseRepository,
       StatisticLessonRepository,
@@ -101,6 +105,7 @@ import { AnswerRepository } from './repository/answer.repository';
     CourseController,
     RubricController,
     LessonController,
+    PhotoController,
     StatisticController,
     FastSupportController,
     EventController,
@@ -118,6 +123,7 @@ import { AnswerRepository } from './repository/answer.repository';
     VideoAdviceService,
     LessonService,
     LessonToTrackService,
+    PhotoService,
     TrackService,
     ChallengeService,
     CourseToVideoAdviceService,

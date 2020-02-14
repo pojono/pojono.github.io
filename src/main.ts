@@ -7,8 +7,9 @@ import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { Telegram } from './lib/telegram';
-const logger = new Logger('Bootstrap');
 import * as rp from 'request-promise-native';
+
+const logger = new Logger('Bootstrap');
 
 process.on('SIGTERM', async function onSigterm() {
   const message: string =

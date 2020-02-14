@@ -33,6 +33,13 @@ class MeResponseDto {
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly picture: string;
 
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    example: 55,
+  })
+  public readonly pictureZoom: number;
+
   @ApiModelProperty({ type: 'number', nullable: false, default: 0 })
   public readonly currentStrike: number;
 
@@ -93,6 +100,9 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
   isPushesSkipped: boolean;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  isPushesReminded: boolean;
 
   @ApiModelProperty({ type: 'string', nullable: true })
   pushesTime: string;

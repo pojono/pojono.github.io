@@ -3,7 +3,6 @@ import { AppService } from './app.service';
 import { ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { RootResponse } from './app.response';
 import { GetRequestId } from './lib/get.request.id.decorator';
-import { logger } from './lib/logger';
 
 @ApiUseTags('root')
 @Controller()

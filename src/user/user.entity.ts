@@ -41,6 +41,9 @@ export class User extends BaseEntity {
   picture: string;
 
   @Column({ nullable: false, default: 0 })
+  pictureZoom: number;
+
+  @Column({ nullable: false, default: 0 })
   currentStrike: number;
 
   @Column({ nullable: false, default: 0 })
@@ -87,6 +90,9 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false, default: false })
   isPushesSkipped: boolean;
+
+  @Column({ nullable: false, default: false })
+  isPushesReminded: boolean;
 
   @Column({ nullable: true })
   pushesTime: string;

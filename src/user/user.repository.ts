@@ -49,6 +49,18 @@ export class UserRepository extends Repository<User> {
       user.firstQuizFinished = userUpdateDto.firstQuizFinished;
     }
 
+    if (dtoKeys.includes('picture')) {
+      user.picture = userUpdateDto.picture;
+    }
+
+    if (dtoKeys.includes('pictureZoom')) {
+      user.pictureZoom = userUpdateDto.pictureZoom;
+    }
+
+    if (dtoKeys.includes('isPushesReminded')) {
+      user.isPushesReminded = userUpdateDto.isPushesReminded;
+    }
+
     return await user.save();
   }
 
