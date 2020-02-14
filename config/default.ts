@@ -18,13 +18,6 @@ module.exports = {
   db: {
     migrations: ['./src/infrastructure/database/typeorm/migrations/*.ts'],
     migrationsDir: './src/infrastructure/database/typeorm/migrations/',
-    port: '5454',
-    host: 'localhost',
-    username: 'postgres',
-    password: 'postgres',
-    database: 'prostoapp',
-    synchronize: true,
-    migrationsRun: true,
     logging: false,
   },
   sms: {
