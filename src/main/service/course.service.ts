@@ -86,6 +86,10 @@ export class CourseService {
       numberOfStudents: await this.statisticCourseService.countUsersOnCourseId(
         courseId,
       ),
+      startedLessons: await this.statisticLessonService.countStartedByUserIdAndCourseId(
+        userId,
+        courseId,
+      ),
     };
   }
 

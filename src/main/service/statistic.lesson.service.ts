@@ -47,4 +47,14 @@ export class StatisticLessonService {
       courseId,
     );
   }
+
+  async countStartedByUserIdAndCourseId(
+    userId: number,
+    courseId: number,
+  ): Promise<number> {
+    return this.statisticLessonRepository.countStartedByUserIdAndCourseId(
+      userId,
+      courseId,
+    );
+  }
 }

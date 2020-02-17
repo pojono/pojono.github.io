@@ -67,4 +67,18 @@ export class StatisticLessonRepository extends Repository<StatisticLesson> {
       .getRawOne();
     return Number(count);
   }
+
+  async countStartedByUserIdAndCourseId(
+    userId: number,
+    courseId: number,
+  ): Promise<number> {
+    const { count } = await this.createQueryBuilder('statistic_lesson')
+      .select(`COUNT(statistic_lesson.id)`, 'count')
+      .where({
+        userId,
+        courseId,
+      })
+      .getRawOne();
+    return Number(count);
+  }
 }

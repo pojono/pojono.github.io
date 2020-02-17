@@ -9,4 +9,7 @@ export class CourseStatsResponseDto {
 
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly numberOfStudents: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly startedLessons: number;
 }
