@@ -100,11 +100,11 @@ export class User extends BaseEntity {
   @Column({ nullable: false, default: false })
   firstQuizFinished: boolean;
 
-  public subscriptionIsNotActive(): boolean {
-    return (
+  public subscriptionIsActive(): boolean {
+    const isNotActive =
       (moment(this.subscriptionEndDate).isValid() &&
         moment(this.subscriptionEndDate).isBefore(moment.utc())) ||
-      this.subscriptionIsCancelled
-    );
+      this.subscriptionIsCancelled;
+    return !!isNotActive;
   }
 }

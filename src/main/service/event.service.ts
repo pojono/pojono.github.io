@@ -45,7 +45,7 @@ export class EventService {
 
     if (event) {
       if (event.event === EventEnum.AUTHORIZATION_FINISHED) {
-        if (user.subscriptionIsNotActive() && user.firstQuizFinished) {
+        if (!user.subscriptionIsActive() && user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_SUBSCRIPTION,
           );
@@ -53,7 +53,7 @@ export class EventService {
             return quiz.id;
           }
         }
-        if (!user.subscriptionIsNotActive() && user.firstQuizFinished) {
+        if (user.subscriptionIsActive() && user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
@@ -61,7 +61,7 @@ export class EventService {
             return quiz.id;
           }
         }
-        if (user.subscriptionIsNotActive() && !user.firstQuizFinished) {
+        if (!user.subscriptionIsActive() && !user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_FIRST_QUIZ,
           );
@@ -69,7 +69,7 @@ export class EventService {
             return quiz.id;
           }
         }
-        if (!user.subscriptionIsNotActive() && !user.firstQuizFinished) {
+        if (user.subscriptionIsActive() && !user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
@@ -91,6 +91,10 @@ export class EventService {
             return quiz.id;
           }
         }
+      }
+
+      if (event.event === EventEnum.COURSE_FINISHED) {
+        return event.quizId;
       }
     }
 
