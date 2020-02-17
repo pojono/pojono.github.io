@@ -127,14 +127,16 @@ export class UserService {
   }
 
   async sendSms(
-    requestId: number,
+    requestId: string,
     smsRequestDto: SmsRequestDto,
-  ): Promise<void> {
+  ): Promise<boolean> {
+    let newUser: boolean = false;
     const { phone } = smsRequestDto;
 
     let user: User | undefined = await this.getUserByPhone(phone);
     if (!user) {
       user = await this.createUserByPhone(phone);
+      newUser = true;
       // TODO: telegram
       await Telegram.sendMessage('🙋 New user +' + phone, requestId);
     }
@@ -147,7 +149,7 @@ export class UserService {
 
     // BACKDOOR START
     if (phone === config.get('sms.phoneWithoutSms')) {
-      return;
+      return newUser;
     }
     // BACKDOOR FINISH
 
@@ -173,9 +175,9 @@ export class UserService {
       const code: string = await this.generateSmsCode();
       await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
-      logger.log('On phone ' + phone + ' sent sms message: ' + code);
+      logger.log('On phone ' + phone + ' sent sms message: ' + code, requestId);
       try {
-        await rp({
+        const response = await rp({
           url,
           method: 'POST',
           json: {
@@ -190,10 +192,24 @@ export class UserService {
             ],
           },
         });
+        if (
+          response &&
+          response.messages &&
+          response.messages[0] &&
+          response.messages[0].status
+        ) {
+          if (response.messages[0].status === 'not enough balance') {
+            await Telegram.sendMessage(
+              '💸 Not enough money for IQSMS',
+              requestId,
+            );
+          }
+        }
       } catch (err) {
         logger.error(err);
       }
     }
+    return newUser;
   }
 
   isFewTime(user): boolean {

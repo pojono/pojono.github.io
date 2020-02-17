@@ -49,8 +49,11 @@ export class UserController {
     @GetRequestId() requestId,
     @Body(ValidationPipe) smsRequestDto: SmsRequestDto,
   ): Promise<SmsResponse> {
-    await this.userService.sendSms(requestId, smsRequestDto);
-    return new SmsResponse(requestId, null);
+    const newUser: boolean = await this.userService.sendSms(
+      requestId,
+      smsRequestDto,
+    );
+    return new SmsResponse(requestId, { newUser });
   }
 
   @Post('/signin')
