@@ -41,6 +41,13 @@ export class LessonResponseDto {
   })
   affirmationText: string;
 
+  @ApiModelProperty({
+    type: 'string',
+    nullable: true,
+    description: 'Автор цитаты',
+  })
+  quoteAuthor: string;
+
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly orderIndex: number;
 }

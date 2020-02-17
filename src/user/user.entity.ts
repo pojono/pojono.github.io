@@ -105,6 +105,6 @@ export class User extends BaseEntity {
       (moment(this.subscriptionEndDate).isValid() &&
         moment(this.subscriptionEndDate).isBefore(moment.utc())) ||
       this.subscriptionIsCancelled;
-    return !!isNotActive;
+    return !isNotActive;
   }
 }
