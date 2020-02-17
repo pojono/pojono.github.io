@@ -5,3 +5,4 @@ prosto-jenkins.pem
 deploy
 yarn-error.log
 backups_staging
+terraform
