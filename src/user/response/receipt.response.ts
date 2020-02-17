@@ -1,7 +1,14 @@
 import CustomResponse from '../../lib/custom.response';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-class ReceiptResponseDto {}
+export class ReceiptResponseDto {
+  @ApiModelProperty({
+    type: 'boolean',
+    description: 'Result of validation',
+    nullable: false,
+  })
+  public readonly subscriptionIsActive: boolean;
+}
 
 export class ReceiptResponse extends CustomResponse {
   @ApiModelProperty({ type: ReceiptResponseDto, nullable: true })

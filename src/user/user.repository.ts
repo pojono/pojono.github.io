@@ -122,7 +122,7 @@ export class UserRepository extends Repository<User> {
     await user.save();
   }
 
-  async updateSubscription(user: User, subscriptionDto): Promise<void> {
+  async updateSubscription(user: User, subscriptionDto): Promise<User> {
     user.subscriptionPlatform = subscriptionDto.appType;
     user.subscriptionEnvironment = subscriptionDto.environment;
     user.subscriptionProductId = subscriptionDto.productId;
@@ -133,6 +133,6 @@ export class UserRepository extends Repository<User> {
     user.subscriptionEndDate = subscriptionDto.endDate;
     user.subscriptionIsCancelled = subscriptionDto.isCancelled;
 
-    await user.save();
+    return user.save();
   }
 }

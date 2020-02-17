@@ -28,7 +28,10 @@ import { MeResponse } from './response/me.response';
 import { GetRequestId } from '../lib/get.request.id.decorator';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { SettingsResponse } from './response/settings.response';
-import { ReceiptResponse } from './response/receipt.response';
+import {
+  ReceiptResponse,
+  ReceiptResponseDto,
+} from './response/receipt.response';
 import { ReceiptUpdateDto } from './dto/receipt.update.dto';
 import { ErrorIf } from '../lib/error.if';
 import { PURCHASE_VALIDATION_ERROR } from '../lib/errors';
@@ -131,16 +134,15 @@ export class UserController {
     @Body(ValidationPipe) receiptUpdateDto: ReceiptUpdateDto,
   ): Promise<ReceiptResponse> {
     try {
-      await this.userService.processPurchase(
+      const processResult: ReceiptResponseDto = await this.userService.processPurchase(
         user,
         receiptUpdateDto.iosPurchase,
         receiptUpdateDto.androidPurchase,
       );
+      return new ReceiptResponse(requestId, processResult);
     } catch (err) {
       ErrorIf.isTrue(true, PURCHASE_VALIDATION_ERROR);
       this.logger.error(JSON.stringify(err), requestId);
     }
-
-    return new ReceiptResponse(requestId, null);
   }
 }

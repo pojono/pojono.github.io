@@ -45,6 +45,7 @@ import { JWT } from 'google-auth-library';
 import { google } from 'googleapis';
 import { StoreEnviromentEnum } from './store.environment.enum';
 import { Telegram } from '../lib/telegram';
+import { ReceiptResponseDto } from './response/receipt.response';
 
 @Injectable()
 export class UserService {
@@ -421,11 +422,11 @@ export class UserService {
     user: User,
     iosPurchase: IosPurchase | undefined,
     androidPurchase: AndroidPurchase | undefined,
-  ): Promise<void> {
+  ): Promise<ReceiptResponseDto> {
     if (iosPurchase) {
       const appType: AppTypeEnum = AppTypeEnum.IOS;
       const iosReceipt = iosPurchase.transactionReceipt;
-      await this.validatePurchase(user, appType, iosReceipt);
+      return this.validatePurchase(user, appType, iosReceipt);
     }
     if (androidPurchase) {
       const appType: AppTypeEnum = AppTypeEnum.ANDROID;
@@ -435,7 +436,7 @@ export class UserService {
         purchaseToken: androidPurchase.purchaseToken,
         subscription: true,
       };
-      await this.validatePurchase(user, appType, androidReceipt);
+      return this.validatePurchase(user, appType, androidReceipt);
     }
   }
 
@@ -443,7 +444,7 @@ export class UserService {
     user: User,
     appType: AppTypeEnum,
     receipt,
-  ): Promise<void> {
+  ): Promise<ReceiptResponseDto> {
     iap.config({
       // If you want to exclude old transaction, set this to true. Default is false:
       // appleExcludeOldTransactions: true,
@@ -468,7 +469,7 @@ export class UserService {
       ),
     });
 
-    const androidGoogleApi = google.androidpublisher({ version: 'v3' });
+    // const androidGoogleApi = google.androidpublisher({ version: 'v3' });
 
     await iap.setup();
     const validationResponse = await iap.validate(receipt);
@@ -521,21 +522,29 @@ export class UserService {
         : StoreEnviromentEnum.PRODUCTION;
     }
 
-    await this.userRepository.updateSubscription(user, {
-      appType,
-      environment,
-      productId,
-      origTxId,
-      latestReceipt,
-      validationResponse,
-      startDate,
-      endDate,
-      isCancelled,
-    });
+    const updatedUser: User = await this.userRepository.updateSubscription(
+      user,
+      {
+        appType,
+        environment,
+        productId,
+        origTxId,
+        latestReceipt,
+        validationResponse,
+        startDate,
+        endDate,
+        isCancelled,
+      },
+    );
+
+    return {
+      subscriptionIsActive: updatedUser.subscriptionIsActive(),
+    };
 
     // From https://developer.android.com/google/play/billing/billing_library_overview:
     // You must acknowledge all purchases within three days.
     // Failure to properly acknowledge purchases results in those purchases being refunded.
+    /*
     if (
       appType === AppTypeEnum.ANDROID &&
       validationResponse.acknowledgementState === 0
@@ -550,6 +559,7 @@ export class UserService {
         this.logger.error(err);
       }
     }
+    */
   }
 
   async shouldCheckSubscriptionAgain(user: User): Promise<boolean> {
