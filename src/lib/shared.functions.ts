@@ -1,9 +1,9 @@
-import Jimp from 'jimp';
 import { extname } from 'path';
 import { Logger } from '@nestjs/common';
 import { Assert } from './assert';
 import { UPLOAD_ERROR } from './errors';
 
+const Jimp = require('jimp');
 const PREVIEW_EXTENSION = 'png';
 const logger = new Logger('Shared Functions');
 
