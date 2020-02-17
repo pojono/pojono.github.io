@@ -29,6 +29,13 @@ export class GetCourseByIdResponseDto {
   public readonly challenge: ChallengeResponseDto;
 
   @ApiModelProperty({
+    type: 'number',
+    nullable: true,
+    isArray: false,
+  })
+  public readonly challengeShowAfterLessonIndex: number;
+
+  @ApiModelProperty({
     type: VideoAdviceResponseDto,
     nullable: false,
     isArray: true,
