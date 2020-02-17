@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Event } from '../entity/event.entity';
 import { EventRequestDto } from '../dto/event.request.dto';
+import { EventEnum } from '../event.enum';
 
 @EntityRepository(Event)
 export class EventRepository extends Repository<Event> {
@@ -19,7 +20,10 @@ export class EventRepository extends Repository<Event> {
       event: eventRequestDto.event,
     };
 
-    if (eventRequestDto.id) {
+    if (
+      eventRequestDto.id &&
+      eventRequestDto.event !== EventEnum.LESSON_FINISHED
+    ) {
       search.value = eventRequestDto.id;
     }
 

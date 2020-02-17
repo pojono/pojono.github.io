@@ -15,7 +15,7 @@ export class EventRequestDto {
       // EventEnum.APP_STARTED,
     ],
   })
-  event: number;
+  event: string;
 
   @IsOptional()
   @IsNumberString()
