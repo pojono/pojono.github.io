@@ -23,7 +23,7 @@ export class GetCourseByIdResponseDto {
 
   @ApiModelProperty({
     type: ChallengeResponseDto,
-    nullable: false,
+    nullable: true,
     isArray: false,
   })
   public readonly challenge: ChallengeResponseDto;

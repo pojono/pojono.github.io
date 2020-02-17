@@ -53,12 +53,18 @@ export class CourseService {
     const lesson: LessonResponseDto[] = await this.lessonService.getLessonsByCourseId(
       id,
     );
-    const challenge: ChallengeResponseDto = await this.challengeService.getChallengeByCourseId(
+
+    const challengeForCourse: ChallengeResponseDto = await this.challengeService.getChallengeByCourseId(
       id,
     );
+    const challenge: ChallengeResponseDto = challengeForCourse
+      ? challengeForCourse
+      : null;
+
     const challengeShowAfterLessonIndex = challenge
       ? challenge.showAfterLessonIndex
       : null;
+
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesByCourseId(
       id,
     );
