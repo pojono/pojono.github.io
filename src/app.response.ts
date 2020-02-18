@@ -4,6 +4,12 @@ import CustomResponse from './lib/custom.response';
 class RootResponseDto {
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly uptime: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly tag: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  public readonly instance: string;
 }
 
 export class RootResponse extends CustomResponse {

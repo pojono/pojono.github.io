@@ -14,4 +14,11 @@ export class CheckboxResponseDto {
     isArray: false,
   })
   public readonly checkboxButton: string;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: true,
+    isArray: false,
+  })
+  public readonly checkboxAnswerId: number;
 }

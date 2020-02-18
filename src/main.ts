@@ -1,3 +1,5 @@
+import SharedFunctions from './lib/shared.functions';
+
 if (process.env.IMAGE_TAG) {
   process.env.TAG = process.env.IMAGE_TAG;
 }
@@ -116,16 +118,23 @@ async function bootstrap() {
   await app.listen(port);
 
   const startMessage: string =
-    '⚡️✅ Start: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
+    '⚡️✅ Start: ' +
+    SharedFunctions.uptime() +
+    ' #' +
+    process.env.TAG +
+    ' <' +
+    process.env.NODE_ENV +
+    '> ';
 
   await Telegram.sendMessage(startMessage);
 
+  /*
   try {
-    const health: any = await checkOutside();
+    await checkOutside();
 
     const healthMessage: string =
       '⚡️❇️ Network. Up: ' +
-      health.data.uptime +
+      SharedFunctions.uptime() +
       ' #' +
       process.env.TAG +
       ' <' +
@@ -143,6 +152,7 @@ async function bootstrap() {
       error;
     await Telegram.sendImportantMessage(message);
   }
+  */
 }
 
 (async () => {

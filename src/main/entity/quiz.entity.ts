@@ -52,11 +52,20 @@ export class Quiz extends BaseEntity {
   checkboxButton: string;
 
   @Column({ nullable: true })
+  checkboxAnswerId: number;
+
+  @Column({ nullable: true })
   timepickerTitle: string;
 
   @Column({ nullable: true })
   timepickerActiveButton: string;
 
   @Column({ nullable: true })
+  timepickerActiveButtonAnswerId: number;
+
+  @Column({ nullable: true })
   timepickerInactiveButton: string;
+
+  @Column({ nullable: true })
+  timepickerInactiveButtonAnswerId: number;
 }

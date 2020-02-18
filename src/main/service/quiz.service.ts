@@ -118,11 +118,15 @@ export class QuizService {
         checkbox: {
           checkboxText: quiz.checkboxText,
           checkboxButton: quiz.checkboxButton,
+          checkboxAnswerId: quiz.checkboxAnswerId,
         },
         timepicker: {
           timepickerTitle: quiz.timepickerTitle,
           timepickerActiveButton: quiz.timepickerActiveButton,
+          timepickerActiveButtonAnswerId: quiz.timepickerActiveButtonAnswerId,
           timepickerInactiveButton: quiz.timepickerInactiveButton,
+          timepickerInactiveButtonAnswerId:
+            quiz.timepickerInactiveButtonAnswerId,
         },
       },
     };

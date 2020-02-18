@@ -16,9 +16,23 @@ export class TimepickerResponseDto {
   public readonly timepickerActiveButton: string;
 
   @ApiModelProperty({
+    type: 'number',
+    nullable: true,
+    isArray: false,
+  })
+  public readonly timepickerActiveButtonAnswerId: number;
+
+  @ApiModelProperty({
     type: 'string',
     nullable: true,
     isArray: false,
   })
   public readonly timepickerInactiveButton: string;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: true,
+    isArray: false,
+  })
+  public readonly timepickerInactiveButtonAnswerId: number;
 }
