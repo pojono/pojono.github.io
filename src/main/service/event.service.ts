@@ -90,6 +90,13 @@ export class EventService {
           if (quiz) {
             return quiz.id;
           }
+        } else {
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_BACK,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
         }
       }
 

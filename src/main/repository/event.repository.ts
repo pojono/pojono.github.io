@@ -20,13 +20,20 @@ export class EventRepository extends Repository<Event> {
       event: eventRequestDto.event,
     };
 
-    if (
-      eventRequestDto.id &&
-      eventRequestDto.event !== EventEnum.LESSON_FINISHED
-    ) {
+    if (eventRequestDto.id) {
       search.value = eventRequestDto.id;
     }
 
-    return Event.findOne({ where: search });
+    let result = await Event.findOne({ where: search });
+
+    if (!result) {
+      result = await Event.findOne({
+        where: {
+          event: eventRequestDto.event,
+          value: null,
+        },
+      });
+    }
+    return result;
   }
 }

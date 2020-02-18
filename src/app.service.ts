@@ -33,6 +33,6 @@ export class AppService {
     addMinutes(segments, minutes);
     addSeconds(segments, seconds);
 
-    return { uptime: segments.join(', ') + ' Welcome to ECS 2!' };
+    return { uptime: segments.join(', ') };
   }
 }
