@@ -1,6 +1,9 @@
 if (process.env.IMAGE_TAG) {
   process.env.TAG = process.env.IMAGE_TAG;
 }
+process.env.INSTANCE = Math.random()
+  .toString(36)
+  .slice(2, 2 + Math.max(1, Math.min(3, 10)));
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
