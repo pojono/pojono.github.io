@@ -6,6 +6,8 @@ import { RangeResponseDto } from './range.response';
 import { InputResponseDto } from './input.response';
 import { ActionResponseDto } from './action.response';
 import { GoToResponseDto } from './go.to.response';
+import { CheckboxResponseDto } from './checkbox.response';
+import { TimepickerResponseDto } from './timepicker.response';
 
 export class QuizResponseDto {
   @ApiModelProperty({
@@ -64,4 +66,18 @@ export class QuizResponseDto {
     isArray: false,
   })
   public readonly goto: GoToResponseDto;
+
+  @ApiModelProperty({
+    type: CheckboxResponseDto,
+    nullable: true,
+    isArray: false,
+  })
+  public readonly checkbox: CheckboxResponseDto;
+
+  @ApiModelProperty({
+    type: TimepickerResponseDto,
+    nullable: true,
+    isArray: false,
+  })
+  public readonly timepicker: TimepickerResponseDto;
 }

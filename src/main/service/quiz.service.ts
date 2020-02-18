@@ -115,6 +115,15 @@ export class QuizService {
           entity: quiz.gotoEntity,
           entityId: quiz.gotoEntityId,
         },
+        checkbox: {
+          checkboxText: quiz.checkboxText,
+          checkboxButton: quiz.checkboxButton,
+        },
+        timepicker: {
+          timepickerTitle: quiz.timepickerTitle,
+          timepickerActiveButton: quiz.timepickerActiveButton,
+          timepickerInactiveButton: quiz.timepickerInactiveButton,
+        },
       },
     };
   }

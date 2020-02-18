@@ -44,4 +44,19 @@ export class Quiz extends BaseEntity {
 
   @Column({ nullable: true })
   eventDescription: EventDescriptionEnum;
+
+  @Column({ nullable: true })
+  checkboxText: string;
+
+  @Column({ nullable: true })
+  checkboxButton: string;
+
+  @Column({ nullable: true })
+  timepickerTitle: string;
+
+  @Column({ nullable: true })
+  timepickerActiveButton: string;
+
+  @Column({ nullable: true })
+  timepickerInactiveButton: string;
 }

@@ -5,4 +5,6 @@ export enum ActionTypesEnum {
   MULTICHOICE = 'MULTICHOICE',
   ACTION = 'ACTION',
   GOTO = 'GOTO',
+  CHECKBOX = 'CHECKBOX',
+  TIMEPICKER = 'TIMEPICKER',
 }
