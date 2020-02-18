@@ -8,4 +8,5 @@ COPY tsconfig.json .
 COPY config ./config
 COPY src ./src
 RUN yarn build
+EXPOSE 80
 CMD node dist/src/main
