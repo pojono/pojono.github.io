@@ -522,23 +522,27 @@ export class UserService {
         : StoreEnviromentEnum.PRODUCTION;
     }
 
+    const validationResult = {
+      appType,
+      environment,
+      productId,
+      origTxId,
+      latestReceipt,
+      validationResponse,
+      startDate,
+      endDate,
+      isCancelled,
+    };
+
     const updatedUser: User = await this.userRepository.updateSubscription(
       user,
-      {
-        appType,
-        environment,
-        productId,
-        origTxId,
-        latestReceipt,
-        validationResponse,
-        startDate,
-        endDate,
-        isCancelled,
-      },
+      validationResult,
     );
 
     return {
       subscriptionIsActive: updatedUser.subscriptionIsActive(),
+      validationResponse,
+      validationResult,
     };
 
     // From https://developer.android.com/google/play/billing/billing_library_overview:

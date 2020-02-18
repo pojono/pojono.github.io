@@ -29,6 +29,9 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true })
   affirmationText: string;
 
+  @Column({ nullable: true })
+  quoteAuthor: string;
+
   @Column({ nullable: false })
   orderIndex: number;
 }

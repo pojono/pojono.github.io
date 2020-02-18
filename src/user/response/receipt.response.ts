@@ -8,6 +8,20 @@ export class ReceiptResponseDto {
     nullable: false,
   })
   public readonly subscriptionIsActive: boolean;
+
+  @ApiModelProperty({
+    type: 'object',
+    description: 'Validation response',
+    nullable: false,
+  })
+  public readonly validationResponse: any;
+
+  @ApiModelProperty({
+    type: 'object',
+    description: 'Validation result (will write to database)',
+    nullable: false,
+  })
+  public readonly validationResult: any;
 }
 
 export class ReceiptResponse extends CustomResponse {
