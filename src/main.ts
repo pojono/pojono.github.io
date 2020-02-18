@@ -1,3 +1,7 @@
+if (process.env.IMAGE_TAG) {
+  process.env.TAG = process.env.IMAGE_TAG;
+}
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
