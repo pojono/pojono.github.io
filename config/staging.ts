@@ -1,7 +1,7 @@
 module.exports = {
   server: {
     port: 80,
-    url: 'https://staging-new.prostoapp.com/',
+    url: 'https://staging.prostoapp.com/',
   },
   logs: {
     showHeaders: true,
