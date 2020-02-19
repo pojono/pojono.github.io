@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { StatisticHistory } from '../entity/statistic.history.entity';
+import * as moment from 'moment';
 
 @EntityRepository(StatisticHistory)
 export class StatisticHistoryRepository extends Repository<StatisticHistory> {
@@ -14,6 +15,7 @@ export class StatisticHistoryRepository extends Repository<StatisticHistory> {
     statsHistory.trackId = trackId;
     statsHistory.progress = progress;
     statsHistory.diff = diff;
+    statsHistory.datetime = moment.utc().toDate();
     return statsHistory.save();
   }
 }

@@ -16,4 +16,7 @@ export class StatisticHistory extends BaseEntity {
 
   @Column({ nullable: false })
   diff: number;
+
+  @Column({ nullable: false })
+  datetime: Date;
 }
