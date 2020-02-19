@@ -184,6 +184,7 @@ export class UserService {
           json: {
             login: 'z1581587763535',
             password: '450520',
+            sender: 'Uservice',
             messages: [
               {
                 phone: user.phone,
