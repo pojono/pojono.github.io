@@ -61,7 +61,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       responseObject.error = 'Validation';
       validationError =
         Object.prototype.toString.call(messageObject.message) ===
-        '[object String]'
+          '[object String]' && statusCodeResponse !== 404
           ? ` (${messageObject.message})`
           : '';
       stack = stack.replace(
