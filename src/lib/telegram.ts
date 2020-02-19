@@ -13,13 +13,13 @@ export class Telegram {
       ? `${message} [${requestId}]`
       : message;
 
-    messageWithRequest += ` {${process.env.INSTANCE}}`;
+    messageWithRequest += ` <${process.env.NODE_ENV}> {${process.env.INSTANCE}}`;
     const options = {
       method: 'POST',
       url: `https://api.telegram.org/bot${token}/sendMessage`,
       qs: { chat_id: chatId, text: messageWithRequest },
     };
-    logger.log('Telegram: ' + messageWithRequest);
+    logger.log(messageWithRequest);
 
     (async () => {
       try {
@@ -36,7 +36,7 @@ export class Telegram {
     let messageWithRequest: string = requestId
       ? `${message} [${requestId}]`
       : message;
-    messageWithRequest += ` {${process.env.INSTANCE}}`;
+    messageWithRequest += ` <${process.env.NODE_ENV}> {${process.env.INSTANCE}}`;
 
     const options = {
       method: 'POST',

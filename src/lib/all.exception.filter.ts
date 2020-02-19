@@ -58,13 +58,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // Validation
     if (messageObject.message) {
       responseObject.message = messageObject.message;
-      responseObject.error = 'Validation Error';
+      responseObject.error = 'Validation';
       validationError =
         Object.prototype.toString.call(messageObject.message) ===
         '[object String]'
           ? ` (${messageObject.message})`
           : '';
-      stack += `\n\n${JSON.stringify(messageObject.message)}`;
+      stack = stack.replace(
+        '[object Object]',
+        `${JSON.stringify(messageObject.message)}`,
+      );
     }
 
     if (statusCodeResponse === 404) {
@@ -85,8 +88,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const codeAndError: string = `${statusCodeResponse} ${responseObject.error}`;
 
-    logger(responseObject.requestId).error(codeAndError);
-    logger(responseObject.requestId).error(stack);
+    // logger(responseObject.requestId).error(codeAndError, stack);
+    logger(responseObject.requestId).error(codeAndError, stack);
+    // logger(responseObject.requestId).error(stack);
 
     const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId}${validationError}`;
 
@@ -94,7 +98,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       await Telegram.sendMessage(telegramMessage, responseObject.requestId);
     })();
 
-    logger(responseObject.requestId).log(telegramMessage);
+    // logger(responseObject.requestId).log(telegramMessage);
 
     response.status(status).json(responseObject);
   }

@@ -16,32 +16,23 @@ import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { Telegram } from './lib/telegram';
-import * as rp from 'request-promise-native';
 
 const logger = new Logger('Bootstrap');
 
 process.on('SIGTERM', async function onSigterm() {
-  const message: string =
-    '⚡️️❗️ SIGTERM: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
+  const message: string = '⚡️️❗️ SIGTERM: #' + process.env.TAG;
   logger.log(message);
   await Telegram.sendImportantMessage(message);
 });
 
 process.on('SIGINT', async function onSigint() {
-  const message: string =
-    '⚡⭕️️ SIGINT: #' + process.env.TAG + ' <' + process.env.NODE_ENV + '>';
+  const message: string = '⚡⭕️️ SIGINT: #' + process.env.TAG;
   logger.log(message);
   await Telegram.sendImportantMessage(message);
 });
 
 process.on('uncaughtException', async err => {
-  const message: string =
-    '⚡🆘 uncaughtException: #' +
-    process.env.TAG +
-    ' <' +
-    process.env.NODE_ENV +
-    '> ' +
-    err;
+  const message: string = '⚡🆘 uncaughtException: #' + process.env.TAG + err;
   logger.error(message);
   logger.error(err.stack);
   await Telegram.sendImportantMessage(message);
@@ -50,27 +41,47 @@ process.on('uncaughtException', async err => {
 
 process.on('unhandledRejection', async (err: any) => {
   const message: string =
-    '⚡️⛔️ unhandledRejection: #' +
-    process.env.TAG +
-    ' <' +
-    process.env.NODE_ENV +
-    '> ' +
-    err;
+    '⚡️⛔️ unhandledRejection: #' + process.env.TAG + err;
   logger.error(message);
   logger.error(err.stack || err);
   await Telegram.sendImportantMessage(message);
   process.exit(1);
 });
 
-async function checkOutside() {
-  return rp.get({
-    uri: config.get('server.url'),
-    json: true,
-  });
+import { LoggerService } from '@nestjs/common';
+
+export class MyLogger implements LoggerService {
+  log(message: string, context: string) {
+    if (context) {
+      console.log(`[${context}] ` + message); // tslint:disable-line
+    } else {
+      console.log(message, context); // tslint:disable-line
+    }
+  }
+  error(message: string, trace: string, context: string) {
+    if (context) {
+      message = `[${context}] ` + message;
+    }
+    if (trace) {
+      message = message + ' ' + trace;
+    }
+    console.error(message); // tslint:disable-line
+  }
+  warn(message: string) {
+    console.log(message); // tslint:disable-line
+  }
+  debug(message: string) {
+    console.log(message); // tslint:disable-line
+  }
+  verbose(message: string) {
+    console.log(message); // tslint:disable-line
+  }
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new MyLogger(),
+  });
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
     const errors = Object.keys(ERRORS).reduce(
@@ -118,52 +129,13 @@ async function bootstrap() {
   await app.listen(port);
 
   const startMessage: string =
-    '⚡️✅ Start: ' +
-    SharedFunctions.uptime() +
-    ' #' +
-    process.env.TAG +
-    ' <' +
-    process.env.NODE_ENV +
-    '> ';
-
+    '⚡️✅ Start: ' + SharedFunctions.uptime() + ' #' + process.env.TAG;
   await Telegram.sendMessage(startMessage);
-
-  /*
-  try {
-    await checkOutside();
-
-    const healthMessage: string =
-      '⚡️❇️ Network. Up: ' +
-      SharedFunctions.uptime() +
-      ' #' +
-      process.env.TAG +
-      ' <' +
-      process.env.NODE_ENV +
-      '>';
-
-    await Telegram.sendMessage(healthMessage);
-  } catch (error) {
-    const message: string =
-      '⚡️❌️ NetworkError: #' +
-      process.env.TAG +
-      ' <' +
-      process.env.NODE_ENV +
-      '> ' +
-      error;
-    await Telegram.sendImportantMessage(message);
-  }
-  */
 }
 
 (async () => {
   bootstrap().catch(async err => {
-    const message: string =
-      '⚡️📛️ BootstrapError: #' +
-      process.env.TAG +
-      ' <' +
-      process.env.NODE_ENV +
-      '> ' +
-      err;
+    const message: string = '⚡️📛️ BootstrapError: #' + process.env.TAG + err;
     logger.error(message);
     logger.error(err.stack || err);
     await Telegram.sendImportantMessage(message);
