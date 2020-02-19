@@ -19,6 +19,7 @@ import { StatisticCourseService } from './statistic.course.service';
 import { StatisticTrackService } from './statistic.track.service';
 import { Rubric } from '../entity/rubric.entity';
 import { RubricService } from './rubric.service';
+import { StatisticHistoryService } from './statistic.history.service';
 
 export const FINISH_EDGE: number = 90;
 
@@ -34,6 +35,7 @@ export class StatisticService {
     private statisticCourseService: StatisticCourseService,
     private statisticLessonService: StatisticLessonService,
     private statisticTrackService: StatisticTrackService,
+    private statisticHistoryService: StatisticHistoryService,
     private rubricService: RubricService,
   ) {}
 
@@ -46,6 +48,13 @@ export class StatisticService {
   ): Promise<void> {
     const track: Track = await this.trackService.getById(trackId);
     ErrorIf.isEmpty(track, OBJECT_NOT_FOUND);
+
+    await this.statisticHistoryService.createStats(
+      user.id,
+      trackId,
+      progress,
+      diff,
+    );
 
     const deltaListenTime: number = await this.trackService.getSecondsByPercent(
       track,

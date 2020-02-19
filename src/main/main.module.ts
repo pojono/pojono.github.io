@@ -62,6 +62,8 @@ import { OnboardingRepository } from './repository/onboarding.repository';
 import { OnboardingController } from './controller/onboarding.controller';
 import { OnboardingService } from './service/onboarding.service';
 import { AnswerRepository } from './repository/answer.repository';
+import { StatisticHistoryRepository } from './repository/statistic.history.repository';
+import { StatisticHistoryService } from './service/statistic.history.service';
 
 @Module({
   imports: [
@@ -85,6 +87,7 @@ import { AnswerRepository } from './repository/answer.repository';
       StatisticCourseRepository,
       StatisticLessonRepository,
       StatisticTrackRepository,
+      StatisticHistoryRepository,
       EventRepository,
       QuizRepository,
       QuizMessageRepository,
@@ -134,6 +137,7 @@ import { AnswerRepository } from './repository/answer.repository';
     StatisticHourService,
     StatisticCourseService,
     StatisticTrackService,
+    StatisticHistoryService,
     EventService,
     QuizService,
     OnboardingService,
