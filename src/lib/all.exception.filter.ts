@@ -81,18 +81,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
         : '';
     const requestInfo: string = `${request.method} ${request.originalUrl}${body}`;
 
-    let userId: string = '?';
+    let userId: string = '';
     if (request.user) {
       userId = request.user.id;
     }
 
     const codeAndError: string = `${statusCodeResponse} ${responseObject.error}`;
 
-    // logger(responseObject.requestId).error(codeAndError, stack);
     logger(responseObject.requestId).error(codeAndError, stack);
-    // logger(responseObject.requestId).error(stack);
+    let telegramMessage: string = `⚠ ${codeAndError} ${requestInfo}`;
 
-    const telegramMessage: string = `⚠ ${codeAndError} ${requestInfo} UserId: ${userId}${validationError}`;
+    if (userId) {
+      telegramMessage += ` UserId: ${userId}`;
+    }
+    if (validationError) {
+      telegramMessage += validationError;
+    }
 
     (async () => {
       await Telegram.sendMessage(telegramMessage, responseObject.requestId);
