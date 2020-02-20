@@ -29,7 +29,7 @@ module.exports = {
     codeWithoutSms: '0112',
   },
   picture: {
-    width: 6000,
+    width: 256,
   },
   daysForNewBadge: 7,
   sessionIdleDuration: 10,
