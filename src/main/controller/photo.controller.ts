@@ -64,12 +64,10 @@ export class PhotoController {
   ): Promise<UploadPhotoResponse> {
     try {
       const linkPhoto: string = await this.photoService.createPhoto(
+        requestId,
         file,
         user.id,
       );
-
-      this.logger.log(`File ${file.originalname} was uploaded succesfully`);
-
       return new UploadPhotoResponse(requestId, { link: linkPhoto });
     } catch (error) {
       ErrorIf.isEmpty(null, UPLOAD_ERROR);

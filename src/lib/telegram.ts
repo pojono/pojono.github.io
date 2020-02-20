@@ -19,7 +19,7 @@ export class Telegram {
       url: `https://api.telegram.org/bot${token}/sendMessage`,
       qs: { chat_id: chatId, text: messageWithRequest },
     };
-    logger.log(messageWithRequest);
+    logger.log('Telegram: ' + messageWithRequest);
 
     (async () => {
       try {
@@ -43,7 +43,7 @@ export class Telegram {
       url: `https://api.telegram.org/bot${token}/sendMessage`,
       qs: { chat_id: chatId, text: messageWithRequest },
     };
-    logger.log('Telegram: ' + messageWithRequest);
+    logger.log('Telegram!: ' + messageWithRequest);
 
     try {
       await rp(options);

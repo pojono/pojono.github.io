@@ -5,6 +5,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PhotoRepository } from '../repository/photo.repository';
 import SharedFunctions from '../../lib/shared.functions';
+import { Telegram } from '../../lib/telegram';
 
 const AWS_S3_BUCKET_NAME: string = config.get('aws.bucketName');
 const pictureWidth: number = config.get('picture.width');
@@ -25,14 +26,18 @@ const s3 = new AWS.S3(s3Options);
 
 @Injectable()
 export class PhotoService {
-  private logger = new Logger('AuthService');
+  private logger = new Logger();
 
   constructor(
     @InjectRepository(PhotoRepository)
     private photoRepository: PhotoRepository,
   ) {}
 
-  async createPhoto(file: any, userId: number): Promise<string> {
+  async createPhoto(
+    requestId: string,
+    file: any,
+    userId: number,
+  ): Promise<string> {
     const fileName: string = SharedFunctions.generateRandomFileName(file).name;
 
     const resizedImage: Buffer = await SharedFunctions.resizePicture(
@@ -50,7 +55,10 @@ export class PhotoService {
     await s3.upload(uploadParams).promise();
     await this.photoRepository.createPhoto(fileName, userId);
 
-    this.logger.log(`Create photo file ${fileName} by ${userId}`);
+    await Telegram.sendMessage(
+      `Saved file ${file.originalname} here: ${URL_PHOTOS + fileName}`,
+      requestId,
+    );
 
     const link: string = URL_PHOTOS + fileName;
 

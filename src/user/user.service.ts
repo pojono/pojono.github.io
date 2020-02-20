@@ -208,7 +208,7 @@ export class UserService {
           }
         }
       } catch (err) {
-        logger.error(err);
+        logger.error(err); // TODO: catch this err
       }
     }
     return newUser;
