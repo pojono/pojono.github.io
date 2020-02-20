@@ -428,8 +428,7 @@ export class UserService {
     if (iosPurchase) {
       const appType: AppTypeEnum = AppTypeEnum.IOS;
       const iosReceipt = iosPurchase.transactionReceipt;
-      await Telegram.sendMessage('💸 New iOS receipt', requestId);
-      return this.validatePurchase(user, appType, iosReceipt);
+      return this.validatePurchase(user, appType, iosReceipt, requestId, true);
     }
     if (androidPurchase) {
       const appType: AppTypeEnum = AppTypeEnum.ANDROID;
@@ -439,8 +438,13 @@ export class UserService {
         purchaseToken: androidPurchase.purchaseToken,
         subscription: true,
       };
-      await Telegram.sendMessage('💸 New Android receipt', requestId);
-      return this.validatePurchase(user, appType, androidReceipt);
+      return this.validatePurchase(
+        user,
+        appType,
+        androidReceipt,
+        requestId,
+        true,
+      );
     }
   }
 
@@ -448,6 +452,8 @@ export class UserService {
     user: User,
     appType: AppTypeEnum,
     receipt,
+    requestId: string = 'validate_purchase',
+    isNewReceipt: boolean = false,
   ): Promise<ReceiptResponseDto> {
     iap.config({
       // If you want to exclude old transaction, set this to true. Default is false:
@@ -542,6 +548,15 @@ export class UserService {
       user,
       validationResult,
     );
+
+    if (isNewReceipt) {
+      await Telegram.sendMessage(
+        `💸 New ${appType} receipt: ${productId} ${environment} Start: ${startDate.toISOString()} End: ${endDate.toISOString()} UserId: ${
+          user.id
+        }`,
+        requestId,
+      );
+    }
 
     return {
       subscriptionIsActive: updatedUser.subscriptionIsActive(),
