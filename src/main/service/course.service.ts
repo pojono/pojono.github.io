@@ -54,20 +54,29 @@ export class CourseService {
       id,
     );
 
+    let challenge: ChallengeResponseDto = null;
     const challengeForCourse: ChallengeResponseDto = await this.challengeService.getChallengeByCourseId(
       id,
     );
-    const challenge: ChallengeResponseDto = challengeForCourse
-      ? challengeForCourse
-      : null;
 
-    const challengeShowAfterLessonIndex = challenge
-      ? challenge.showAfterLessonIndex
-      : null;
+    let challengeShowAfterLessonIndex: number = 0;
+    if (challengeForCourse && challengeForCourse.showAfterLessonIndex) {
+      challengeShowAfterLessonIndex = challengeForCourse.showAfterLessonIndex;
+    }
+
+    let finishedLessons: number = 0;
+    if (course && course.courseStats && course.courseStats.finishedLessons) {
+      finishedLessons = course.courseStats.finishedLessons;
+    }
+
+    if (finishedLessons >= challengeShowAfterLessonIndex) {
+      challenge = challengeForCourse;
+    }
 
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesByCourseId(
       id,
     );
+
     return {
       course,
       lesson,
