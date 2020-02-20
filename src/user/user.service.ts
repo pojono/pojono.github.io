@@ -420,6 +420,7 @@ export class UserService {
   }
 
   async processPurchase(
+    requestId: string,
     user: User,
     iosPurchase: IosPurchase | undefined,
     androidPurchase: AndroidPurchase | undefined,
@@ -427,6 +428,7 @@ export class UserService {
     if (iosPurchase) {
       const appType: AppTypeEnum = AppTypeEnum.IOS;
       const iosReceipt = iosPurchase.transactionReceipt;
+      await Telegram.sendMessage('💸 New iOS receipt', requestId);
       return this.validatePurchase(user, appType, iosReceipt);
     }
     if (androidPurchase) {
@@ -437,6 +439,7 @@ export class UserService {
         purchaseToken: androidPurchase.purchaseToken,
         subscription: true,
       };
+      await Telegram.sendMessage('💸 New Android receipt', requestId);
       return this.validatePurchase(user, appType, androidReceipt);
     }
   }

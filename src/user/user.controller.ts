@@ -135,6 +135,7 @@ export class UserController {
   ): Promise<ReceiptResponse> {
     try {
       const processResult: ReceiptResponseDto = await this.userService.processPurchase(
+        requestId,
         user,
         receiptUpdateDto.iosPurchase,
         receiptUpdateDto.androidPurchase,

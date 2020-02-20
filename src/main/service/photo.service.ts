@@ -56,7 +56,7 @@ export class PhotoService {
     await this.photoRepository.createPhoto(fileName, userId);
 
     await Telegram.sendMessage(
-      `Saved file ${file.originalname} here: ${URL_PHOTOS + fileName}`,
+      `📷 Saved file ${file.originalname} here: ${URL_PHOTOS + fileName}`,
       requestId,
     );
 
