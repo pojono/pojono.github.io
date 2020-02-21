@@ -10,11 +10,12 @@ export class CourseToVideoAdviceService {
     private courseToVideoAdviceRepository: CourseToVideoAdviceRepository,
   ) {}
 
-  async getByCourseId(courseId: number): Promise<number[]> {
+  async getByCourseId(courseId: number): Promise<CourseToVideoAdvice[]> {
     const courseToVideoAdvices: CourseToVideoAdvice[] = await this.courseToVideoAdviceRepository.findByCourseId(
       courseId,
     );
-    return courseToVideoAdvices.map(element => element.videoAdviceId);
+    return courseToVideoAdvices;
+    // return courseToVideoAdvices.map(element => element.videoAdviceId);
   }
 
   async getByCourseIdAndVideoAdviceId(

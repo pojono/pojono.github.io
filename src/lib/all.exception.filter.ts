@@ -99,7 +99,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     (async () => {
-      await Telegram.sendMessage(telegramMessage, responseObject.requestId);
+      if (statusCodeResponse !== 404) {
+        await Telegram.sendMessage(telegramMessage, responseObject.requestId);
+      }
     })();
 
     // logger(responseObject.requestId).log(telegramMessage);

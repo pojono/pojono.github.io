@@ -68,15 +68,20 @@ export class VideoAdviceService {
   // async getVideoAdvicesWithStatsByCourseId(
   async getVideoAdvicesByCourseId(
     courseId: number,
+    finishedLessons: number,
   ): Promise<VideoAdviceResponseDto[]> {
-    const videoAdviceIds: number[] = await this.courseToVideoAdviceService.getByCourseId(
+    const videoAdviceIds: CourseToVideoAdvice[] = await this.courseToVideoAdviceService.getByCourseId(
       courseId,
     );
 
     const videoAdvices: VideoAdviceResponseDto[] = [];
 
     for (const videoAdviceId of videoAdviceIds) {
-      videoAdvices.push(await this.getVideoAdviceById(courseId, videoAdviceId));
+      if (finishedLessons >= videoAdviceId.showAfterLessonIndex) {
+        videoAdvices.push(
+          await this.getVideoAdviceById(courseId, videoAdviceId.id),
+        );
+      }
     }
 
     return videoAdvices;

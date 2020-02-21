@@ -75,6 +75,7 @@ export class CourseService {
 
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getVideoAdvicesByCourseId(
       id,
+      finishedLessons,
     );
 
     return {
