@@ -46,7 +46,7 @@ export class PhotoService {
     );
 
     const uploadParams: S3.Types.PutObjectRequest = {
-      Key: fileName,
+      Key: process.env.NODE_ENV + '/' + fileName,
       Body: resizedImage,
       Bucket: AWS_S3_BUCKET_NAME,
       ContentType: file.mimetype,
@@ -56,11 +56,14 @@ export class PhotoService {
     await this.photoRepository.createPhoto(fileName, userId);
 
     await Telegram.sendMessage(
-      `📷 Saved file ${file.originalname} here: ${URL_PHOTOS + fileName}`,
+      `📷 Saved file ${file.originalname} here: ${URL_PHOTOS +
+        process.env.NODE_ENV +
+        '/' +
+        fileName}`,
       requestId,
     );
 
-    const link: string = URL_PHOTOS + fileName;
+    const link: string = URL_PHOTOS + process.env.NODE_ENV + '/' + fileName;
 
     return link;
   }
