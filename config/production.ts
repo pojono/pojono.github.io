@@ -10,8 +10,8 @@ module.exports = {
     enable: false,
   },
   sms: {
-    useCognito: false,
-    useIqSms: true,
+    useCognito: true,
+    useIqSms: false,
   },
   aws: {
     cognito: {

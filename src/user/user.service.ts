@@ -113,7 +113,10 @@ export class UserService {
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
       // TODO: telegram
-      await Telegram.sendMessage('🔑 Authentication +' + user.phone, requestId);
+      await Telegram.sendMessage(
+        '🔑 Authentication +' + user.phone + ' UserId: ' + user.id,
+        requestId,
+      );
 
       return { token };
     } catch (err) {
@@ -139,7 +142,10 @@ export class UserService {
       user = await this.createUserByPhone(phone);
       newUser = true;
       // TODO: telegram
-      await Telegram.sendMessage('🙋 New user +' + phone, requestId);
+      await Telegram.sendMessage(
+        '🙋 New user +' + phone + ' UserId: ' + user.id,
+        requestId,
+      );
     }
 
     // TODO: telegram

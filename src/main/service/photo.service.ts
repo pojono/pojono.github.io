@@ -59,7 +59,9 @@ export class PhotoService {
       `📷 Saved file ${file.originalname} here: ${URL_PHOTOS +
         process.env.NODE_ENV +
         '/' +
-        fileName}`,
+        fileName}` +
+        +' UserId: ' +
+        userId,
       requestId,
     );
 
