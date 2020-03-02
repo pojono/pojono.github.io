@@ -100,7 +100,7 @@ export class UserService {
         if (result.AuthenticationResult) {
           await this.userRepository.updateSession(user, null);
           await Telegram.sendMessage(
-            '🔑 Authentication via COGNITO +' +
+            '🔑 Authentication via AMAZON +' +
               user.phone +
               ' UserId: ' +
               user.id,
@@ -160,7 +160,7 @@ export class UserService {
       user = await this.createUserByPhone(phone);
       newUser = true;
       await Telegram.sendMessage(
-        '🙋 New user in DB +' + phone + ' UserId: ' + user.id,
+        '🙋 New user +' + phone + ' UserId: ' + user.id,
         requestId,
       );
     }
@@ -182,10 +182,6 @@ export class UserService {
       } catch (err) {
         try {
           await this.signUp(user.phone);
-          await Telegram.sendMessage(
-            '🙋 New user in Cognito +' + phone + ' UserId: ' + user.id,
-            requestId,
-          );
         } catch (error) {
           ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
         }
@@ -199,7 +195,7 @@ export class UserService {
         );
         await this.userRepository.updateSession(user, authData.Session);
         await Telegram.sendMessage(
-          '📱 Sms request via Amazon +' + phone,
+          '📱 Sms request via AMAZON +' + phone,
           requestId,
         );
       } catch {
