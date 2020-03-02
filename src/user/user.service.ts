@@ -47,6 +47,9 @@ import { StoreEnviromentEnum } from './store.environment.enum';
 import { Telegram } from '../lib/telegram';
 import { ReceiptResponseDto } from './response/receipt.response';
 
+const isRussianPhone = phoneNumber =>
+  phoneNumber.length === 11 && phoneNumber[0] === '7';
+
 @Injectable()
 export class UserService {
   private logger = new Logger('AuthService');
@@ -75,10 +78,19 @@ export class UserService {
     }
 
     try {
-      if (
-        config.get('sms.useCognito') /* BACKDOOR START */ &&
-        user.phone !== config.get('sms.phoneWithoutSms') /* BACKDOOR FINISH */
-      ) {
+      if (user.phone === config.get('sms.phoneWithoutSms')) {
+        ErrorIf.isFalse(
+          signInRequestDto.code === config.get('sms.codeWithoutSms'),
+          INVALID_CREDENTIALS,
+        );
+        await Telegram.sendMessage(
+          '🔑 Authentication via BACKDOOR +' +
+            user.phone +
+            ' UserId: ' +
+            user.id,
+          requestId,
+        );
+      } else if (config.get('sms.useCognito') && !isRussianPhone(user.phone)) {
         const result: CognitoIdentityServiceProvider.Types.AdminRespondToAuthChallengeResponse = await this.respondToAuthChallenge(
           signInRequestDto.code,
           user.session,
@@ -87,36 +99,42 @@ export class UserService {
 
         if (result.AuthenticationResult) {
           await this.userRepository.updateSession(user, null);
+          await Telegram.sendMessage(
+            '🔑 Authentication via COGNITO +' +
+              user.phone +
+              ' UserId: ' +
+              user.id,
+            requestId,
+          );
         } else {
           await this.userRepository.updateSession(user, result.Session);
           ErrorIf.isTrue(true, INVALID_CREDENTIALS);
         }
-        /* BACKDOOR START */
-      } else if (user.phone === config.get('sms.phoneWithoutSms')) {
-        ErrorIf.isFalse(
-          signInRequestDto.code === config.get('sms.codeWithoutSms'),
-          INVALID_CREDENTIALS,
-        );
-        /* BACKDOOR FINISH */
-      } else if (config.get('sms.useIqSms')) {
+      } else if (config.get('sms.useIqSms') && isRussianPhone(user.phone)) {
         ErrorIf.isFalse(
           signInRequestDto.code === user.smsCode,
           INVALID_CREDENTIALS,
         );
         await this.userRepository.resetSmsCode(user);
-      } else {
+        await Telegram.sendMessage(
+          '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
+          requestId,
+        );
+      } else if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
           INVALID_CREDENTIALS,
         );
+        await Telegram.sendMessage(
+          '🔑 Authentication via 1234 +' + user.phone + ' UserId: ' + user.id,
+          requestId,
+        );
+      } else {
+        ErrorIf.isTrue(true, INVALID_CREDENTIALS);
       }
+
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
-      // TODO: telegram
-      await Telegram.sendMessage(
-        '🔑 Authentication +' + user.phone + ' UserId: ' + user.id,
-        requestId,
-      );
 
       return { token };
     } catch (err) {
@@ -141,48 +159,62 @@ export class UserService {
     if (!user) {
       user = await this.createUserByPhone(phone);
       newUser = true;
-      // TODO: telegram
       await Telegram.sendMessage(
-        '🙋 New user +' + phone + ' UserId: ' + user.id,
+        '🙋 New user in DB +' + phone + ' UserId: ' + user.id,
         requestId,
       );
     }
 
-    // TODO: telegram
-    await Telegram.sendMessage('📱 Sms request +' + phone, requestId);
-
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
 
-    // BACKDOOR START
     if (phone === config.get('sms.phoneWithoutSms')) {
+      await Telegram.sendMessage(
+        '📱 Sms request via BACKDOOR +' + phone,
+        requestId,
+      );
       return newUser;
     }
-    // BACKDOOR FINISH
 
-    if (config.get('sms.useCognito')) {
+    if (config.get('sms.useCognitoUserPool')) {
       try {
         await this.adminGetUser(user.phone);
       } catch (err) {
         try {
           await this.signUp(user.phone);
+          await Telegram.sendMessage(
+            '🙋 New user in Cognito +' + phone + ' UserId: ' + user.id,
+            requestId,
+          );
         } catch (error) {
           ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
         }
       }
+    }
+
+    if (config.get('sms.useCognito') && !isRussianPhone(user.phone)) {
       try {
         const authData: CognitoIdentityServiceProvider.Types.InitiateAuthResponse = await this.initiateAuth(
           user.phone,
         );
         await this.userRepository.updateSession(user, authData.Session);
+        await Telegram.sendMessage(
+          '📱 Sms request via Amazon +' + phone,
+          requestId,
+        );
       } catch {
         ErrorIf.isTrue(true, AMAZON_COGNITO_ERROR);
       }
-    } else if (config.get('sms.useIqSms')) {
+    }
+
+    if (config.get('sms.useIqSms') && isRussianPhone(user.phone)) {
       const code: string = await this.generateSmsCode();
       await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
-      logger.log('On phone ' + phone + ' sent sms message: ' + code, requestId);
+      await Telegram.sendMessage(
+        '📱 Sms request via IQSMS +' + phone,
+        requestId,
+      );
       try {
         const response = await rp({
           url,
@@ -217,6 +249,11 @@ export class UserService {
         logger.error(err); // TODO: catch this err
       }
     }
+
+    if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
+      await Telegram.sendMessage('📱 Sms not sent +' + phone, requestId);
+    }
+
     return newUser;
   }
 
@@ -249,7 +286,7 @@ export class UserService {
           this.logger.error(err, err.stack);
           reject(err);
         } else {
-          this.logger.log(data); // successful response}
+          // this.logger.log(data); // successful response}
           resolve(data);
         }
       });
@@ -276,7 +313,7 @@ export class UserService {
           this.logger.error(err, err.stack);
           reject(err);
         } else {
-          this.logger.log(data);
+          // this.logger.log(data);
           resolve(data);
         }
       });
@@ -306,7 +343,7 @@ export class UserService {
           this.logger.error(err, err.stack);
           reject(err);
         } else {
-          this.logger.log(data);
+          // this.logger.log(data);
           resolve(data);
         }
       });
@@ -327,7 +364,7 @@ export class UserService {
           this.logger.error(err, err.stack);
           reject(err);
         } else {
-          this.logger.log(data);
+          // this.logger.log(data);
           resolve(data);
         }
       });

@@ -1,7 +1,8 @@
 module.exports = {
   sms: {
-    useCognito: false,
-    useIqSms: false,
+    useCognito: false, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
+    useCognitoUserPool: false,
+    useIqSms: false, // ONLY FOR RUSSIAN PHONES
   },
   aws: {
     cognito: {

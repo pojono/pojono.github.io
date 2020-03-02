@@ -10,8 +10,9 @@ module.exports = {
     scheme: 'https',
   },
   sms: {
-    useCognito: false,
-    useIqSms: false,
+    useCognito: true, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
+    useCognitoUserPool: true,
+    useIqSms: true, // ONLY FOR RUSSIAN PHONES
   },
   aws: {
     cognito: {
