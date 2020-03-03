@@ -56,16 +56,11 @@ export class PhotoService {
     await this.photoRepository.createPhoto(fileName, userId);
 
     await Telegram.sendMessage(
-      `📷 Saved file ${file.originalname} here: ${URL_PHOTOS +
-        process.env.NODE_ENV +
-        '/' +
-        fileName}` +
-        +' UserId: ' +
-        userId,
+      `📷 Saved file ${file.originalname} here: ${URL_PHOTOS}${process.env.NODE_ENV}/${fileName} UserId: ${userId}`,
       requestId,
     );
 
-    const link: string = URL_PHOTOS + process.env.NODE_ENV + '/' + fileName;
+    const link: string = `${URL_PHOTOS}${process.env.NODE_ENV}/${fileName}`;
 
     return link;
   }
