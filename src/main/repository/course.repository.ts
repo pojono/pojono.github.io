@@ -1,5 +1,6 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, MoreThan } from 'typeorm';
 import { Course } from '../entity/course.entity';
+import * as moment from 'moment';
 
 @EntityRepository(Course)
 export class CourseRepository extends Repository<Course> {
@@ -24,7 +25,10 @@ export class CourseRepository extends Repository<Course> {
 
   async findAnnouncementCoursesIds(): Promise<number[]> {
     const courses: Course[] = await Course.find({
-      where: { forAnnounce: true },
+      where: {
+        forAnnounce: true,
+        startDate: MoreThan(moment.utc().toDate()),
+      },
     });
     return courses.map(course => course.id);
   }
