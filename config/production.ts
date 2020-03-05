@@ -7,7 +7,7 @@ module.exports = {
     showHeaders: true,
   },
   swagger: {
-    enable: false,
+    enable: true,
   },
   sms: {
     useCognito: true, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
