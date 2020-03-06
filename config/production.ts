@@ -8,6 +8,7 @@ module.exports = {
   },
   swagger: {
     enable: true,
+    scheme: 'https',
   },
   sms: {
     useCognito: true, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
