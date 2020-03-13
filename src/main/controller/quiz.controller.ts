@@ -43,7 +43,7 @@ export class QuizController {
   ): Promise<GetQuizResponse> {
     return new GetQuizResponse(
       requestId,
-      await this.quizService.getQuiz(idRequestDto.id),
+      await this.quizService.getQuiz(idRequestDto.id, user),
     );
   }
 

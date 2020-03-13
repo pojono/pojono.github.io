@@ -14,7 +14,7 @@ export class MessageResponseDto {
     nullable: true,
     isArray: false,
   })
-  public readonly text: string;
+  public text: string;
 
   @ApiModelProperty({
     type: EntityEnum,

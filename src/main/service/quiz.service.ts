@@ -72,13 +72,18 @@ export class QuizService {
     return { quizId: answer.quizId };
   }
 
-  async getQuiz(quizId: number): Promise<GetQuizResponseDto> {
+  async getQuiz(quizId: number, user: User): Promise<GetQuizResponseDto> {
     const quiz: Quiz | undefined = await this.quizRepository.findById(quizId);
     ErrorIf.isEmpty(quiz, OBJECT_NOT_FOUND);
 
-    const messages: MessageResponseDto[] = await this.quizMessageRepository.findByQuizId(
+    let messages: MessageResponseDto[] = await this.quizMessageRepository.findByQuizId(
       quizId,
     );
+
+    messages = messages.map(message => {
+      message.text = message.text.split('%USERNAME%').join(user.firstName);
+      return message;
+    });
 
     const choice: ChoiceResponseDto[] = await this.quizChoiceRepository.findByQuizId(
       quizId,
