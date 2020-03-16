@@ -37,4 +37,7 @@ module.exports = {
     synchronize: true,
     migrationsRun: true,
   },
+  iap: {
+    enable: true,
+  },
 };

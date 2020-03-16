@@ -23,7 +23,10 @@ module.exports = {
     username: 'postgres',
     password: 'lIEfoljnekol389halks32',
     database: 'prostoapp',
-    synchronize: true,
+    synchronize: false,
     migrationsRun: true,
+  },
+  iap: {
+    enable: false,
   },
 };

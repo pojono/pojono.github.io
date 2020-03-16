@@ -494,6 +494,14 @@ export class UserService {
     requestId: string = 'validate_purchase',
     isNewReceipt: boolean = false,
   ): Promise<ReceiptResponseDto> {
+    if (!config.get('iap.enable')) {
+      return {
+        subscriptionIsActive: true,
+        validationResponse: {},
+        validationResult: {},
+      };
+    }
+
     iap.config({
       // If you want to exclude old transaction, set this to true. Default is false:
       // appleExcludeOldTransactions: true,
