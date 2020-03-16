@@ -81,7 +81,9 @@ export class QuizService {
     );
 
     messages = messages.map(message => {
-      message.text = message.text.split('%USERNAME%').join(user.firstName);
+      message.text = message.text
+        ? message.text.split('%USERNAME%').join(user.firstName)
+        : null;
       return message;
     });
 
