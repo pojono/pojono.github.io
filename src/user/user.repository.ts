@@ -8,7 +8,7 @@ export class UserRepository extends Repository<User> {
     const user = new User();
     user.phone = phone;
     user.lastActivity = moment().toDate();
-    user.currentStrike = 1;
+    // user.currentStrike = 1;
     await user.save();
     return user;
   }

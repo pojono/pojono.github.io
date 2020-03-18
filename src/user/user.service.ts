@@ -431,6 +431,10 @@ export class UserService {
       await this.userRepository.incrementStrike(user);
     }
 
+    if (user.currentStrike === 1) {
+      await this.userRepository.incrementStrike(user);
+    }
+
     if (lastActivity.isBefore(userStartYesterday)) {
       // this.logger.log('LastActivity was before yesterday. Strike = 1');
       await this.userRepository.resetStrike(user);
