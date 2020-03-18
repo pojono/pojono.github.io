@@ -431,7 +431,7 @@ export class UserService {
       await this.userRepository.incrementStrike(user);
     }
 
-    if (user.currentStrike === 1) {
+    if (user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
     }
 
