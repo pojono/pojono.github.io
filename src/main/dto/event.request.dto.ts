@@ -12,10 +12,20 @@ export class EventRequestDto {
       EventEnum.LESSON_FINISHED,
       EventEnum.COURSE_FINISHED,
       EventEnum.AUTHORIZATION_FINISHED,
-      // EventEnum.APP_STARTED,
+      EventEnum.APP_OPENED,
+      EventEnum.VIDEO_STARTED,
+      EventEnum.VIDEO_FINISHED,
+      EventEnum.TRACK_STARTED,
+      EventEnum.TRACK_FINISHED,
+      EventEnum.COURSE_STARTED,
+      EventEnum.CHALLENGE_ACCEPTED,
+      EventEnum.GO_TO_RECOMMENDED_COURSE,
+      EventEnum.AFFIRMATION_SHOWED,
+      EventEnum.AFFIRMATION_SAVED,
+      EventEnum.AFFIRMATION_SHARED,
     ],
   })
-  event: string;
+  event: EventEnum;
 
   @IsOptional()
   @IsNumberString()

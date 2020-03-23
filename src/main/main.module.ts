@@ -64,6 +64,8 @@ import { OnboardingService } from './service/onboarding.service';
 import { AnswerRepository } from './repository/answer.repository';
 import { StatisticHistoryRepository } from './repository/statistic.history.repository';
 import { StatisticHistoryService } from './service/statistic.history.service';
+import { EventHistoryRepository } from './repository/event.history.repository';
+import { EventHistoryService } from './service/event.history.service';
 
 @Module({
   imports: [
@@ -95,6 +97,7 @@ import { StatisticHistoryService } from './service/statistic.history.service';
       QuizMultichoiceRepository,
       OnboardingRepository,
       AnswerRepository,
+      EventHistoryRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -141,6 +144,7 @@ import { StatisticHistoryService } from './service/statistic.history.service';
     EventService,
     QuizService,
     OnboardingService,
+    EventHistoryService,
   ],
 })
 export class MainModule {}

@@ -8,6 +8,7 @@ import { User } from '../../user/user.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
+import { EventHistoryService } from './event.history.service';
 
 @Injectable()
 export class EventService {
@@ -15,6 +16,7 @@ export class EventService {
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository,
 
+    private eventHistoryService: EventHistoryService,
     private statisticLessonService: StatisticLessonService,
     private quizService: QuizService,
   ) {}
@@ -23,6 +25,12 @@ export class EventService {
     user: User,
     eventRequestDto: EventRequestDto,
   ): Promise<number | null> {
+    await this.eventHistoryService.createEvent(
+      user.id,
+      eventRequestDto.event,
+      eventRequestDto.id,
+    );
+
     const event: Event | undefined = await this.eventRepository.findEvent(
       eventRequestDto,
     );

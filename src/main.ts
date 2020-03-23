@@ -129,7 +129,12 @@ async function bootstrap() {
   await app.listen(port);
 
   const startMessage: string =
-    '⚡️✅ Start: ' + SharedFunctions.uptime() + ' #' + process.env.TAG;
+    '⚡️✅ Start on port ' +
+    port +
+    ': ' +
+    SharedFunctions.uptime() +
+    ' #' +
+    process.env.TAG;
   await Telegram.sendMessage(startMessage);
 }
 

@@ -25,6 +25,7 @@ module.exports = {
     database: 'prostoapp',
     synchronize: false,
     migrationsRun: true,
+    logging: true,
   },
   iap: {
     enable: false,
