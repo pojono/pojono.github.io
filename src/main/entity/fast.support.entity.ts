@@ -19,4 +19,16 @@ export class FastSupport extends BaseEntity {
 
   @Column({ nullable: true })
   duration: string;
+
+  @Column({ nullable: true })
+  affirmation: string;
+
+  @Column({ nullable: true })
+  affirmationForShare: string;
+
+  @Column({ nullable: true })
+  affirmationText: string;
+
+  @Column({ nullable: true })
+  quoteAuthor: string;
 }
