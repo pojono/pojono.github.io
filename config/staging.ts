@@ -39,4 +39,5 @@ module.exports = {
   iap: {
     enable: false,
   },
+  load_testing: true,
 };

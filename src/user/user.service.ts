@@ -125,10 +125,12 @@ export class UserService {
           signInRequestDto.code === config.get('sms.notRandom'),
           INVALID_CREDENTIALS,
         );
-        await Telegram.sendMessage(
-          '🔑 Authentication via 1234 +' + user.phone + ' UserId: ' + user.id,
-          requestId,
-        );
+        if (!config.get('load_testing')) {
+          await Telegram.sendMessage(
+            '🔑 Authentication via 1234 +' + user.phone + ' UserId: ' + user.id,
+            requestId,
+          );
+        }
       } else {
         ErrorIf.isTrue(true, INVALID_CREDENTIALS);
       }
@@ -159,10 +161,12 @@ export class UserService {
     if (!user) {
       user = await this.createUserByPhone(phone);
       newUser = true;
-      await Telegram.sendMessage(
-        '🙋 New user +' + phone + ' UserId: ' + user.id,
-        requestId,
-      );
+      if (!config.get('load_testing')) {
+        await Telegram.sendMessage(
+          '🙋 New user +' + phone + ' UserId: ' + user.id,
+          requestId,
+        );
+      }
     }
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
@@ -247,7 +251,9 @@ export class UserService {
     }
 
     if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
-      await Telegram.sendMessage('📱 Sms not sent +' + phone, requestId);
+      if (!config.get('load_testing')) {
+        await Telegram.sendMessage('📱 Sms not sent +' + phone, requestId);
+      }
     }
 
     return newUser;

@@ -47,4 +47,5 @@ module.exports = {
     chatId: '-397651856',
     token: '972600463:AAEI9vGgLyPJbzfTxowAhwso_vym53A2i7Y',
   },
+  load_testing: false,
 };
