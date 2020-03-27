@@ -458,6 +458,10 @@ export class UserService {
     // this.logger.log('lastActivity ' + lastActivity.toISOString());
     // this.logger.log('sessionEdgeTime ' + sessionEdgeTime.toISOString());
 
+    if (user.sessionsCounter === 0) {
+      await this.userRepository.incrementSession(user);
+    }
+
     if (lastActivity.isAfter(sessionEdgeTime)) {
       // this.logger.log(
       //   'Last Activity is not so far. Session counter does not change',
