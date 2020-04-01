@@ -55,8 +55,6 @@ export class RubricService {
       id,
     );
 
-    course.sort((a, b) => a.courseInfo.id - b.courseInfo.id);
-
     const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getByRubricId(
       id,
     );
