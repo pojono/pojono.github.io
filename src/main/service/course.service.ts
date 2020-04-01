@@ -50,6 +50,7 @@ export class CourseService {
       userId,
       id,
     );
+
     const lesson: LessonResponseDto[] = await this.lessonService.getLessonsByCourseId(
       id,
     );
@@ -77,6 +78,8 @@ export class CourseService {
       id,
       finishedLessons,
     );
+
+    videoAdvice.sort((a, b) => a.id - b.id);
 
     return {
       course,
