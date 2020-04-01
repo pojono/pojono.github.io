@@ -8,7 +8,7 @@ export class CourseToVideoAdviceRepository extends Repository<
   async findByCourseId(courseId: number): Promise<CourseToVideoAdvice[]> {
     return CourseToVideoAdvice.find({
       where: { courseId },
-      order: { id: 'ASC' },
+      order: { orderIndex: 'ASC' },
     });
   }
 
