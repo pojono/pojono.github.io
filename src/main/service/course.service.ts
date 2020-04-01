@@ -79,8 +79,6 @@ export class CourseService {
       finishedLessons,
     );
 
-    videoAdvice.sort((a, b) => a.id - b.id);
-
     return {
       course,
       lesson,
