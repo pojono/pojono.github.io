@@ -37,7 +37,7 @@ module.exports = {
     migrationsRun: true,
   },
   iap: {
-    enable: false,
+    enable: true,
   },
-  load_testing: true,
+  load_testing: false,
 };
