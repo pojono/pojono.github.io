@@ -79,7 +79,7 @@ export class VideoAdviceService {
     for (const videoAdviceId of videoAdviceIds) {
       if (finishedLessons >= videoAdviceId.showAfterLessonIndex) {
         videoAdvices.push(
-          await this.getVideoAdviceById(courseId, videoAdviceId.id),
+          await this.getVideoAdviceById(courseId, videoAdviceId.videoAdviceId),
         );
       }
     }
