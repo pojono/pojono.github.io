@@ -227,7 +227,7 @@ export class UserService {
               {
                 phone: user.phone,
                 clientId: 1,
-                text: `code: ${code}`,
+                text: `Код для Prosto: ${code}`,
               },
             ],
           },
