@@ -52,11 +52,11 @@ export class MainService {
 
     return {
       topCourse,
+      videoAdvice,
       stats,
       bestCourses,
       announcement,
       fastSupport,
-      videoAdvice,
     };
   }
 }
