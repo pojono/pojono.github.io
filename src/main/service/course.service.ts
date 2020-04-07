@@ -50,6 +50,7 @@ export class CourseService {
       userId,
       id,
     );
+
     const lesson: LessonResponseDto[] = await this.lessonService.getLessonsByCourseId(
       id,
     );
