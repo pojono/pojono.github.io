@@ -4,7 +4,10 @@ import { RubricToCourse } from '../entity/rubric.to.course.entity';
 @EntityRepository(RubricToCourse)
 export class RubricToCourseRepository extends Repository<RubricToCourse> {
   async findByRubricId(rubricId: number): Promise<RubricToCourse[]> {
-    return RubricToCourse.find({ where: { rubricId } });
+    return RubricToCourse.find({
+      where: { rubricId },
+      order: { orderIndex: 'ASC' },
+    });
   }
 
   async findRubricIdsByCourseId(courseId: number): Promise<number[]> {
