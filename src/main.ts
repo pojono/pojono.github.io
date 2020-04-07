@@ -36,7 +36,7 @@ process.on('uncaughtException', async err => {
   logger.error(message);
   logger.error(err.stack);
   await Telegram.sendImportantMessage(message);
-  process.exit(1);
+  // process.exit(1);
 });
 
 process.on('unhandledRejection', async (err: any) => {

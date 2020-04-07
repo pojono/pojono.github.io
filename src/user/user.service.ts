@@ -647,7 +647,9 @@ export class UserService {
   }
 
   async shouldCheckSubscriptionAgain(user: User): Promise<boolean> {
-    const dayAgoMoment: moment.Moment = moment.utc().subtract(5, 'minute');
+    const dayAgoMoment: moment.Moment = moment
+      .utc()
+      .subtract(config.get('iap.checkingPeriod'), 'minute');
     return (
       !user.subscriptionLastValidation ||
       moment(user.subscriptionLastValidation).isBefore(dayAgoMoment)
