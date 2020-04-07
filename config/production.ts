@@ -38,6 +38,6 @@ module.exports = {
     migrationsRun: true,
   },
   iap: {
-    enable: false,
+    enable: true,
   },
 };
