@@ -7,7 +7,7 @@ module.exports = {
     showHeaders: true,
   },
   swagger: {
-    enable: true,
+    enable: false,
     scheme: 'https',
   },
   sms: {
@@ -38,6 +38,6 @@ module.exports = {
     migrationsRun: true,
   },
   iap: {
-    enable: false,
+    enable: true,
   },
 };
