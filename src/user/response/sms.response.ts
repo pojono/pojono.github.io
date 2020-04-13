@@ -1,14 +1,21 @@
 import CustomResponse from '../../lib/custom.response';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-class SmsResponseDto {}
+class SmsResponseDto {
+  @ApiModelProperty({
+    type: 'boolean',
+    description: 'New user or not',
+    nullable: false,
+  })
+  public readonly newUser: boolean;
+}
 
 export class SmsResponse extends CustomResponse {
   @ApiModelProperty({ type: SmsResponseDto, nullable: true })
   data: SmsResponseDto;
 
-  constructor(data: SmsResponseDto) {
-    super(true);
+  constructor(requestId: string, data: SmsResponseDto) {
+    super(requestId);
     this.data = data;
   }
 }

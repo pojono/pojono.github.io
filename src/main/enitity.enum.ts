@@ -1,0 +1,10 @@
+export enum EntityEnum {
+  LESSON = 'LESSON',
+  COURSE = 'COURSE',
+  HOME = 'HOME',
+  RUBRIC = 'RUBRIC',
+  ONBOARDING = 'ONBOARDING',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  // SET_PUSHES = 'SET_PUSHES',
+  BACK = 'BACK',
+}
