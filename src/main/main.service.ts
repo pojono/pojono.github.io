@@ -55,8 +55,8 @@ export class MainService {
       videoAdvice,
       stats,
       bestCourses,
-      announcement,
       fastSupport,
+      announcement,
     };
   }
 }
