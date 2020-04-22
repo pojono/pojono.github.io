@@ -109,6 +109,9 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
   firstQuizFinished: boolean;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  isTestUser: boolean;
 }
 
 export class MeResponse extends CustomResponse {
