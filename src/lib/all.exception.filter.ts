@@ -28,6 +28,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       ? customException.stack
       : 'Stack not found';
 
+    // ENTITY TOO LARGE
+    const exceptionName: string =
+      customException && customException.name ? customException.name : '';
+
     let message;
     if (messageObject.error) {
       message = messageObject.error;
@@ -86,7 +90,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       userId = request.user.id;
     }
 
-    const codeAndError: string = `${statusCodeResponse} ${responseObject.error}`;
+    const codeAndError: string = `${statusCodeResponse} ${responseObject.error} ${exceptionName}`;
 
     logger(responseObject.requestId).error(codeAndError, stack);
     let telegramMessage: string = `⚠ ${codeAndError} ${requestInfo}`;
