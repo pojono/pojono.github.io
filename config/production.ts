@@ -7,7 +7,7 @@ module.exports = {
     showHeaders: true,
   },
   swagger: {
-    enable: false,
+    enable: true,
     scheme: 'https',
   },
   sms: {
