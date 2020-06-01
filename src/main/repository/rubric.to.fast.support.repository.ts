@@ -6,6 +6,13 @@ export class RubricToFastSupportRepository extends Repository<
   RubricToFastSupport
 > {
   async findByRubricId(rubricId: number): Promise<RubricToFastSupport[]> {
-    return RubricToFastSupport.find({ where: { rubricId } });
+    return RubricToFastSupport.find({
+      where: {
+        rubricId,
+      },
+      order: {
+        orderIndex: 'ASC',
+      },
+    });
   }
 }

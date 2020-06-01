@@ -19,7 +19,7 @@ module.exports = {
     cognito: {
       userPoolId: 'eu-west-1_65Op52Obc',
     },
-    bucketName: 'prosto-photo',
+    bucketName: 'photos.prostoapp.com',
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
     localSimulation: false,
