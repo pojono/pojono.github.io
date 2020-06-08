@@ -34,4 +34,7 @@ export class Course extends BaseEntity {
 
   @Column({ nullable: true })
   colour: string;
+
+  @Column({ nullable: true })
+  musicCourse: boolean;
 }
