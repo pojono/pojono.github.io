@@ -9,4 +9,13 @@ export class MainStatsResponseDto {
 
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly maxStrike: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly myCurrentStrike: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly myMaxStrike: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly myTodayTime: number;
 }
