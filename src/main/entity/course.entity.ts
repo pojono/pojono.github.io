@@ -37,4 +37,7 @@ export class Course extends BaseEntity {
 
   @Column({ nullable: true })
   musicCourse: boolean;
+
+  @Column({ nullable: true })
+  recommendationId: number;
 }

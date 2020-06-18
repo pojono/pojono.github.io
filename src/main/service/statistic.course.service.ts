@@ -10,16 +10,23 @@ export class StatisticCourseService {
     private statisticCourseRepository: StatisticCourseRepository,
   ) {}
 
-  async courseInProgress(userId: number, courseId: number): Promise<void> {
-    const statsCourse:
+  async courseInProgress(
+    userId: number,
+    courseId: number,
+  ): Promise<StatisticCourse> {
+    let statsCourse:
       | StatisticCourse
       | undefined = await this.statisticCourseRepository.findByUserIdAndCourseId(
       userId,
       courseId,
     );
     if (!statsCourse) {
-      await this.statisticCourseRepository.createStats(userId, courseId);
+      statsCourse = await this.statisticCourseRepository.createStats(
+        userId,
+        courseId,
+      );
     }
+    return statsCourse;
   }
 
   async finishCourse(userId: number, courseId: number): Promise<void> {
