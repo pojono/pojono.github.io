@@ -13,4 +13,7 @@ export class QuizChoice extends BaseEntity {
 
   @Column({ nullable: false })
   quizId: number;
+
+  @Column({ nullable: false, default: 0 })
+  orderIndex: number;
 }

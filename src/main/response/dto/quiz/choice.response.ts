@@ -28,4 +28,12 @@ export class ChoiceResponseDto {
     isArray: false,
   })
   public readonly quizId: number;
+
+  @ApiModelProperty({
+    type: 'number',
+    nullable: false,
+    description: 'Порядковый номер',
+    default: 0,
+  })
+  public readonly orderIndex: number;
 }
