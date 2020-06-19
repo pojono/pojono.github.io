@@ -18,6 +18,7 @@ import { User } from '../../user/user.entity';
 import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
+import { StatisticCourse } from '../entity/statistic.course.entity';
 
 @Injectable()
 export class CourseService {
@@ -119,6 +120,17 @@ export class CourseService {
 
     if (!latestCourseId) {
       latestCourseId = await this.getBeginnerCourseId();
+    } else {
+      const courseStatistic: StatisticCourse = await this.statisticCourseService.courseInProgress(
+        user.id,
+        latestCourseId,
+      );
+      if (courseStatistic && courseStatistic.isFinished) {
+        const course: Course = await this.getById(latestCourseId);
+        if (course && course.recommendationId) {
+          latestCourseId = course.recommendationId;
+        }
+      }
     }
     return this.getCourseWithStatsById(user.id, latestCourseId);
   }
