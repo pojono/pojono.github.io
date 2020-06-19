@@ -142,7 +142,7 @@ export class StatisticService {
     const userStartMonth: Date = moment
       .utc()
       .startOf('month')
-      .add(user.utcDiff * -1, 'minutes')
+      .add(user.utcDiff, 'minutes')
       .toDate();
 
     // #STATS-7
