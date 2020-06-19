@@ -17,9 +17,18 @@ export class StatisticHourService {
     const dayAgo: Date = moment
       .utc()
       .subtract(24, 'hour')
-      .add(user.utcDiff * -1, 'minutes')
+      .add(user.utcDiff, 'minutes')
       .toDate();
     return this.sumAfterDate(dayAgo, false);
+  }
+
+  async sumForUserLastDay(user: User): Promise<number> {
+    const dayAgo: Date = moment
+      .utc()
+      .subtract(24, 'hour')
+      .add(user.utcDiff, 'minutes')
+      .toDate();
+    return this.sumByUserIdAfterDate(user.id, dayAgo, false);
   }
 
   async sumByUserIdAfterDate(

@@ -377,7 +377,7 @@ export class UserService {
     // #STATS-2
     const dayAgo: Date = moment()
       .subtract(24, 'hour')
-      .add(user.utcDiff * -1, 'minutes')
+      .add(user.utcDiff, 'minutes')
       .toDate();
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
   }
@@ -404,30 +404,20 @@ export class UserService {
   }
 
   async updateStrike(user: User, utcDiff: number): Promise<void> {
-    const lastActivity: moment.Moment = moment(user.lastActivity);
+    const lastActivity: moment.Moment = moment(user.lastActivity).add(
+      utcDiff,
+      'minute',
+    );
 
-    const reverseUtcDiff: number = utcDiff * -1;
-    const serverTime: moment.Moment = moment.utc();
-    const userTime: moment.Moment = moment.utc().add(reverseUtcDiff, 'minute');
     const userStartToday: moment.Moment = moment
       .utc()
-      .startOf('day')
-      .add(reverseUtcDiff, 'minute');
+      .add(utcDiff, 'minute')
+      .startOf('day');
+
     const userStartYesterday: moment.Moment = moment(userStartToday).subtract(
       24,
       'hour',
     );
-
-    // TODO: load test
-    // this.logger.log('lastActivity ' + lastActivity.toISOString());
-    // this.logger.log('serverTime ' + serverTime.toISOString());
-    // this.logger.log('userTime ' + userTime.toISOString());
-    // this.logger.log('userStartToday ' + userStartToday.toISOString());
-    // this.logger.log('userStartYesterday ' + userStartYesterday.toISOString());
-
-    // if (lastActivity.isAfter(userStartToday)) {
-    //   this.logger.log('Last Activity is Today. Strike does not change');
-    // }
 
     if (
       lastActivity.isAfter(userStartYesterday) &&
