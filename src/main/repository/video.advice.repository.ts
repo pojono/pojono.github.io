@@ -12,6 +12,13 @@ export class VideoAdviceRepository extends Repository<VideoAdvice> {
   }
 
   async findForMainPage(): Promise<VideoAdvice[]> {
-    return VideoAdvice.find({ where: { forMainPage: true } });
+    return VideoAdvice.find({
+      where: {
+        forMainPage: true,
+      },
+      order: {
+        orderIndex: 'ASC',
+      },
+    });
   }
 }

@@ -18,4 +18,7 @@ export class VideoAdviceResponseDto {
 
   @ApiModelProperty({ type: 'string', nullable: true })
   public readonly colour: string;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly orderIndex: number;
 }
