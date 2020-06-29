@@ -90,6 +90,7 @@ export class UserController {
     @GetRequestId() requestId,
     @GetUser() user: User,
   ): Promise<MeResponse> {
+    user.subscriptionLatestReceipt = '';
     return new MeResponse(requestId, user);
   }
 
