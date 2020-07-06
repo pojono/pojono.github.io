@@ -36,6 +36,7 @@ export class MainService {
       myCurrentStrike: user.currentStrike,
       myMaxStrike: user.maxStrike,
       myTodayTime: await this.statisticHourService.sumForUserLastDay(user),
+      totalListenTime: user.sessionsDuration,
     };
   }
 
