@@ -18,4 +18,7 @@ export class MainStatsResponseDto {
 
   @ApiModelProperty({ type: 'number', nullable: false })
   public readonly myTodayTime: number;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly totalListenTime: number;
 }
