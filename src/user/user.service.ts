@@ -404,35 +404,15 @@ export class UserService {
   }
 
   async updateStrike(user: User, utcDiff: number): Promise<void> {
-    const lastActivity: moment.Moment = moment(user.lastActivity).add(
-      utcDiff,
-      'minute',
-    );
-
-    const userStartToday: moment.Moment = moment
+    const todayDate = moment
       .utc()
-      .add(utcDiff, 'minute')
+      .add(utcDiff * -1, 'minutes')
       .startOf('day');
+    const strikeDiff = todayDate.diff(moment.utc(user.lastActivity), 'days');
 
-    const userStartYesterday: moment.Moment = moment(userStartToday).subtract(
-      24,
-      'hour',
-    );
-
-    if (
-      lastActivity.isAfter(userStartYesterday) &&
-      lastActivity.isBefore(userStartToday)
-    ) {
-      // this.logger.log('Last Activity was yesterday. Strike +1');
+    if (strikeDiff === 1 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
-    }
-
-    if (user.currentStrike === 0) {
-      await this.userRepository.incrementStrike(user);
-    }
-
-    if (lastActivity.isBefore(userStartYesterday)) {
-      // this.logger.log('LastActivity was before yesterday. Strike = 1');
+    } else if (strikeDiff > 1) {
       await this.userRepository.resetStrike(user);
     }
   }
