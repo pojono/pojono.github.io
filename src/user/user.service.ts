@@ -408,7 +408,11 @@ export class UserService {
       .utc()
       .add(utcDiff * -1, 'minutes')
       .startOf('day');
-    const strikeDiff = todayDate.diff(moment.utc(user.lastActivity), 'days');
+    const lastActivityDate = moment
+      .utc(user.lastActivity)
+      .add(utcDiff * -1, 'minutes')
+      .startOf('day');
+    const strikeDiff = todayDate.diff(lastActivityDate, 'days');
 
     if (strikeDiff === 1 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
