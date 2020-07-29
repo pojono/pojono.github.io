@@ -39,6 +39,6 @@ module.exports = {
   },
   iap: {
     enable: true,
-    testMode: true,
+    testMode: false,
   },
 };
