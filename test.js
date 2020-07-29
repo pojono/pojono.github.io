@@ -26,18 +26,6 @@ function strike(currentDate, lastActivity, utcDiff) {
   return todayDate.diff(lastActivityDate, 'days');
 }
 
-function strike2(currentDate, lastActivity, utcDiff) {
-  const todayDate = moment
-    .utc(currentDate)
-    .add(utcDiff * -1, 'minutes')
-    .startOf('day');
-  const lastActivityDate = moment
-    .utc(lastActivity)
-    .add(utcDiff * -1, 'minutes')
-    .startOf('day');
-  return todayDate.diff(lastActivityDate, 'days');
-}
-
 function test(cases) {
   for (let case_ of cases) {
     const result = strike(case_.currentDate, case_.lastActivity, case_.utcDiff);
@@ -84,41 +72,3 @@ test([
     result: 2,
   },
 ]);
-
-/*
-const lastActivity = moment.utc('2020-07-27 11:31:36');
-const diff = 900;
-const userStartToday = moment
-  .utc()
-  .startOf('day')
-  .add(diff, 'minute');
-
-const userStartYesterday = moment(userStartToday).subtract(
-  24,
-  'hour',
-);
-
-if (
-  lastActivity.isAfter(userStartYesterday) &&
-  lastActivity.isBefore(userStartToday)
-) {
-  console.log('Last Activity was yesterday. Strike +1');
-}
-
-if (
-  lastActivity.isAfter(userStartToday)
-) {
-  console.log('Strike hasnt been changed');
-}
-
-if (lastActivity.isBefore(userStartYesterday)) {
-  console.log('LastActivity was before yesterday. Strike = 1');
-}
-
-console.log(lastActivity.toISOString());
-console.log(moment.utc().toISOString());
-console.log(userStartToday.toISOString());
-console.log(userStartYesterday.toISOString());
-console.log(diff);
-
- */
