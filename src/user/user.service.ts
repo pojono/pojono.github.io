@@ -406,11 +406,11 @@ export class UserService {
   async updateStrike(user: User, utcDiff: number): Promise<void> {
     const todayDate = moment
       .utc()
-      .add(utcDiff * -1, 'minutes')
+      .add(utcDiff, 'minutes')
       .startOf('day');
     const lastActivityDate = moment
       .utc(user.lastActivity)
-      .add(utcDiff * -1, 'minutes')
+      .add(utcDiff, 'minutes')
       .startOf('day');
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
 
