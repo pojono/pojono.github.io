@@ -40,4 +40,5 @@ module.exports = {
     enable: true,
   },
   load_testing: false,
+  promocode: ['STAGING_PROMOCODE', 'PROMO', 'AVOCADO'],
 };

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
@@ -66,6 +67,18 @@ export class UserService {
 
   async editMyself(user: User, userUpdateDto: UserUpdateDto): Promise<User> {
     return this.userRepository.updateUser(user, userUpdateDto);
+  }
+
+  async updatePromocode(
+    requestId: string,
+    user: User,
+    userPromocodeDto: UserPromocodeDto,
+  ): Promise<User> {
+    await Telegram.sendMessage(
+      '🥑 Promocode: ' + userPromocodeDto.promocode + ' UserId: ' + user.id,
+      requestId,
+    );
+    return this.userRepository.updatePromocode(user, userPromocodeDto);
   }
 
   async signIn(

@@ -103,6 +103,12 @@ export class User extends BaseEntity {
   @Column({ nullable: false, default: false })
   isTestUser: boolean;
 
+  @Column({ nullable: true })
+  promocode: string;
+
+  @Column({ nullable: true })
+  promocodeDate: Date;
+
   public subscriptionIsActive(): boolean {
     return (
       moment(this.subscriptionEndDate).isValid() &&

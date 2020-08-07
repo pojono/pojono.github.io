@@ -30,4 +30,5 @@ module.exports = {
   iap: {
     enable: false,
   },
+  promocode: ['DEV_PROMOCODE', 'PROMO', 'AVOCADO'],
 };

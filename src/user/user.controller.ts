@@ -7,7 +7,10 @@ import {
   Body,
   Put,
   Logger,
+  HttpStatus,
 } from '@nestjs/common';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
+import { PromocodeResponse } from './response/promocode.response';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get.user.decorator';
@@ -121,6 +124,30 @@ export class UserController {
   ): Promise<SettingsResponse> {
     return new SettingsResponse(requestId, {
       daysForNewBadge: config.get('daysForNewBadge'),
+    });
+  }
+
+  @Put('/promocode')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: PromocodeResponse })
+  @ApiOperation({
+    title: 'Проверка корректности промокода и запись в базу в случае успеха',
+  })
+  async getPromocode(
+    @GetRequestId() requestId,
+    @GetUser() user: User,
+    @Body(ValidationPipe) userPromocodeDto: UserPromocodeDto,
+  ): Promise<PromocodeResponse> {
+    const promocode: string[] = config.get('promocode');
+    const isCorrect: boolean = promocode.includes(
+      userPromocodeDto.promocode.toUpperCase(),
+    );
+    if (isCorrect) {
+      await this.userService.updatePromocode(requestId, user, userPromocodeDto);
+    }
+    return new PromocodeResponse(requestId, {
+      isCorrect,
     });
   }
 

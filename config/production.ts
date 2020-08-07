@@ -41,4 +41,5 @@ module.exports = {
     enable: true,
     testMode: false,
   },
+  promocode: ['PROD_PROMOCODE', 'PROMO', 'AVOCADO'],
 };
