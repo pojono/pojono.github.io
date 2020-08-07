@@ -73,12 +73,27 @@ export class UserService {
     requestId: string,
     user: User,
     userPromocodeDto: UserPromocodeDto,
-  ): Promise<User> {
-    await Telegram.sendMessage(
-      '🥑 Promocode: ' + userPromocodeDto.promocode + ' UserId: ' + user.id,
-      requestId,
+  ): Promise<boolean> {
+    const promocode: string[] = config.get('promocode');
+    const isCorrect: boolean = promocode.includes(
+      userPromocodeDto.promocode.toUpperCase(),
     );
-    return this.userRepository.updatePromocode(user, userPromocodeDto);
+    if (isCorrect) {
+      await this.userRepository.updatePromocode(user, userPromocodeDto);
+      await Telegram.sendMessage(
+        '🥑 Promocode: ' + userPromocodeDto.promocode + ' UserId: ' + user.id,
+        requestId,
+      );
+    } else {
+      await Telegram.sendMessage(
+        '🤢 Wrong Promocode: ' +
+          userPromocodeDto.promocode +
+          ' UserId: ' +
+          user.id,
+        requestId,
+      );
+    }
+    return isCorrect;
   }
 
   async signIn(

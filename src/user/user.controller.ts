@@ -139,13 +139,11 @@ export class UserController {
     @GetUser() user: User,
     @Body(ValidationPipe) userPromocodeDto: UserPromocodeDto,
   ): Promise<PromocodeResponse> {
-    const promocode: string[] = config.get('promocode');
-    const isCorrect: boolean = promocode.includes(
-      userPromocodeDto.promocode.toUpperCase(),
+    const isCorrect: boolean = await this.userService.updatePromocode(
+      requestId,
+      user,
+      userPromocodeDto,
     );
-    if (isCorrect) {
-      await this.userService.updatePromocode(requestId, user, userPromocodeDto);
-    }
     return new PromocodeResponse(requestId, {
       isCorrect,
     });
