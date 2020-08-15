@@ -1,0 +1,67 @@
+- hosts: vps
+  tasks:
+    - name: Install docker
+      tags:
+        - system
+      become: true
+      shell: curl -sSL https://get.docker.com/ | bash
+
+    - name: No sudo docker
+      tags:
+        - system
+      become: true
+      shell: usermod -aG docker {{ ansible_ssh_user }}
+
+    - name: Install docker-compose
+      tags:
+        - system
+      become: true
+      shell: curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+    - name: Make docker-compose executable
+      tags:
+        - system
+      become: true
+      shell: chmod +x /usr/local/bin/docker-compose
+
+    - name: create network for traefik
+      tags:
+        - traefik
+      shell: docker network create web
+
+    - name: copy docker-compose for traefik
+      tags:
+        - traefik
+      copy:
+        src: ../traefik
+        dest: /home/ubuntu/
+
+    - name: start traefik
+      tags:
+        - traefik
+      shell: cd /home/ubuntu/traefik && docker-compose up -d
+
+    - name: Create a directory if it does not exist
+      tags:
+        - blog
+      file:
+        path: /home/ubuntu/blog
+        state: directory
+        mode: '0755'
+
+    - name: copy docker-compose for blog
+      tags:
+        - blog
+      copy:
+        src: ../docker-compose.yml
+        dest: /home/ubuntu/blog/docker-compose.yml
+
+    - name: docker pull
+      tags:
+        - blog
+      shell: docker pull pojono/blog:latest
+
+    - name: Start blog
+      tags:
+        - blog
+      shell: cd /home/ubuntu/blog && docker-compose up -d
