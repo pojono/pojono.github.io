@@ -23,6 +23,8 @@ avatar: /image/avatar.jpeg
 ## Complete url after key words.
 ## Unused key can be commented out.
 links:
+
+  Github: https://github.com/pojono
   Blog: /archives
   #  Category:
   #  Tags:
@@ -49,7 +51,6 @@ links:
   #  QQ:
   #  Weibo:
   #  WeChat:
-  Github: https://github.com/pojono
 
 # how links show: you have 2 choice--text or icon.
 links_text_enable: false
