@@ -1,30 +1,41 @@
 # How to create a new blog?
 
-##Step 1. Set a DNS A records:
-pojono.ru 
-*.pojono.ru 
+##Step 0. Start
+Launch a new EC2 instance
+Allocate Elastic IP
+Set inbound rules: 0.0.0.0 for HTTP and HTTPS
 
-##Step 2. Install on VPS:
-apt install htop
-apt install mc
-curl -sSL https://get.docker.com/ | bash
-usermod -aG docker $USER
-curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+##Step 1. Set the DNS A-records:
+pojono.com
+*.pojono.com
 
-##Step 3. Install traefik:
-docker network create web
-cd ~
-git clone https://github.com/pojono/blog.git
-cd blog/traefik
-docker-compose up -d
+##Step 2. Connect by SSH
+sudo nano /etc/ssh/sshd_config
+PasswordAuthentication no => yes
+sudo passwd ubuntu
+sudo service ssh restart
 
-##Step 4. Install Jenkins:
+##Step 3. Install docker
+cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "system" && cd ..
+
+##Step 4. Install traefik
+cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "traefik" && cd ..
+
+##Step 5. Install blog
+docker build -t blog . && \
+docker tag blog:latest pojono/blog:latest && \
+docker push pojono/blog:latest && \
+cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "blog" && cd ..
+
+##Local check
+docker run -p 8080:80 blog:latest 
+
+##Step X. Install Jenkins:
 cd ~/blog/jeknins
 docker-compose up -d --build
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
-##Step 5. Install Netdata:
+##Step X. Install Netdata:
 
 > cd ~/blog/netdata
   docker-compose up -d
@@ -33,8 +44,8 @@ Edit notifications parameters:
 > docker exec -it netdata /etc/netdata/edit-config health_alarm_notify.conf 
 
 Set these parameters and save (:wq):      
-> TELEGRAM_BOT_TOKEN="823689878:AAH7Wv6f6mnLr3v9sJtcDwd9g5PohKM_4fg"
-  DEFAULT_RECIPIENT_TELEGRAM="360376015"  
+> TELEGRAM_BOT_TOKEN=""
+  DEFAULT_RECIPIENT_TELEGRAM=""  
 
 Test notification:
 
@@ -43,6 +54,5 @@ Test notification:
  /usr/libexec/netdata/plugins.d/alarm-notify.sh test
 
 ##Links:
-Blog: pojono.ru
-Jenkins: jenkins.pojono.ru
-Traefik: traefik.pojono.ru
+Blog: pojono.com
+Traefik: traefik.pojono.com
