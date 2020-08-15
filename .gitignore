@@ -2,3 +2,4 @@
 src/public
 src/node_modules
 secret
+ansible/hosts
