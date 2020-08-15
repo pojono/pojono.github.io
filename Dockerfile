@@ -1,4 +1,4 @@
-FROM node:lts AS builder
+FROM node:14.8.0-alpine3.11 AS builder
 WORKDIR /app
 RUN npm install hexo-cli -g -f
 COPY src/package.json /app
