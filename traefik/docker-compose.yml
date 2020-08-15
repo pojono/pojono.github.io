@@ -16,7 +16,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.backend=traefik"
-      - "traefik.frontend.rule=Host:traefik.pojono.ru"
+      - "traefik.frontend.rule=Host:traefik.pojono.com"
       - "traefik.docker.network=web"
       - "traefik.frontend.auth.basic.users=${HTTP_USERNAME}:${HTTP_PASSWORD}"
       - "traefik.port=8080"
