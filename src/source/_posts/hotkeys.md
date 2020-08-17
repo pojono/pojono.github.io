@@ -9,4 +9,11 @@ I am always trying to improve my performance on coding. And one of the many opti
 
 My personal choice is Intellij IDEA.
 The keyboard on Mac is different than classic Windows keyboard, so my hotkeys are different.
-Only one disadavantage is TouchBar, which do not allow to use F-keys properly. 
+Only one disadvantage is TouchBar, which do not allow to use F-keys properly. 
+
+Command + Q => Quit
+Command + W => Close tab
+Command + E => Recent files
+Command + R => Replace in file
+Command + T => Fetch
+Command + Y => Remove line
