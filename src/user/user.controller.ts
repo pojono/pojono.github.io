@@ -10,7 +10,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UserPromocodeDto } from './dto/user.promocode.dto';
-import { PromocodeResponse } from './response/promocode.response';
+import {
+  PromocodeResponse,
+  PromocodeResponseDto,
+} from './response/promocode.response';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get.user.decorator';
@@ -139,14 +142,12 @@ export class UserController {
     @GetUser() user: User,
     @Body(ValidationPipe) userPromocodeDto: UserPromocodeDto,
   ): Promise<PromocodeResponse> {
-    const isCorrect: boolean = await this.userService.updatePromocode(
+    const result: PromocodeResponseDto = await this.userService.updatePromocode(
       requestId,
       user,
       userPromocodeDto,
     );
-    return new PromocodeResponse(requestId, {
-      isCorrect,
-    });
+    return new PromocodeResponse(requestId, result);
   }
 
   @Put('/receipt')

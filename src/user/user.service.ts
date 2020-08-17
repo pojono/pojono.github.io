@@ -3,6 +3,7 @@ import { ErrorIf } from '../lib/error.if';
 import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PromocodeResponseDto } from './response/promocode.response';
 import { UserRepository } from './user.repository';
 import {
   AMAZON_COGNITO_ERROR,
@@ -73,15 +74,26 @@ export class UserService {
     requestId: string,
     user: User,
     userPromocodeDto: UserPromocodeDto,
-  ): Promise<boolean> {
-    const promocode: string[] = config.get('promocode');
-    const isCorrect: boolean = promocode.includes(
+  ): Promise<PromocodeResponseDto> {
+    const trialCodes: string[] = config.get('promocode.trial');
+    const discountCodes: string[] = config.get('promocode.discount');
+
+    const isTrial: boolean = trialCodes.includes(
       userPromocodeDto.promocode.toUpperCase(),
     );
-    if (isCorrect) {
+    const isDiscount: boolean = discountCodes.includes(
+      userPromocodeDto.promocode.toUpperCase(),
+    );
+
+    if (isTrial || isDiscount) {
       await this.userRepository.updatePromocode(user, userPromocodeDto);
       await Telegram.sendMessage(
-        '🥑 Promocode: ' + userPromocodeDto.promocode + ' UserId: ' + user.id,
+        '🥑 Promocode: ' +
+          userPromocodeDto.promocode +
+          `${isTrial ? ' [trial]' : ''}` +
+          `${isDiscount ? ' [discount]' : ''}` +
+          ' UserId: ' +
+          user.id,
         requestId,
       );
     } else {
@@ -93,7 +105,10 @@ export class UserService {
         requestId,
       );
     }
-    return isCorrect;
+    return {
+      isTrial,
+      isDiscount,
+    };
   }
 
   async signIn(

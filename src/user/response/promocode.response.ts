@@ -1,9 +1,12 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
 
-class PromocodeResponseDto {
+export class PromocodeResponseDto {
   @ApiModelProperty({ type: 'boolean', nullable: false })
-  public readonly isCorrect: boolean;
+  public readonly isDiscount: boolean;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false })
+  public readonly isTrial: boolean;
 }
 
 export class PromocodeResponse extends CustomResponse {
