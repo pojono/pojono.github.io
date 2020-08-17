@@ -14,6 +14,11 @@ Only one disadvantage is TouchBar, which do not allow to use F-keys properly.
 Command + Q => Quit
 Command + W => Close tab
 Command + E => Recent files
-Command + R => Replace in file
+Command + R => Replace in tab
 Command + T => Fetch
 Command + Y => Remove line
+
+Command + A => Select all
+Command + S => Expanding select
+Command + D => Duplicate line
+Command + F => Search in tab
