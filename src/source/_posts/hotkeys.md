@@ -22,3 +22,8 @@ Command + A => Select all
 Command + S => Expanding select
 Command + D => Duplicate line
 Command + F => Search in tab
+
+Command + Z => Undo
+Command + X => Cut
+Command + C => Copy
+Command + V => Past
