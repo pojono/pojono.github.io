@@ -11,6 +11,10 @@ My personal choice is Intellij IDEA.
 The keyboard on Mac is different than classic Windows keyboard, so my hotkeys are different.
 Only one disadvantage is TouchBar, which do not allow to use F-keys properly. 
 
+Command + ± - VCS popup
+Command + 1 - Project
+Command + 2 - Favorites
+
 Command + Q => Quit
 Command + W => Close tab
 Command + E => Recent files
