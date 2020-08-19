@@ -23,11 +23,13 @@ Command + 9 - VCS
 Command + 0 - Terminal
 Command + - - Fold
 Command + = - Expand
+Command + Backspace - Delete Line
+Command + Tab - Switch between apps (MacOS)
 
 Command + Q => Quit
 Command + W => Close tab
 Command + E => Recent files
-Command + R => Replace in tab
+Command + R => Replace in open tab
 Command + T => Fetch
 Command + Y => Remove line
 
