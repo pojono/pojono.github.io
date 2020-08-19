@@ -21,6 +21,8 @@ Command + 6 - TODO
 Command + 7 - Database
 Command + 9 - VCS
 Command + 0 - Terminal
+Command + - - Fold
+Command + = - Expand
 
 Command + Q => Quit
 Command + W => Close tab
