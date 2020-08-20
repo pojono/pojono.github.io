@@ -47,5 +47,9 @@ Command + Shift + W => Close other tabs
 Command + Shift + E => Recent locations
 Command + Shift + U => UPPER/lower text
 Command + Shift + R => Replace in path
+Command + Shift + \[ => Left tab
+Command + Shift + \] => Right tab
 
+Command + Shift + A => Find in actions
 Command + Shift + F => Find in path
+Command + Shift + K => Push
