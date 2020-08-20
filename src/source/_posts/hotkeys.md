@@ -44,5 +44,8 @@ Command + C => Copy
 Command + V => Past
 
 Command + Shift + W => Close other tabs
-Command + Shift + F => Find in path
+Command + Shift + E => Recent locations
+Command + Shift + U => UPPER/lower text
 Command + Shift + R => Replace in path
+
+Command + Shift + F => Find in path
