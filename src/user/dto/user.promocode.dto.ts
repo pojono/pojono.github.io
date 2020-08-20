@@ -3,7 +3,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class UserPromocodeDto {
   @IsString()
-  @MinLength(4)
+  @MinLength(1)
   @MaxLength(30)
   @ApiModelProperty({
     type: 'string',
