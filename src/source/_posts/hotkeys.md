@@ -42,3 +42,7 @@ Command + Z => Undo
 Command + X => Cut
 Command + C => Copy
 Command + V => Past
+
+Command + Shift + W => Close other tabs
+Command + Shift + F => Find in path
+Command + Shift + R => Replace in path
