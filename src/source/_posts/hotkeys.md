@@ -53,3 +53,8 @@ Command + Shift + \] => Right tab
 Command + Shift + A => Find in actions
 Command + Shift + F => Find in path
 Command + Shift + K => Push
+
+Command + Shift + V => Paste history
+
+
+
