@@ -7,7 +7,21 @@ categories:
   - coding      
 ---
 Замыкание - это сочетание функции и лексического окружения в котором эта функция была определена.
-То есть внутренняя имеет доступ к окружению внешней функции.
+То есть внутренняя функция имеет доступ к окружению внешней функции.
 
 Пример, наглядно демонстрирующий работу замыкания:
-<script src="https://gist.github.com/pojono/61e814a6e3cfbfc8576064a94e4fde2e.js"></script>
+
+{% codeblock lang:javascript %}
+function counter () {
+  let index = 0;
+  return () => index++;
+}
+
+const myCounter1 = counter();
+myCounter1(); // 0
+myCounter1(); // 1
+myCounter1(); // 2
+
+const myCounter2 = counter();
+myCounter2(); // 0
+{% endcodeblock %}
