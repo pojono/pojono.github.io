@@ -1,5 +1,5 @@
 ---
-title: JavaScript: Proxy
+title: "JavaScript: Proxy"
 tags: 
   - javascript
   - proxy

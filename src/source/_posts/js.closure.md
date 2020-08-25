@@ -1,5 +1,5 @@
 ---
-title: JavaScript: Closure
+title: "JavaScript: Closure"
 tags: 
   - javascript
   - closure
