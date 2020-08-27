@@ -18,3 +18,8 @@ categories:
 * Ловушка (trap): функция для работы с целью.
 
 Навесить proxy можно на любой объект в javascript, в том числе и функцию и класс.
+
+Общий синтаксис следующий:
+{% codeblock lang:javascript %}
+const p = new Proxy(target, handler);
+{% endcodeblock %}
