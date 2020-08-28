@@ -43,4 +43,3 @@ docker run -p 8080:80 blog:latest
 ## Links:
 Blog: [pojono.com](https://pojono.com)
 
-Traefik: [traefik.pojono.com](https://traefik.pojono.com)
