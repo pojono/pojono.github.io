@@ -23,3 +23,20 @@ function add(n) {
 const x = 5;
 add.bind(x, 2)(); // 7
 {% endcodeblock %}
+
+Попробуем написать собственную реализацию bind:
+
+{% codeblock lang:javascript %}
+Function.prototype.mybind = function(context, ...args) {
+    const fn = this;
+    return function() { 
+        return fn.apply(
+            context,
+            args
+        );
+    }
+}
+
+const x = 5;
+add.mybind(x, 2)(); // 7
+{% endcodeblock %}
