@@ -27,12 +27,9 @@ ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "system"
 ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "traefik"
 ````
 
-## Step 5. Install blog
+## Step 5. Build and deploy
 ````
-docker build -t blog . && \
-docker tag blog:latest pojono/blog:latest && \
-docker push pojono/blog:latest && \
-cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "blog" && cd ..
+./update.sh
 ````
 
 ## Local check blog
