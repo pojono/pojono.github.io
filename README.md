@@ -35,7 +35,7 @@ docker push pojono/blog:latest && \
 cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags "blog" && cd ..
 ````
 
-## Local check
+## Local check blog
 ````
 docker run -p 8080:80 blog:latest 
 ````
@@ -43,4 +43,3 @@ docker run -p 8080:80 blog:latest
 ## Links:
 Blog: [pojono.com](https://pojono.com)
 
-Traefik: [traefik.pojono.com](https://traefik.pojono.com)
