@@ -40,3 +40,18 @@ Function.prototype.mybind = function(context, ...args) {
 const x = 5;
 add.mybind(x, 2)(); // 7
 {% endcodeblock %}
+
+Как видно из примера выше функция mybind работает аналогично стандартной функции bind.
+То есть мы назначаем собственную функцию прототипу объекта Function
+и в этой функции возвращаем функцию apply c переданным окружением и аргументами.
+
+Перепишем её с использованием стрелочных функций для большей наглядности:
+
+{% codeblock lang:javascript %}
+Function.prototype.mybind = function(context, ...args) {
+    return () => this.apply(context, args);
+}
+
+const x = 5;
+add.mybind(x, 2)(); // 7
+{% endcodeblock %}
