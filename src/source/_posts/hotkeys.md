@@ -56,7 +56,3 @@ Command + Shift + K => Push
 
 Command + Shift + V => Paste history
 Command + Shift + ~ => Switch between projects
-
-
-
-
