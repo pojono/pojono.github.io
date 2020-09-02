@@ -1,3 +1,11 @@
+.github
+.idea
 node_modules
 src/node_modules
 ansible/hosts
+jenkins
+netdata
+traefik
+Jenkinsfile
+README.md
+update.sh
