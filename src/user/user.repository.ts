@@ -66,11 +66,8 @@ export class UserRepository extends Repository<User> {
     return await user.save();
   }
 
-  async updatePromocode(
-    user: User,
-    userPromocodeDto: UserPromocodeDto,
-  ): Promise<User> {
-    user.promocode = userPromocodeDto.promocode;
+  async updatePromocode(user: User, promocode: string): Promise<User> {
+    user.promocode = promocode;
     user.promocodeDate = moment.utc().toDate();
     return user.save();
   }

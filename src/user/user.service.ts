@@ -78,16 +78,16 @@ export class UserService {
     const trialCodes: string[] = config.get('promocode.trial');
     const discountCodes: string[] = config.get('promocode.discount');
 
-    const code: string = userPromocodeDto.promocode.trim().toUpperCase();
+    const promocode: string = userPromocodeDto.promocode.trim().toUpperCase();
 
-    const isTrial: boolean = trialCodes.includes(code);
-    const isDiscount: boolean = discountCodes.includes(code);
+    const isTrial: boolean = trialCodes.includes(promocode);
+    const isDiscount: boolean = discountCodes.includes(promocode);
 
     if (isTrial || isDiscount) {
-      await this.userRepository.updatePromocode(user, userPromocodeDto);
+      await this.userRepository.updatePromocode(user, promocode);
       await Telegram.sendMessage(
         '🥑 Promocode: ' +
-          code +
+          promocode +
           `${isTrial ? ' [trial]' : ''}` +
           `${isDiscount ? ' [discount]' : ''}` +
           ' UserId: ' +
@@ -96,7 +96,7 @@ export class UserService {
       );
     } else {
       await Telegram.sendMessage(
-        '🤢 Wrong Promocode: ' + code + ' UserId: ' + user.id,
+        '🤢 Wrong Promocode: ' + promocode + ' UserId: ' + user.id,
         requestId,
       );
     }
