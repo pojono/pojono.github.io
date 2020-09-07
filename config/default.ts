@@ -49,4 +49,8 @@ module.exports = {
     token: '972600463:AAEI9vGgLyPJbzfTxowAhwso_vym53A2i7Y',
   },
   load_testing: false,
+  promocode: {
+    discount: ['DEFAULT_DISCOUNT_CODE1', 'DEFAULT_DISCOUNT_CODE2'],
+    trial: ['DEFAULT_TRIAL_CODE1', 'DEFAULT_TRIAL_CODE2'],
+  },
 };

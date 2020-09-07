@@ -30,4 +30,8 @@ module.exports = {
   iap: {
     enable: false,
   },
+  promocode: {
+    discount: ['DEV_DISCOUNT_CODE1', 'DEV_DISCOUNT_CODE2'],
+    trial: ['DEV_TRIAL_CODE1', 'DEV_TRIAL_CODE2'],
+  },
 };

@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PromocodeResponseDto } from './response/promocode.response';
 import { UserRepository } from './user.repository';
 import {
   AMAZON_COGNITO_ERROR,
@@ -66,6 +68,47 @@ export class UserService {
 
   async editMyself(user: User, userUpdateDto: UserUpdateDto): Promise<User> {
     return this.userRepository.updateUser(user, userUpdateDto);
+  }
+
+  async updatePromocode(
+    requestId: string,
+    user: User,
+    userPromocodeDto: UserPromocodeDto,
+  ): Promise<PromocodeResponseDto> {
+    const trialCodes: string[] = config.get('promocode.trial');
+    const discountCodes: string[] = config.get('promocode.discount');
+
+    const isTrial: boolean = trialCodes.includes(
+      userPromocodeDto.promocode.toUpperCase(),
+    );
+    const isDiscount: boolean = discountCodes.includes(
+      userPromocodeDto.promocode.toUpperCase(),
+    );
+
+    if (isTrial || isDiscount) {
+      await this.userRepository.updatePromocode(user, userPromocodeDto);
+      await Telegram.sendMessage(
+        '🥑 Promocode: ' +
+          userPromocodeDto.promocode +
+          `${isTrial ? ' [trial]' : ''}` +
+          `${isDiscount ? ' [discount]' : ''}` +
+          ' UserId: ' +
+          user.id,
+        requestId,
+      );
+    } else {
+      await Telegram.sendMessage(
+        '🤢 Wrong Promocode: ' +
+          userPromocodeDto.promocode +
+          ' UserId: ' +
+          user.id,
+        requestId,
+      );
+    }
+    return {
+      isTrial,
+      isDiscount,
+    };
   }
 
   async signIn(

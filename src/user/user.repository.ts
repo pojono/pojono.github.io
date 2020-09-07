@@ -1,4 +1,5 @@
 import { EntityRepository, MoreThan, Repository } from 'typeorm';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { User } from './user.entity';
 import * as moment from 'moment';
 
@@ -63,6 +64,15 @@ export class UserRepository extends Repository<User> {
     }
 
     return await user.save();
+  }
+
+  async updatePromocode(
+    user: User,
+    userPromocodeDto: UserPromocodeDto,
+  ): Promise<User> {
+    user.promocode = userPromocodeDto.promocode;
+    user.promocodeDate = moment.utc().toDate();
+    return user.save();
   }
 
   async countUsersWithActivityAfterDate(activityDate: Date) {
