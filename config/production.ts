@@ -51,6 +51,7 @@ module.exports = {
       'NOSTRESS',
     ],
     trial: [
+      /*
       'VDOH',
       'VDOH2751',
       'VDOH5681',
@@ -69,6 +70,7 @@ module.exports = {
       'YESWECAN',
       'CALM',
       'HEADSPACE',
+      */
     ],
   },
 };
