@@ -55,10 +55,12 @@ export class PhotoService {
     await s3.upload(uploadParams).promise();
     await this.photoRepository.createPhoto(fileName, userId);
 
+    /*
     await Telegram.sendMessage(
       `📷 Saved file ${file.originalname} here: ${URL_PHOTOS}${process.env.NODE_ENV}/${fileName} UserId: ${userId}`,
       requestId,
     );
+    */
 
     const link: string = `${URL_PHOTOS}${process.env.NODE_ENV}/${fileName}`;
 

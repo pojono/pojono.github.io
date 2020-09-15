@@ -43,12 +43,14 @@ module.exports = {
   },
   promocode: {
     discount: [
+      /*
       'AVOCADO',
       'SPASIBO',
       'SNJR5D',
       'GREEN4LIFE',
       'HAPPY',
       'NOSTRESS',
+      */
     ],
     trial: [
       /*
