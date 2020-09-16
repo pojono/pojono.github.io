@@ -76,6 +76,10 @@ export class UserRepository extends Repository<User> {
     return User.count({ where: { lastActivity: MoreThan(activityDate) } });
   }
 
+  async countUsers() {
+    return User.count();
+  }
+
   async updateLastActivity(user: User): Promise<void> {
     user.lastActivity = moment.utc().toDate();
     await user.save();

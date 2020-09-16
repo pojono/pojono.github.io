@@ -28,7 +28,7 @@ export class MainService {
 
   async getMainStats(user: User): Promise<MainStatsResponseDto> {
     return {
-      todayUsers: await this.userService.countTodayUsers(user),
+      todayUsers: await this.userService.countTodayUsers(),
       todayUsersTime: await this.statisticHourService.sumForAllUsersLastDay(
         user,
       ),

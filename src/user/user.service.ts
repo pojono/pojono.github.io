@@ -411,13 +411,16 @@ export class UserService {
     });
   }
 
-  async countTodayUsers(user: User): Promise<number> {
+  async countTodayUsers(): Promise<number> {
+    return this.userRepository.countUsers();
+    /*
     // #STATS-2
     const dayAgo: Date = moment()
       .subtract(24, 'hour')
       .add(user.utcDiff, 'minutes')
       .toDate();
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
+    */
   }
 
   async addTotalListenTime(user: User, sessionsDuration: number) {
