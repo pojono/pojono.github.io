@@ -34,8 +34,8 @@ module.exports = {
     username: 'prostoadmin',
     password: 'Pioj32wo8han20y1kKKxaw4egp23',
     database: 'prostoapp',
-    synchronize: true,
-    migrationsRun: true,
+    synchronize: false,
+    migrationsRun: false,
   },
   iap: {
     enable: true,

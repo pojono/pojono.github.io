@@ -72,9 +72,11 @@ export class UserRepository extends Repository<User> {
     return user.save();
   }
 
+  /*
   async countUsersWithActivityAfterDate(activityDate: Date) {
     return User.count({ where: { lastActivity: MoreThan(activityDate) } });
   }
+  */
 
   async countUsers() {
     return User.count();

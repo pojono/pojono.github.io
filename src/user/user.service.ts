@@ -249,10 +249,6 @@ export class UserService {
       const code: string = await this.generateSmsCode();
       await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
-      await Telegram.sendMessage(
-        '📱 Sms request via IQSMS +' + phone,
-        requestId,
-      );
       try {
         const response = await rp({
           url,
@@ -284,8 +280,13 @@ export class UserService {
           }
         }
       } catch (err) {
-        logger.error(err); // TODO: catch this err
+        logger.error('SMSERROR');
+        logger.error(err);
       }
+      await Telegram.sendMessage(
+        '📱 Sms request via IQSMS +' + phone,
+        requestId,
+      );
     }
 
     if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
