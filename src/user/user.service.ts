@@ -673,7 +673,7 @@ export class UserService {
   }
 
   async subscriptionIsExpired(user: User): Promise<void> {
-    ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
+    // ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
 
     ErrorIf.isTrue(
       moment(user.subscriptionEndDate).isValid() &&
