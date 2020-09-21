@@ -144,8 +144,13 @@ export class UserRepository extends Repository<User> {
     user.subscriptionLatestReceipt = subscriptionDto.latestReceipt;
     user.subscriptionValidationResponse = subscriptionDto.validationResponse;
     user.subscriptionStartDate = subscriptionDto.startDate;
-    user.subscriptionEndDate = subscriptionDto.endDate;
     user.subscriptionIsCancelled = subscriptionDto.isCancelled;
+
+    const curEndDate = moment.utc(user.subscriptionEndDate);
+    const newEndDate = moment.utc(subscriptionDto.endDate);
+    if (!curEndDate.isValid() || newEndDate.isAfter(curEndDate)) {
+      user.subscriptionEndDate = subscriptionDto.endDate;
+    }
 
     return user.save();
   }
