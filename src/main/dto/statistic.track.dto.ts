@@ -30,13 +30,13 @@ export class StatisticTrackDto {
   diff: number;
 
   @IsNumber()
-  @Min(-720)
+  @Min(-840)
   @Max(720)
   @ApiModelProperty({
     type: 'number',
     example: -180,
     required: true,
-    minimum: -720,
+    minimum: -840,
     maximum: 720,
     description: 'Разница в минутах между местным временем пользователя и UTC',
   })
