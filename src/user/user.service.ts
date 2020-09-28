@@ -135,7 +135,8 @@ export class UserService {
           user.phone,
         );
 
-        if (result.AuthenticationResult) {
+        if (result.AuthenticationResult ||
+          signInRequestDto.code === user.smsCode) {
           await this.userRepository.updateSession(user, null);
           await Telegram.sendMessage(
             '🔑 Authentication via AMAZON +' +
@@ -153,7 +154,6 @@ export class UserService {
           signInRequestDto.code === user.smsCode,
           INVALID_CREDENTIALS,
         );
-        await this.userRepository.resetSmsCode(user);
         await Telegram.sendMessage(
           '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
           requestId,
@@ -173,6 +173,7 @@ export class UserService {
         ErrorIf.isTrue(true, INVALID_CREDENTIALS);
       }
 
+      await this.userRepository.resetSmsCode(user);
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
@@ -209,6 +210,8 @@ export class UserService {
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
+    const code: string = await this.generateSmsCode();
+    await this.userRepository.updateSmsCode(user, code);
 
     if (phone === config.get('sms.phoneWithoutSms')) {
       await Telegram.sendMessage(
@@ -246,8 +249,6 @@ export class UserService {
     }
 
     if (config.get('sms.useIqSms') && isRussianPhone(user.phone)) {
-      const code: string = await this.generateSmsCode();
-      await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
       try {
         const response = await rp({
