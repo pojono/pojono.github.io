@@ -49,8 +49,8 @@ import { StoreEnviromentEnum } from './store.environment.enum';
 import { Telegram } from '../lib/telegram';
 import { ReceiptResponseDto } from './response/receipt.response';
 
-const isRussianPhone = phoneNumber =>
-  phoneNumber.length === 11 && phoneNumber[0] === '7';
+const isRussianPhone = phoneNumber => !!phoneNumber;
+// phoneNumber.length === 11 && phoneNumber[0] === '7';
 
 @Injectable()
 export class UserService {
@@ -135,8 +135,10 @@ export class UserService {
           user.phone,
         );
 
-        if (result.AuthenticationResult ||
-          signInRequestDto.code === user.smsCode) {
+        if (
+          result.AuthenticationResult ||
+          signInRequestDto.code === user.smsCode
+        ) {
           await this.userRepository.updateSession(user, null);
           await Telegram.sendMessage(
             '🔑 Authentication via AMAZON +' +
