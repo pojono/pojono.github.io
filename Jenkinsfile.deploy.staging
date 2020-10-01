@@ -50,7 +50,7 @@ pipeline {
 }
 
 def getBranches() {
-  def cmd = "aws2 ecr list-images --repository-name prostoapp_api --filter tagStatus=TAGGED --region eu-west-1"
+  def cmd = "aws ecr list-images --repository-name prostoapp_api --filter tagStatus=TAGGED --region eu-west-1"
   def ecr_images_json = cmd.execute()
   def data = new JsonSlurperClassic().parseText(ecr_images_json.text)
   def ecr_images = [];
