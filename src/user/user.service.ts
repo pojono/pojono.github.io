@@ -49,8 +49,8 @@ import { StoreEnviromentEnum } from './store.environment.enum';
 import { Telegram } from '../lib/telegram';
 import { ReceiptResponseDto } from './response/receipt.response';
 
-const isRussianPhone = phoneNumber => !!phoneNumber;
-// phoneNumber.length === 11 && phoneNumber[0] === '7';
+const isRussianPhone = phoneNumber =>
+  phoneNumber.length === 11 && phoneNumber[0] === '7';
 
 @Injectable()
 export class UserService {
