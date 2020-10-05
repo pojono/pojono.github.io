@@ -71,7 +71,7 @@ export class EventService {
         }
         if (!user.subscriptionIsActive() && !user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
-            EventDescriptionEnum.GO_TO_SUBSCRIPTION,
+            EventDescriptionEnum.GO_TO_FIRST_QUIZ,
           );
           if (quiz) {
             return quiz.id;
