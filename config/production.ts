@@ -4,7 +4,7 @@ module.exports = {
     url: 'https://production.prostoapp.com/',
   },
   logs: {
-    showHeaders: true,
+    showHeaders: false,
   },
   swagger: {
     enable: false,
@@ -40,6 +40,7 @@ module.exports = {
   iap: {
     enable: true,
     testMode: false,
+    debugLogs: true,
   },
   promocode: {
     discount: [
