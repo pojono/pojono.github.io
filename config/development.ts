@@ -22,6 +22,12 @@ module.exports = {
     host: 'prosto-dev.czt41szsg5y0.eu-west-1.rds.amazonaws.com',
     username: 'postgres',
     password: 'lIEfoljnekol389halks32',
+    /*
+    port: '5324',
+    host: '84.201.133.51',
+    username: 'prostoadmin',
+    password: 'O3lka3097ahqlsQxzlw39',
+    */
     database: 'prostoapp',
     synchronize: false,
     migrationsRun: true,

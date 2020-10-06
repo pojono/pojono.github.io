@@ -46,7 +46,7 @@ node {
       }
 
       stage("notify") {
-        telegramSend "🛠✅️ Build №${env.BUILD_NUMBER}: Finish ```#${remoteImageTag}``` \nDeploy: https://jenkins.prostoapp.com/job/deploy-ecs/"
+        telegramSend "🛠✅️ Build №${env.BUILD_NUMBER}: Finish ```#${remoteImageTag}``` \nDeploy: https://jenkins.prostoapp.com/job/deploy_staging/ https://jenkins.prostoapp.com/job/deploy_production/"
       }
 
     } catch(e) {
