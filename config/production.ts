@@ -40,7 +40,7 @@ module.exports = {
   iap: {
     enable: true,
     testMode: false,
-    debugLogs: true,
+    debugLogs: false,
   },
   promocode: {
     discount: [
