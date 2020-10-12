@@ -4,10 +4,10 @@ module.exports = {
     url: 'https://production.prostoapp.com/',
   },
   logs: {
-    showHeaders: true,
+    showHeaders: false,
   },
   swagger: {
-    enable: true,
+    enable: false,
     scheme: 'https',
   },
   sms: {
@@ -34,21 +34,24 @@ module.exports = {
     username: 'prostoadmin',
     password: 'Pioj32wo8han20y1kKKxaw4egp23',
     database: 'prostoapp',
-    synchronize: true,
-    migrationsRun: true,
+    synchronize: false,
+    migrationsRun: false,
   },
   iap: {
     enable: true,
     testMode: false,
+    debugLogs: false,
   },
   promocode: {
     discount: [
+      /*
       'AVOCADO',
       'SPASIBO',
       'SNJR5D',
       'GREEN4LIFE',
       'HAPPY',
       'NOSTRESS',
+      */
     ],
     trial: [
       /*

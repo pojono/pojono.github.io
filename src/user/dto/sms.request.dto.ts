@@ -3,8 +3,8 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class SmsRequestDto {
   @IsString()
-  @MinLength(8)
-  @MaxLength(15)
+  @MinLength(6)
+  @MaxLength(20)
   @ApiModelProperty({
     type: 'string',
     example: '12345678',

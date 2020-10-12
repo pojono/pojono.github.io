@@ -3,7 +3,13 @@ import * as config from 'config';
 import { Logger } from '@nestjs/common';
 
 export function routerLogger(req, res, next) {
-  const requestId: string = crypto.randomBytes(6).toString('base64');
+  const requestId: string = crypto
+    .randomBytes(6)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/\=/g, '_');
+
   const logger = new Logger(requestId);
 
   req.locals = {};

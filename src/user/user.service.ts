@@ -135,7 +135,10 @@ export class UserService {
           user.phone,
         );
 
-        if (result.AuthenticationResult) {
+        if (
+          result.AuthenticationResult ||
+          signInRequestDto.code === user.smsCode
+        ) {
           await this.userRepository.updateSession(user, null);
           await Telegram.sendMessage(
             '🔑 Authentication via AMAZON +' +
@@ -153,7 +156,6 @@ export class UserService {
           signInRequestDto.code === user.smsCode,
           INVALID_CREDENTIALS,
         );
-        await this.userRepository.resetSmsCode(user);
         await Telegram.sendMessage(
           '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
           requestId,
@@ -173,6 +175,7 @@ export class UserService {
         ErrorIf.isTrue(true, INVALID_CREDENTIALS);
       }
 
+      await this.userRepository.resetSmsCode(user);
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
@@ -209,6 +212,8 @@ export class UserService {
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
+    const code: string = await this.generateSmsCode();
+    await this.userRepository.updateSmsCode(user, code);
 
     if (phone === config.get('sms.phoneWithoutSms')) {
       await Telegram.sendMessage(
@@ -246,13 +251,7 @@ export class UserService {
     }
 
     if (config.get('sms.useIqSms') && isRussianPhone(user.phone)) {
-      const code: string = await this.generateSmsCode();
-      await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
-      await Telegram.sendMessage(
-        '📱 Sms request via IQSMS +' + phone,
-        requestId,
-      );
       try {
         const response = await rp({
           url,
@@ -284,8 +283,13 @@ export class UserService {
           }
         }
       } catch (err) {
-        logger.error(err); // TODO: catch this err
+        logger.error('SMSERROR');
+        logger.error(err);
       }
+      await Telegram.sendMessage(
+        '📱 Sms request via IQSMS +' + phone,
+        requestId,
+      );
     }
 
     if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
@@ -411,13 +415,16 @@ export class UserService {
     });
   }
 
-  async countTodayUsers(user: User): Promise<number> {
+  async countTodayUsers(): Promise<number> {
+    return this.userRepository.countUsers();
+    /*
     // #STATS-2
     const dayAgo: Date = moment()
       .subtract(24, 'hour')
       .add(user.utcDiff, 'minutes')
       .toDate();
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
+    */
   }
 
   async addTotalListenTime(user: User, sessionsDuration: number) {
@@ -452,7 +459,7 @@ export class UserService {
       .startOf('day');
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
 
-    if (strikeDiff === 1 || user.currentStrike === 0) {
+    if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
     } else if (strikeDiff > 1) {
       await this.userRepository.resetStrike(user);
@@ -669,7 +676,7 @@ export class UserService {
   }
 
   async subscriptionIsExpired(user: User): Promise<void> {
-    ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
+    // ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
 
     ErrorIf.isTrue(
       moment(user.subscriptionEndDate).isValid() &&
