@@ -72,6 +72,14 @@ export class UserRepository extends Repository<User> {
     return user.save();
   }
 
+  async updateRatingQuiz(
+    user: User,
+    ratingQuizFinished: boolean,
+  ): Promise<User> {
+    user.ratingQuizFinished = ratingQuizFinished;
+    return user.save();
+  }
+
   /*
   async countUsersWithActivityAfterDate(activityDate: Date) {
     return User.count({ where: { lastActivity: MoreThan(activityDate) } });

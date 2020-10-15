@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from '../../user/user.service';
 import { EventRepository } from '../repository/event.repository';
 import { EventRequestDto } from '../dto/event.request.dto';
 import { Event } from '../entity/event.entity';
@@ -19,6 +20,7 @@ export class EventService {
     private eventHistoryService: EventHistoryService,
     private statisticLessonService: StatisticLessonService,
     private quizService: QuizService,
+    private userService: UserService,
   ) {}
 
   async getEvent(
@@ -96,6 +98,14 @@ export class EventService {
             EventDescriptionEnum.GO_TO_PUSHES,
           );
           if (quiz) {
+            return quiz.id;
+          }
+        } else if (finishedLessons > 1 && !user.ratingQuizFinished) {
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_RATING_QUIZ,
+          );
+          if (quiz) {
+            await this.userService.ratingQuizFinished(user);
             return quiz.id;
           }
         } else {

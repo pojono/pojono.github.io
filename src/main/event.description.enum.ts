@@ -4,4 +4,6 @@ export enum EventDescriptionEnum {
   GO_TO_HOME = 'GO_TO_HOME',
   GO_TO_PUSHES = 'GO_TO_PUSHES',
   GO_TO_BACK = 'GO_TO_BACK',
+  GO_TO_RATING_QUIZ = 'GO_TO_RATING_QUIZ',
+  GO_TO_RATING = 'GO_TO_RATING',
 }
