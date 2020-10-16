@@ -7,7 +7,7 @@ module.exports = {
     showHeaders: false,
   },
   jwt: {
-    expiresIn: 3600000,
+    expiresIn: 360,
     secret: 'TopSecret',
   },
   swagger: {
