@@ -36,4 +36,7 @@ export class CourseResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: true })
   public readonly musicCourse: boolean;
+
+  @ApiModelProperty({ type: 'number', nullable: false })
+  public readonly orderIndex: number;
 }
