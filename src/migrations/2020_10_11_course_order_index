@@ -1,0 +1,1 @@
+ALTER TABLE "course" ADD "orderIndex" integer NOT NULL DEFAULT 0;

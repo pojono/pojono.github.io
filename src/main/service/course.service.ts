@@ -7,7 +7,7 @@ import { RubricToCourseService } from './rubric.to.course.service';
 import { GetCourseByIdResponseDto } from '../response/get.course.by.id.response';
 import { LessonResponseDto } from '../response/dto/lesson.response';
 import { ChallengeResponseDto } from '../response/dto/challenge.response';
-import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
+// import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
 import { LessonService } from './lesson.service';
 import { VideoAdviceService } from './video.advice.service';
 import { ChallengeService } from './challenge.service';
@@ -155,7 +155,9 @@ export class CourseService {
     for (const courseId of courseIds) {
       courses.push(await this.getCourseWithStatsById(userId, courseId));
     }
-    return courses;
+    return courses.sort(
+      (a, b) => a.courseInfo.orderIndex - b.courseInfo.orderIndex,
+    );
   }
 
   async getAnnouncementCourses(
