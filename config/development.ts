@@ -29,9 +29,9 @@ module.exports = {
     password: 'O3lka3097ahqlsQxzlw39',
     */
     database: 'prostoapp',
-    synchronize: false,
+    synchronize: true,
     migrationsRun: true,
-    logging: false,
+    logging: true,
   },
   iap: {
     enable: false,
