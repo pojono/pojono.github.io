@@ -40,4 +40,7 @@ export class Course extends BaseEntity {
 
   @Column({ nullable: true })
   recommendationId: number;
+
+  @Column({ nullable: false, default: 0 })
+  orderIndex: number;
 }
