@@ -111,6 +111,15 @@ export class EventService {
       if (event.event === EventEnum.COURSE_FINISHED) {
         return event.quizId;
       }
+
+      if (event.event === EventEnum.APP_OPENED) {
+        const quiz = await this.quizService.getByEventDescription(
+          EventDescriptionEnum.GO_TO_NEWS,
+        );
+        if (quiz) {
+          return quiz.id;
+        }
+      }
     }
 
     return null;
