@@ -1,7 +1,7 @@
 module.exports = {
   server: {
     port: 80,
-    url: 'https://staging.prostoapp.com/',
+    url: 'https://staging.dev.prostoapp.com/',
   },
   logs: {
     showHeaders: true,
@@ -40,4 +40,8 @@ module.exports = {
     enable: true,
   },
   load_testing: false,
+  promocode: {
+    discount: ['STAGING_DISCOUNT_CODE1', 'STAGING_DISCOUNT_CODE2'],
+    trial: ['STAGING_TRIAL_CODE1', 'STAGING_TRIAL_CODE2'],
+  },
 };

@@ -16,6 +16,9 @@ export class QuizMultichoiceRepository extends Repository<QuizMultichoice> {
       where: {
         quizId,
       },
+      order: {
+        orderIndex: 'ASC',
+      },
     });
   }
 }

@@ -83,6 +83,8 @@ export class TrackService {
     }
     */
 
-    return tracks;
+    return trackIds
+      .map(trackId => tracks.find(track => trackId === track.trackInfo.id))
+      .filter(track => track && track.trackInfo && track.trackInfo.id);
   }
 }

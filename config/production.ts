@@ -4,7 +4,7 @@ module.exports = {
     url: 'https://production.prostoapp.com/',
   },
   logs: {
-    showHeaders: true,
+    showHeaders: false,
   },
   swagger: {
     enable: false,
@@ -19,7 +19,7 @@ module.exports = {
     cognito: {
       userPoolId: 'eu-west-1_65Op52Obc',
     },
-    bucketName: 'prosto-photo',
+    bucketName: 'photos.prostoapp.com',
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
     localSimulation: false,
@@ -34,10 +34,46 @@ module.exports = {
     username: 'prostoadmin',
     password: 'Pioj32wo8han20y1kKKxaw4egp23',
     database: 'prostoapp',
-    synchronize: true,
-    migrationsRun: true,
+    synchronize: false,
+    migrationsRun: false,
   },
   iap: {
     enable: true,
+    testMode: false,
+    debugLogs: false,
+  },
+  promocode: {
+    discount: [
+      /*
+      'AVOCADO',
+      'SPASIBO',
+      'SNJR5D',
+      'GREEN4LIFE',
+      'HAPPY',
+      'NOSTRESS',
+      */
+    ],
+    trial: [
+      /*
+      'VDOH',
+      'VDOH2751',
+      'VDOH5681',
+      'VDOH1275',
+      'ULIBKA',
+      'SKAZHIDA',
+      'SVOBODA',
+      'SVOBODA371',
+      'SVOBODA846',
+      'SVOBODA578',
+      'PRIVET',
+      'PRIVET6825',
+      'PRIVET5185',
+      'PRIVET5815',
+      'GREENGODDESS',
+      'YESWECAN',
+      'CALM',
+      'HEADSPACE',
+      */
+    ],
   },
 };

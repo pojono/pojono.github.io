@@ -7,7 +7,7 @@ import { RubricToCourseService } from './rubric.to.course.service';
 import { GetCourseByIdResponseDto } from '../response/get.course.by.id.response';
 import { LessonResponseDto } from '../response/dto/lesson.response';
 import { ChallengeResponseDto } from '../response/dto/challenge.response';
-import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
+// import { VideoAdviceWithStatsResponseDto } from '../response/dto/video.advice.with.stats.response';
 import { LessonService } from './lesson.service';
 import { VideoAdviceService } from './video.advice.service';
 import { ChallengeService } from './challenge.service';
@@ -18,6 +18,7 @@ import { User } from '../../user/user.entity';
 import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
+import { StatisticCourse } from '../entity/statistic.course.entity';
 
 @Injectable()
 export class CourseService {
@@ -119,6 +120,17 @@ export class CourseService {
 
     if (!latestCourseId) {
       latestCourseId = await this.getBeginnerCourseId();
+    } else {
+      const courseStatistic: StatisticCourse = await this.statisticCourseService.courseInProgress(
+        user.id,
+        latestCourseId,
+      );
+      if (courseStatistic && courseStatistic.isFinished) {
+        const course: Course = await this.getById(latestCourseId);
+        if (course && course.recommendationId) {
+          latestCourseId = course.recommendationId;
+        }
+      }
     }
     return this.getCourseWithStatsById(user.id, latestCourseId);
   }
@@ -143,7 +155,9 @@ export class CourseService {
     for (const courseId of courseIds) {
       courses.push(await this.getCourseWithStatsById(userId, courseId));
     }
-    return courses;
+    return courses.sort(
+      (a, b) => a.courseInfo.orderIndex - b.courseInfo.orderIndex,
+    );
   }
 
   async getAnnouncementCourses(

@@ -1,4 +1,5 @@
 import { EntityRepository, MoreThan, Repository } from 'typeorm';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { User } from './user.entity';
 import * as moment from 'moment';
 
@@ -65,8 +66,20 @@ export class UserRepository extends Repository<User> {
     return await user.save();
   }
 
+  async updatePromocode(user: User, promocode: string): Promise<User> {
+    user.promocode = promocode;
+    user.promocodeDate = moment.utc().toDate();
+    return user.save();
+  }
+
+  /*
   async countUsersWithActivityAfterDate(activityDate: Date) {
     return User.count({ where: { lastActivity: MoreThan(activityDate) } });
+  }
+  */
+
+  async countUsers() {
+    return User.count();
   }
 
   async updateLastActivity(user: User): Promise<void> {
@@ -131,8 +144,13 @@ export class UserRepository extends Repository<User> {
     user.subscriptionLatestReceipt = subscriptionDto.latestReceipt;
     user.subscriptionValidationResponse = subscriptionDto.validationResponse;
     user.subscriptionStartDate = subscriptionDto.startDate;
-    user.subscriptionEndDate = subscriptionDto.endDate;
     user.subscriptionIsCancelled = subscriptionDto.isCancelled;
+
+    const curEndDate = moment.utc(user.subscriptionEndDate);
+    const newEndDate = moment.utc(subscriptionDto.endDate);
+    if (!curEndDate.isValid() || newEndDate.isAfter(curEndDate)) {
+      user.subscriptionEndDate = subscriptionDto.endDate;
+    }
 
     return user.save();
   }

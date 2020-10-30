@@ -16,6 +16,7 @@ import HTTP_CODE_DESCRIPTION from './http.description';
 import * as ERRORS from './lib/errors';
 import { AllExceptionsFilter } from './lib/all.exception.filter';
 import { Telegram } from './lib/telegram';
+import { json } from 'express';
 
 const logger = new Logger('Bootstrap');
 
@@ -82,6 +83,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new MyLogger(),
   });
+  app.use(json({ limit: '1000kb' }));
+
   const scheme: 'http' | 'https' = config.get('swagger.scheme');
   if (config.get('swagger.enable')) {
     const errors = Object.keys(ERRORS).reduce(

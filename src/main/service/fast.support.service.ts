@@ -56,7 +56,11 @@ export class FastSupportService {
       id,
     );
 
-    return this.getByIds(fastSupportIds);
+    const fastSupport = await this.getByIds(fastSupportIds);
+
+    return fastSupportIds
+      .map(supportId => fastSupport.find(support => supportId === support.id))
+      .filter(support => support && support.id);
   }
 
   async getForMainPage(): Promise<FastSupportResponseDto[]> {

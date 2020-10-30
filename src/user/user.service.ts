@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
+import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PromocodeResponseDto } from './response/promocode.response';
 import { UserRepository } from './user.repository';
 import {
   AMAZON_COGNITO_ERROR,
@@ -68,6 +70,42 @@ export class UserService {
     return this.userRepository.updateUser(user, userUpdateDto);
   }
 
+  async updatePromocode(
+    requestId: string,
+    user: User,
+    userPromocodeDto: UserPromocodeDto,
+  ): Promise<PromocodeResponseDto> {
+    const trialCodes: string[] = config.get('promocode.trial');
+    const discountCodes: string[] = config.get('promocode.discount');
+
+    const promocode: string = userPromocodeDto.promocode.trim().toUpperCase();
+
+    const isTrial: boolean = trialCodes.includes(promocode);
+    const isDiscount: boolean = discountCodes.includes(promocode);
+
+    if (isTrial || isDiscount) {
+      await this.userRepository.updatePromocode(user, promocode);
+      await Telegram.sendMessage(
+        '🥑 Promocode: ' +
+          promocode +
+          `${isTrial ? ' [trial]' : ''}` +
+          `${isDiscount ? ' [discount]' : ''}` +
+          ' UserId: ' +
+          user.id,
+        requestId,
+      );
+    } else {
+      await Telegram.sendMessage(
+        '🤢 Wrong Promocode: ' + promocode + ' UserId: ' + user.id,
+        requestId,
+      );
+    }
+    return {
+      isTrial,
+      isDiscount,
+    };
+  }
+
   async signIn(
     requestId: number,
     signInRequestDto: SignInRequestDto,
@@ -97,7 +135,10 @@ export class UserService {
           user.phone,
         );
 
-        if (result.AuthenticationResult) {
+        if (
+          result.AuthenticationResult ||
+          signInRequestDto.code === user.smsCode
+        ) {
           await this.userRepository.updateSession(user, null);
           await Telegram.sendMessage(
             '🔑 Authentication via AMAZON +' +
@@ -115,7 +156,6 @@ export class UserService {
           signInRequestDto.code === user.smsCode,
           INVALID_CREDENTIALS,
         );
-        await this.userRepository.resetSmsCode(user);
         await Telegram.sendMessage(
           '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
           requestId,
@@ -135,6 +175,7 @@ export class UserService {
         ErrorIf.isTrue(true, INVALID_CREDENTIALS);
       }
 
+      await this.userRepository.resetSmsCode(user);
       const payload: JwtPayload = { id: user.id };
       const token = await this.jwtService.sign(payload);
 
@@ -171,6 +212,8 @@ export class UserService {
 
     ErrorIf.isTrue(this.isFewTime(user), SMS_TOO_OFTEN);
     await this.userRepository.updateLastCode(user);
+    const code: string = await this.generateSmsCode();
+    await this.userRepository.updateSmsCode(user, code);
 
     if (phone === config.get('sms.phoneWithoutSms')) {
       await Telegram.sendMessage(
@@ -208,13 +251,7 @@ export class UserService {
     }
 
     if (config.get('sms.useIqSms') && isRussianPhone(user.phone)) {
-      const code: string = await this.generateSmsCode();
-      await this.userRepository.updateSmsCode(user, code);
       const url: string = 'http://json.gate.iqsms.ru/send/';
-      await Telegram.sendMessage(
-        '📱 Sms request via IQSMS +' + phone,
-        requestId,
-      );
       try {
         const response = await rp({
           url,
@@ -227,7 +264,7 @@ export class UserService {
               {
                 phone: user.phone,
                 clientId: 1,
-                text: `code: ${code}`,
+                text: `Код для Prosto: ${code}`,
               },
             ],
           },
@@ -246,8 +283,13 @@ export class UserService {
           }
         }
       } catch (err) {
-        logger.error(err); // TODO: catch this err
+        logger.error('SMSERROR');
+        logger.error(err);
       }
+      await Telegram.sendMessage(
+        '📱 Sms request via IQSMS +' + phone,
+        requestId,
+      );
     }
 
     if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
@@ -373,13 +415,16 @@ export class UserService {
     });
   }
 
-  async countTodayUsers(user: User): Promise<number> {
+  async countTodayUsers(): Promise<number> {
+    return this.userRepository.countUsers();
+    /*
     // #STATS-2
     const dayAgo: Date = moment()
       .subtract(24, 'hour')
-      .add(user.utcDiff * -1, 'minutes')
+      .add(user.utcDiff, 'minutes')
       .toDate();
     return this.userRepository.countUsersWithActivityAfterDate(dayAgo);
+    */
   }
 
   async addTotalListenTime(user: User, sessionsDuration: number) {
@@ -404,45 +449,19 @@ export class UserService {
   }
 
   async updateStrike(user: User, utcDiff: number): Promise<void> {
-    const lastActivity: moment.Moment = moment(user.lastActivity);
-
-    const reverseUtcDiff: number = utcDiff * -1;
-    const serverTime: moment.Moment = moment.utc();
-    const userTime: moment.Moment = moment.utc().add(reverseUtcDiff, 'minute');
-    const userStartToday: moment.Moment = moment
+    const todayDate = moment
       .utc()
-      .startOf('day')
-      .add(reverseUtcDiff, 'minute');
-    const userStartYesterday: moment.Moment = moment(userStartToday).subtract(
-      24,
-      'hour',
-    );
+      .add(utcDiff * -1, 'minutes')
+      .startOf('day');
+    const lastActivityDate = moment
+      .utc(user.lastActivity)
+      .add(utcDiff * -1, 'minutes')
+      .startOf('day');
+    const strikeDiff = todayDate.diff(lastActivityDate, 'days');
 
-    // TODO: load test
-    // this.logger.log('lastActivity ' + lastActivity.toISOString());
-    // this.logger.log('serverTime ' + serverTime.toISOString());
-    // this.logger.log('userTime ' + userTime.toISOString());
-    // this.logger.log('userStartToday ' + userStartToday.toISOString());
-    // this.logger.log('userStartYesterday ' + userStartYesterday.toISOString());
-
-    // if (lastActivity.isAfter(userStartToday)) {
-    //   this.logger.log('Last Activity is Today. Strike does not change');
-    // }
-
-    if (
-      lastActivity.isAfter(userStartYesterday) &&
-      lastActivity.isBefore(userStartToday)
-    ) {
-      // this.logger.log('Last Activity was yesterday. Strike +1');
+    if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
-    }
-
-    if (user.currentStrike === 0) {
-      await this.userRepository.incrementStrike(user);
-    }
-
-    if (lastActivity.isBefore(userStartYesterday)) {
-      // this.logger.log('LastActivity was before yesterday. Strike = 1');
+    } else if (strikeDiff > 1) {
       await this.userRepository.resetStrike(user);
     }
   }
@@ -657,7 +676,7 @@ export class UserService {
   }
 
   async subscriptionIsExpired(user: User): Promise<void> {
-    ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
+    // ErrorIf.isTrue(user.subscriptionIsCancelled, SUBSCRIPRITON_IS_CANCELLED);
 
     ErrorIf.isTrue(
       moment(user.subscriptionEndDate).isValid() &&

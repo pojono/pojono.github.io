@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
+import { logger } from './logger';
 
 export default class CustomResponse {
   @ApiModelProperty({
@@ -42,5 +43,6 @@ export default class CustomResponse {
     this.timestamp = new Date();
     this.requestId = requestId;
     this.statusCode = HttpStatus.OK;
+    logger(requestId).log('Response success: ' + success);
   }
 }

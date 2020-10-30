@@ -1,14 +1,14 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class SmsRequestDto {
+export class UserPromocodeDto {
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
+  @MinLength(1)
+  @MaxLength(30)
   @ApiModelProperty({
     type: 'string',
-    example: '12345678',
+    example: 'AVOCADO',
     required: true,
   })
-  phone: string;
+  promocode: string;
 }

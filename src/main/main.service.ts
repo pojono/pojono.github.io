@@ -28,11 +28,15 @@ export class MainService {
 
   async getMainStats(user: User): Promise<MainStatsResponseDto> {
     return {
-      todayUsers: await this.userService.countTodayUsers(user),
+      todayUsers: await this.userService.countTodayUsers(),
       todayUsersTime: await this.statisticHourService.sumForAllUsersLastDay(
         user,
       ),
       maxStrike: await this.userService.maxStrike(),
+      myCurrentStrike: user.currentStrike,
+      myMaxStrike: user.maxStrike,
+      myTodayTime: await this.statisticHourService.sumForUserLastDay(user),
+      totalListenTime: user.sessionsDuration,
     };
   }
 
@@ -52,11 +56,11 @@ export class MainService {
 
     return {
       topCourse,
+      videoAdvice,
       stats,
       bestCourses,
-      announcement,
       fastSupport,
-      videoAdvice,
+      announcement,
     };
   }
 }

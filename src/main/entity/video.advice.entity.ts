@@ -19,4 +19,7 @@ export class VideoAdvice extends BaseEntity {
 
   @Column({ nullable: true })
   colour: string;
+
+  @Column({ nullable: false, default: 0 })
+  orderIndex: number;
 }
