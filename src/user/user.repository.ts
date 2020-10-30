@@ -1,5 +1,4 @@
-import { EntityRepository, MoreThan, Repository } from 'typeorm';
-import { UserPromocodeDto } from './dto/user.promocode.dto';
+import { EntityRepository, Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as moment from 'moment';
 
@@ -133,6 +132,11 @@ export class UserRepository extends Repository<User> {
 
   async updateSmsCode(user: User, smsCode: string): Promise<void> {
     user.smsCode = smsCode;
+    await user.save();
+  }
+
+  async newsQuizFinished(user: User, quizId: number): Promise<void> {
+    user.latestNewsQuizId = quizId;
     await user.save();
   }
 

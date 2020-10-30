@@ -15,6 +15,11 @@ export class QuizRepository extends Repository<Quiz> {
   async findByEventDescription(
     eventDescription: EventDescriptionEnum,
   ): Promise<Quiz | undefined> {
-    return Quiz.findOne({ where: { eventDescription } });
+    return Quiz.findOne({
+      where: { eventDescription },
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 }
