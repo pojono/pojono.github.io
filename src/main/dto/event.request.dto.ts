@@ -1,4 +1,9 @@
-import { IsEnum, IsNumberString, IsOptional } from 'class-validator';
+import {
+  IsBooleanString,
+  IsEnum,
+  IsNumberString,
+  IsOptional,
+} from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { EventEnum } from '../event.enum';
 
@@ -35,4 +40,13 @@ export class EventRequestDto {
     required: false,
   })
   id: number;
+
+  @IsOptional()
+  @IsBooleanString()
+  @ApiModelProperty({
+    type: 'boolean',
+    example: 'true',
+    required: false,
+  })
+  appHasRating: string;
 }
