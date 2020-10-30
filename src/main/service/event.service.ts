@@ -10,6 +10,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
+import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
@@ -113,7 +114,7 @@ export class EventService {
         } else if (
           finishedLessons > 1 &&
           !user.ratingQuizFinished &&
-          eventRequestDto.appHasRating
+          isTrue(eventRequestDto.appHasRating)
         ) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_RATING_QUIZ,
