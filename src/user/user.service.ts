@@ -10,7 +10,6 @@ import {
   INVALID_CREDENTIALS,
   PURCHASE_VALIDATION_ERROR,
   SMS_TOO_OFTEN,
-  SUBSCRIPRITON_IS_CANCELLED,
   SUBSCRIPRITON_IS_EXPIRED,
 } from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
@@ -72,6 +71,10 @@ export class UserService {
 
   async ratingQuizFinished(user: User): Promise<User> {
     return this.userRepository.updateRatingQuiz(user, true);
+  }
+
+  async newsQuizFinished(user: User, quizId: number): Promise<void> {
+    await this.userRepository.newsQuizFinished(user, quizId);
   }
 
   async updatePromocode(
