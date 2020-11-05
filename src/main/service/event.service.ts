@@ -10,7 +10,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
-import { isTrue } from '../../lib/is.true';
+// import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
@@ -72,10 +72,15 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
+          /*
           if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
             await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
             return latestNewsQuiz.id;
           } else if (quiz) {
+            return quiz.id;
+          }
+          */
+          if (quiz) {
             return quiz.id;
           }
         }
@@ -91,10 +96,15 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
+          /*
           if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
             await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
             return latestNewsQuiz.id;
           } else if (quiz) {
+            return quiz.id;
+          }
+          */
+          if (quiz) {
             return quiz.id;
           }
         }
@@ -113,9 +123,16 @@ export class EventService {
           }
         } else if (
           finishedLessons > 1 &&
+          latestNewsQuiz &&
+          user.latestNewsQuizId !== latestNewsQuiz.id
+          /*
           !user.ratingQuizFinished &&
           isTrue(eventRequestDto.appHasRating)
+          */
         ) {
+          await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+          return latestNewsQuiz.id;
+          /*
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_RATING_QUIZ,
           );
@@ -123,6 +140,7 @@ export class EventService {
             await this.userService.ratingQuizFinished(user);
             return quiz.id;
           }
+          */
         } else {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_BACK,
