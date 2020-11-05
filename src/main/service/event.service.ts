@@ -114,21 +114,10 @@ export class EventService {
         const finishedLessons: number = await this.statisticLessonService.countFinishedByUserId(
           user.id,
         );
-        if (finishedLessons === 1 && !user.pushesTime) {
-          const quiz = await this.quizService.getByEventDescription(
-            EventDescriptionEnum.GO_TO_PUSHES,
-          );
-          if (quiz) {
-            return quiz.id;
-          }
-        } else if (
-          finishedLessons > 1 &&
+        if (
+          finishedLessons > 0 &&
           latestNewsQuiz &&
           user.latestNewsQuizId !== latestNewsQuiz.id
-          /*
-          !user.ratingQuizFinished &&
-          isTrue(eventRequestDto.appHasRating)
-          */
         ) {
           await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
           return latestNewsQuiz.id;
