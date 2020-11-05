@@ -120,7 +120,7 @@ export class EventService {
             EventDescriptionEnum.GO_TO_RATING_QUIZ,
           );
           if (quiz) {
-            // await this.userService.ratingQuizFinished(user);
+            await this.userService.ratingQuizFinished(user);
             return quiz.id;
           }
         } else {
