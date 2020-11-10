@@ -103,3 +103,20 @@ ListenTime = diff \* Track.duration / 100 (в секундах) - длитель
 14. Последняя позиция у прослушанного трека
     Берем значение lastProgress у записи с данным trackId у этого пользователя
     в таблице StatisticTrack
+
+При пересборке Jenkins контейнера:
+docker exec -it jenkins sh
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws configure
+(admin IAM)
+Access key ID AKIA2KBHWCGXUW2B3DUH
+Secret access key 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
+Region eu-west-1
+
+wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip
+unzip terraform_0.11.14_linux_amd64.zip
+chmod +x terraform
+sudo mv terraform /usr/local/bin/
+terraform --version

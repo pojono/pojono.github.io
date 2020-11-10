@@ -28,7 +28,7 @@ module.exports = {
     username: 'prostoadmin',
     password: 'O3lka3097ahqlsQxzlw39',
     */
-    database: 'prostoapp',
+    database: 'dev_ivan',
     synchronize: true,
     migrationsRun: true,
     logging: true,

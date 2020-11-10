@@ -1,0 +1,83 @@
+import groovy.json.JsonSlurperClassic
+
+def region          = "eu-west-1"
+def repositoryId    = "708752839087"
+def repositoryName  = "prostoapp_api"
+def ecRegistry      = "https://${repositoryId}.dkr.ecr.${region}.amazonaws.com"
+
+pipeline {
+    agent any
+    stages {
+        stage("input") {
+            steps {
+                script {
+                    def gitBranches = getGitBranches()
+                    def branches = getBranches()
+                    INPUT_PARAMS = input id: "Branch_name", message: "Select a tag", ok: "select",
+                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'staging\nproduction', description: 'Config environment')]
+                    echo("${INPUT_PARAMS}")
+                 }
+            }
+        }
+
+        stage('clone') {
+            steps {
+                telegramSend "🚀☑️️ Deploy №${env.BUILD_NUMBER}: Start ```#${INPUT_PARAMS.IMAGE_NAME}```<${INPUT_PARAMS.ENV}> \n\n${env.JOB_URL} "
+
+                git branch: "${INPUT_PARAMS.BRANCH_NAME}",
+                    credentialsId: 'bitbucket',
+                    url: 'https://bitbucket.org/Citronium/prostoapp_iac.git'
+
+                sh "ls -lat"
+            }
+        }
+
+        stage("init") {
+            steps {
+                sh "terraform init"
+            }
+        }
+
+        stage("choose workspace") {
+            steps {
+                sh "terraform workspace select ${INPUT_PARAMS.ENV}"
+            }
+        }
+
+        stage("apply") {
+            steps {
+                sh "terraform apply -auto-approve -var-file=${INPUT_PARAMS.ENV}.tfvars -var image_tag='${INPUT_PARAMS.IMAGE_NAME}'"
+            }
+        }
+
+        stage("notify") {
+            steps {
+                telegramSend "🚀✅️️ Deploy №${env.BUILD_NUMBER}: Finish ```#${INPUT_PARAMS.IMAGE_NAME}```<${INPUT_PARAMS.ENV}>"
+            }
+        }
+    }
+}
+
+def getBranches() {
+  def cmd = "aws ecr list-images --repository-name prostoapp_api --filter tagStatus=TAGGED --region eu-west-1"
+  def ecr_images_json = cmd.execute()
+  def data = new JsonSlurperClassic().parseText(ecr_images_json.text)
+  def ecr_images = [];
+  data.imageIds.each { ecr_images.push(it.imageTag) }
+  return ecr_images.sort()
+}
+
+def getGitBranches() {
+
+    git branch: "master",
+        credentialsId: 'bitbucket',
+        url: 'https://bitbucket.org/Citronium/prostoapp_iac.git'
+
+    def gettags = sh(returnStdout: true, script: "git for-each-ref --format='%(refname:short)' refs/remotes/origin").trim()
+    def lines = gettags.readLines();
+
+    def tags = [];
+    lines.each { tags.push(it.substring(it.lastIndexOf('/') + 1, it.length())) }
+
+    return tags;
+}

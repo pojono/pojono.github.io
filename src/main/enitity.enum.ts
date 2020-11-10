@@ -7,4 +7,5 @@ export enum EntityEnum {
   SUBSCRIPTION = 'SUBSCRIPTION',
   // SET_PUSHES = 'SET_PUSHES',
   BACK = 'BACK',
+  RATING = 'RATING',
 }

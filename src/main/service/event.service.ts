@@ -10,6 +10,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
+import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
@@ -108,6 +109,18 @@ export class EventService {
             EventDescriptionEnum.GO_TO_PUSHES,
           );
           if (quiz) {
+            return quiz.id;
+          }
+        } else if (
+          finishedLessons > 1 &&
+          !user.ratingQuizFinished &&
+          isTrue(eventRequestDto.appHasRating)
+        ) {
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_RATING_QUIZ,
+          );
+          if (quiz) {
+            await this.userService.ratingQuizFinished(user);
             return quiz.id;
           }
         } else {

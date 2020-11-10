@@ -69,6 +69,10 @@ export class UserService {
     return this.userRepository.updateUser(user, userUpdateDto);
   }
 
+  async ratingQuizFinished(user: User): Promise<User> {
+    return this.userRepository.updateRatingQuiz(user, true);
+  }
+
   async newsQuizFinished(user: User, quizId: number): Promise<void> {
     await this.userRepository.newsQuizFinished(user, quizId);
   }
