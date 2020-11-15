@@ -19,6 +19,7 @@ import { VideoAdviceResponseDto } from '../response/dto/video.advice.response';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
 import { StatisticCourse } from '../entity/statistic.course.entity';
+import { Lesson } from '../entity/lesson.entity';
 
 @Injectable()
 export class CourseService {
@@ -115,17 +116,32 @@ export class CourseService {
     return user.latestCourseId;
   }
 
+  async getLatestLessonIdForUser(user: User): Promise<number> {
+    return user.latestLessonId;
+  }
+
   async getTopCourse(user: User): Promise<CourseWithStatsResponseDto> {
     let latestCourseId: number = await this.getLatestCourseIdForUser(user);
+    const latestLessonId: number = await this.getLatestLessonIdForUser(user);
 
     if (!latestCourseId) {
       latestCourseId = await this.getBeginnerCourseId();
     } else {
+      let latestLesson: Lesson;
+      if (latestLessonId) {
+        latestLesson = await this.lessonService.getById(latestLessonId);
+      }
+
       const courseStatistic: StatisticCourse = await this.statisticCourseService.courseInProgress(
         user.id,
         latestCourseId,
       );
-      if (courseStatistic && courseStatistic.isFinished) {
+      if (
+        courseStatistic &&
+        courseStatistic.isFinished &&
+        latestLesson &&
+        latestLesson.isLatest
+      ) {
         const course: Course = await this.getById(latestCourseId);
         if (course && course.recommendationId) {
           latestCourseId = course.recommendationId;
