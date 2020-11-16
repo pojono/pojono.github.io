@@ -120,6 +120,11 @@ export class UserRepository extends Repository<User> {
     await user.save();
   }
 
+  async updateLatestLesson(user: User, lessonId: number): Promise<void> {
+    user.latestLessonId = lessonId;
+    await user.save();
+  }
+
   async updateSessionsDuration(user, sessionsDuration): Promise<void> {
     user.sessionsDuration = sessionsDuration;
     await user.save();

@@ -485,6 +485,10 @@ export class UserService {
     await this.userRepository.updateLatestCourse(user, courseId);
   }
 
+  async updateLatestLesson(user: User, lessonId: number): Promise<void> {
+    await this.userRepository.updateLatestLesson(user, lessonId);
+  }
+
   async maxStrike(): Promise<number> {
     return this.userRepository.countMaxStrike();
   }

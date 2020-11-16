@@ -8,7 +8,6 @@ import { UserService } from '../../user/user.service';
 import { GetStatisticMeDto } from '../response/get.statistic.me.response';
 import { StatisticHourService } from './statistic.hour.service';
 import * as moment from 'moment';
-import { FastSupport } from '../entity/fast.support.entity';
 import { FastSupportService } from './fast.support.service';
 import { LessonService } from './lesson.service';
 import { CourseService } from './course.service';
@@ -17,7 +16,6 @@ import { Course } from '../entity/course.entity';
 import { StatisticLessonService } from './statistic.lesson.service';
 import { StatisticCourseService } from './statistic.course.service';
 import { StatisticTrackService } from './statistic.track.service';
-import { Rubric } from '../entity/rubric.entity';
 import { RubricService } from './rubric.service';
 import { StatisticHistoryService } from './statistic.history.service';
 
@@ -98,6 +96,9 @@ export class StatisticService {
         await this.statisticCourseService.finishCourse(user.id, course.id);
       }
       await this.userService.updateLatestCourse(user, course.id);
+      if (lesson) {
+        await this.userService.updateLatestLesson(user, lesson.id);
+      }
     }
 
     await this.userService.updateStrike(user, utcDiff);
