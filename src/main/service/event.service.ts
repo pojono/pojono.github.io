@@ -156,12 +156,15 @@ export class EventService {
       }
 
       if (event.event === EventEnum.GOT_TEMPORARY_TOKEN) {
+        return event.quizId;
+        /*
         const quiz = await this.quizService.getByEventDescription(
           EventDescriptionEnum.GO_TO_NOT_REGISTERED_QUIZ,
         );
         if (quiz) {
           return quiz.id;
         }
+        */
       }
     }
 
