@@ -45,6 +45,8 @@ export class MainService {
       user,
     );
     const stats: MainStatsResponseDto = await this.getMainStats(user);
+    const loginMotivation = {};
+
     const bestCourses: CourseWithStatsResponseDto[] = await this.courseService.getBestCourses(
       user.id,
     );
@@ -54,13 +56,22 @@ export class MainService {
     const fastSupport: FastSupportResponseDto[] = await this.fastSupportService.getForMainPage();
     const videoAdvice: VideoAdviceResponseDto[] = await this.videoAdviceService.getForMainPage();
 
-    return {
+    const response: GetMainResponseDto = {
       topCourse,
       videoAdvice,
       stats,
+      loginMotivation,
       bestCourses,
       fastSupport,
       announcement,
     };
+
+    if (user.phone) {
+      delete response.loginMotivation;
+    } else {
+      delete response.stats;
+    }
+
+    return response;
   }
 }

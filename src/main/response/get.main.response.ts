@@ -19,7 +19,14 @@ export class GetMainResponseDto {
     nullable: false,
     isArray: false,
   })
-  public readonly stats: MainStatsResponseDto;
+  public stats?: MainStatsResponseDto;
+
+  @ApiModelProperty({
+    type: 'object',
+    nullable: false,
+    isArray: false,
+  })
+  public loginMotivation?: object;
 
   @ApiModelProperty({
     type: CourseWithStatsResponseDto,
