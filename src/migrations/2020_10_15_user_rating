@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD "ratingQuizFinished" boolean NOT NULL DEFAULT false;

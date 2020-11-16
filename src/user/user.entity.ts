@@ -101,6 +101,9 @@ export class User extends BaseEntity {
   firstQuizFinished: boolean;
 
   @Column({ nullable: false, default: false })
+  ratingQuizFinished: boolean;
+
+  @Column({ nullable: false, default: false })
   isTestUser: boolean;
 
   @Column({ nullable: true })
@@ -108,6 +111,9 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   promocodeDate: Date;
+
+  @Column({ nullable: true })
+  latestNewsQuizId: number;
 
   public subscriptionIsActive(): boolean {
     return (

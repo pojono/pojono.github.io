@@ -45,7 +45,7 @@ module.exports = {
   promocode: {
     discount: [
       /*
-      'AVOCADO',
+      // 'AVOCADO',
       'SPASIBO',
       'SNJR5D',
       'GREEN4LIFE',

@@ -9,6 +9,8 @@ import { StatisticLessonService } from './statistic.lesson.service';
 import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
+import { UserService } from '../../user/user.service';
+import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
@@ -16,6 +18,7 @@ export class EventService {
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository,
 
+    private userService: UserService,
     private eventHistoryService: EventHistoryService,
     private statisticLessonService: StatisticLessonService,
     private quizService: QuizService,
@@ -52,6 +55,10 @@ export class EventService {
     // ==> такого быть не должно. Но пока отправим 1
 
     if (event) {
+      const latestNewsQuiz = await this.quizService.getByEventDescription(
+        EventDescriptionEnum.GO_TO_NEWS,
+      );
+
       if (event.event === EventEnum.AUTHORIZATION_FINISHED) {
         if (!user.subscriptionIsActive() && user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
@@ -65,7 +72,10 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
-          if (quiz) {
+          if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
+            await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+            return latestNewsQuiz.id;
+          } else if (quiz) {
             return quiz.id;
           }
         }
@@ -81,7 +91,10 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
-          if (quiz) {
+          if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
+            await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+            return latestNewsQuiz.id;
+          } else if (quiz) {
             return quiz.id;
           }
         }
@@ -98,6 +111,18 @@ export class EventService {
           if (quiz) {
             return quiz.id;
           }
+        } else if (
+          finishedLessons > 1 &&
+          !user.ratingQuizFinished &&
+          isTrue(eventRequestDto.appHasRating)
+        ) {
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_RATING_QUIZ,
+          );
+          if (quiz) {
+            await this.userService.ratingQuizFinished(user);
+            return quiz.id;
+          }
         } else {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_BACK,
@@ -110,6 +135,17 @@ export class EventService {
 
       if (event.event === EventEnum.COURSE_FINISHED) {
         return event.quizId;
+      }
+
+      if (event.event === EventEnum.APP_OPENED) {
+        /*
+        const quiz = await this.quizService.getByEventDescription(
+          EventDescriptionEnum.GO_TO_NEWS,
+        );
+        if (quiz) {
+          return quiz.id;
+        }
+        */
       }
     }
 
