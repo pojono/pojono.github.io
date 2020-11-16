@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { MainStatsPublicResponseDto } from './response/dto/main.stats.public.response';
 import { LessonService } from './service/lesson.service';
 import { ChallengeService } from './service/challenge.service';
 import { VideoAdviceService } from './service/video.advice.service';
@@ -45,6 +46,9 @@ export class MainService {
       user,
     );
     const stats: MainStatsResponseDto = await this.getMainStats(user);
+    const statsPublic: MainStatsPublicResponseDto = {
+      todayUsers: stats.todayUsers,
+    };
     const loginMotivation = {};
 
     const bestCourses: CourseWithStatsResponseDto[] = await this.courseService.getBestCourses(
@@ -60,6 +64,7 @@ export class MainService {
       topCourse,
       videoAdvice,
       stats,
+      statsPublic,
       loginMotivation,
       bestCourses,
       fastSupport,
@@ -68,6 +73,7 @@ export class MainService {
 
     if (user.phone) {
       delete response.loginMotivation;
+      delete response.statsPublic;
     } else {
       delete response.stats;
     }

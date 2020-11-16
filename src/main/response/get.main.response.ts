@@ -1,6 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import CustomResponse from '../../lib/custom.response';
 import { FastSupportResponseDto } from './dto/fast.support.response';
+import { MainStatsPublicResponseDto } from './dto/main.stats.public.response';
 import { MainStatsResponseDto } from './dto/main.stats.response';
 import { VideoAdviceResponseDto } from './dto/video.advice.response';
 import { CourseWithStatsResponseDto } from './dto/course.with.stats.response';
@@ -20,6 +21,13 @@ export class GetMainResponseDto {
     isArray: false,
   })
   public stats?: MainStatsResponseDto;
+
+  @ApiModelProperty({
+    type: MainStatsPublicResponseDto,
+    nullable: false,
+    isArray: false,
+  })
+  public statsPublic?: MainStatsPublicResponseDto;
 
   @ApiModelProperty({
     type: 'object',
