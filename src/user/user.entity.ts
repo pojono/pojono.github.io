@@ -34,6 +34,9 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   latestCourseId: number;
 
+  @Column({ nullable: true })
+  latestLessonId: number;
+
   @Column({ nullable: false })
   lastActivity: Date;
 
