@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isTrue } from '../../lib/is.true';
 import { EventRepository } from '../repository/event.repository';
 import { EventRequestDto } from '../dto/event.request.dto';
 import { Event } from '../entity/event.entity';
@@ -72,15 +73,10 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
-          /*
           if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
             await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
             return latestNewsQuiz.id;
           } else if (quiz) {
-            return quiz.id;
-          }
-          */
-          if (quiz) {
             return quiz.id;
           }
         }
@@ -96,15 +92,10 @@ export class EventService {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_HOME,
           );
-          /*
           if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
             await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
             return latestNewsQuiz.id;
           } else if (quiz) {
-            return quiz.id;
-          }
-          */
-          if (quiz) {
             return quiz.id;
           }
         }
@@ -114,14 +105,18 @@ export class EventService {
         const finishedLessons: number = await this.statisticLessonService.countFinishedByUserId(
           user.id,
         );
-        if (
-          finishedLessons > 0 &&
-          latestNewsQuiz &&
-          user.latestNewsQuizId !== latestNewsQuiz.id
+        if (finishedLessons === 1 && !user.pushesTime) {
+          const quiz = await this.quizService.getByEventDescription(
+            EventDescriptionEnum.GO_TO_PUSHES,
+          );
+          if (quiz) {
+            return quiz.id;
+          }
+        } else if (
+          finishedLessons > 1 &&
+          !user.ratingQuizFinished &&
+          isTrue(eventRequestDto.appHasRating)
         ) {
-          await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
-          return latestNewsQuiz.id;
-          /*
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_RATING_QUIZ,
           );
@@ -129,7 +124,6 @@ export class EventService {
             await this.userService.ratingQuizFinished(user);
             return quiz.id;
           }
-          */
         } else {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_BACK,
