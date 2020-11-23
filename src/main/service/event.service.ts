@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isTrue } from '../../lib/is.true';
 import { EventRepository } from '../repository/event.repository';
 import { EventRequestDto } from '../dto/event.request.dto';
 import { Event } from '../entity/event.entity';
@@ -10,7 +11,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
-import { isTrue } from '../../lib/is.true';
+// import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
