@@ -130,6 +130,7 @@ export class UserController {
     });
   }
 
+  /*
   @Put('/promocode')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -149,6 +150,7 @@ export class UserController {
     );
     return new PromocodeResponse(requestId, result);
   }
+  */
 
   @Put('/receipt')
   @UseGuards(AuthGuard())

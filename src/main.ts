@@ -108,6 +108,7 @@ async function bootstrap() {
       .addTag('quizzes', 'Диалоги в псевдо-мессенджере')
       .addTag('events', 'Ивенты о происходящем в приложении')
       .addTag('onboardings', 'Онбоардинги')
+      .addTag('promocodes', 'Промокоды')
       .addTag('root', 'Системная информация о сервере')
       .setDescription(
         'Server started at: ' +
