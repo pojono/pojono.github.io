@@ -12,6 +12,7 @@ import {
   PURCHASE_VALIDATION_ERROR,
   SMS_TOO_OFTEN,
   SUBSCRIPRITON_IS_EXPIRED,
+  TOKEN_ERROR,
 } from '../lib/errors';
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from './dto/sign.in.request.dto';
@@ -203,10 +204,28 @@ export class UserService {
     requestId: string,
     smsRequestDto: SmsRequestDto,
   ): Promise<boolean> {
+    const { token } = smsRequestDto;
+    let tokenUser;
+    if (token) {
+      try {
+        await this.jwtService.verifyAsync(token);
+        const tokenData: any = await this.jwtService.decode(token);
+        const tokenUserId = tokenData.id;
+        tokenUser = await this.userRepository.getUserById(tokenUserId);
+      } catch (err) {
+        ErrorIf.isExist(err, TOKEN_ERROR);
+      }
+    }
+
     let newUser: boolean = false;
     const { phone } = smsRequestDto;
 
     let user: User | undefined = await this.getUserByPhone(phone);
+
+    if (!user && tokenUser) {
+      user = await this.userRepository.attachPhoneToUser(tokenUser, phone);
+    }
+
     if (!user) {
       user = await this.createUserByPhone(phone);
       newUser = true;
@@ -309,6 +328,17 @@ export class UserService {
     return newUser;
   }
 
+  async getToken(requestId: string): Promise<{ token: string }> {
+    const user: User = await this.createTokenUser();
+    const payload: JwtPayload = { id: user.id };
+    const token = await this.jwtService.sign(payload);
+    await Telegram.sendMessage(
+      '🙋 New user with token. UserId: ' + user.id,
+      requestId,
+    );
+    return { token };
+  }
+
   isFewTime(user): boolean {
     const REPEAT_SMS_TIME_MS: number = config.get('sms.minRepeatTime');
     if (!user.lastCode) {
@@ -319,6 +349,10 @@ export class UserService {
 
   async createUserByPhone(phone: string): Promise<User> {
     return this.userRepository.createUser(phone);
+  }
+
+  async createTokenUser(): Promise<User> {
+    return this.userRepository.createTokenUser();
   }
 
   async initiateAuth(phone: string) {

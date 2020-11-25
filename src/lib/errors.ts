@@ -57,7 +57,12 @@ export const EXTENSION_ERROR: StandardRestApiError = StandardRestApiError.create
   'Extension error',
 );
 
-export const PROMOCODE_ALREADY_USED: StandardRestApiError = StandardRestApiError.create(
+export const TOKEN_ERROR: StandardRestApiError = StandardRestApiError.create(
   1012,
+  'Token error',
+);
+
+export const PROMOCODE_ALREADY_USED: StandardRestApiError = StandardRestApiError.create(
+  1013,
   'Promocode already used',
 );
