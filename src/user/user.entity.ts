@@ -1,19 +1,13 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as moment from 'moment';
 
 @Entity()
-@Unique(['phone'])
+// @Unique(['phone'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
   @Column({ nullable: true })
@@ -33,6 +27,9 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   latestCourseId: number;
+
+  @Column({ nullable: true })
+  latestLessonId: number;
 
   @Column({ nullable: false })
   lastActivity: Date;

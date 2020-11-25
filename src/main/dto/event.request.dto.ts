@@ -1,10 +1,10 @@
+import { ApiModelProperty } from '@nestjs/swagger';
 import {
   IsBooleanString,
   IsEnum,
   IsNumberString,
   IsOptional,
 } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
 import { EventEnum } from '../event.enum';
 
 export class EventRequestDto {
@@ -28,6 +28,7 @@ export class EventRequestDto {
       EventEnum.AFFIRMATION_SHOWED,
       EventEnum.AFFIRMATION_SAVED,
       EventEnum.AFFIRMATION_SHARED,
+      EventEnum.GOT_TEMPORARY_TOKEN,
     ],
   })
   event: EventEnum;

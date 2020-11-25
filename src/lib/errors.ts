@@ -56,3 +56,8 @@ export const EXTENSION_ERROR: StandardRestApiError = StandardRestApiError.create
   1011,
   'Extension error',
 );
+
+export const TOKEN_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1012,
+  'Token error',
+);

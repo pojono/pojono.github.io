@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isTrue } from '../../lib/is.true';
 import { EventRepository } from '../repository/event.repository';
 import { EventRequestDto } from '../dto/event.request.dto';
 import { Event } from '../entity/event.entity';
@@ -10,7 +11,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
-import { isTrue } from '../../lib/is.true';
+// import { isTrue } from '../../lib/is.true';
 
 @Injectable()
 export class EventService {
@@ -141,6 +142,18 @@ export class EventService {
         /*
         const quiz = await this.quizService.getByEventDescription(
           EventDescriptionEnum.GO_TO_NEWS,
+        );
+        if (quiz) {
+          return quiz.id;
+        }
+        */
+      }
+
+      if (event.event === EventEnum.GOT_TEMPORARY_TOKEN) {
+        return event.quizId;
+        /*
+        const quiz = await this.quizService.getByEventDescription(
+          EventDescriptionEnum.GO_TO_NOT_REGISTERED_QUIZ,
         );
         if (quiz) {
           return quiz.id;

@@ -13,6 +13,22 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
+  async getUserById(userId: number): Promise<User> {
+    return User.findOne(userId);
+  }
+
+  async attachPhoneToUser(user: User, phone: string): Promise<User> {
+    user.phone = phone;
+    return user.save();
+  }
+
+  async createTokenUser(): Promise<User> {
+    const user = new User();
+    user.lastActivity = moment().toDate();
+    await user.save();
+    return user;
+  }
+
   async updateSession(user: User, session: string): Promise<void> {
     user.session = session;
     await user.save();
@@ -101,6 +117,11 @@ export class UserRepository extends Repository<User> {
 
   async updateLatestCourse(user: User, courseId: number): Promise<void> {
     user.latestCourseId = courseId;
+    await user.save();
+  }
+
+  async updateLatestLesson(user: User, lessonId: number): Promise<void> {
+    user.latestLessonId = lessonId;
     await user.save();
   }
 
