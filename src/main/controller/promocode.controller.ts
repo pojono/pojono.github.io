@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Post,
   Query,
@@ -16,13 +17,12 @@ import { GetRequestId } from '../../lib/get.request.id.decorator';
 import { GetUser } from '../../user/get.user.decorator';
 import { User } from '../../user/user.entity';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
+import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
 import { PostPromocodeActivateResponse } from '../response/post.promocode.activate.response';
 import { PromocodeService } from '../service/promocode.service';
 
 @Controller('promocodes')
 @ApiUseTags('promocodes')
-@UseGuards(AuthGuard())
-@ApiBearerAuth()
 export class PromocodeController {
   constructor(private promocodeService: PromocodeService) {}
 
@@ -34,11 +34,24 @@ export class PromocodeController {
   })
   async activatePromocode(
     @GetRequestId() requestId,
-    @GetUser() user: User,
-    @Query(ValidationPipe)
+    @Body(ValidationPipe)
     promocodeActivateRequestDto: PromocodeActivateRequestDto,
   ): Promise<PostPromocodeActivateResponse> {
     await this.promocodeService.activatePromocode(promocodeActivateRequestDto);
+    return new PostPromocodeActivateResponse(requestId, null);
+  }
+
+  @Post('buy')
+  @ApiResponse({ status: 200, type: PostPromocodeActivateResponse })
+  @ApiOperation({
+    title: 'Покупка подписки',
+    deprecated: false,
+  })
+  async buyPromocode(
+    @GetRequestId() requestId,
+    @Body(ValidationPipe) promocodeBuyRequestDto: PromocodeBuyRequestDto,
+  ): Promise<PostPromocodeActivateResponse> {
+    await this.promocodeService.buyPromocode(promocodeBuyRequestDto, requestId);
     return new PostPromocodeActivateResponse(requestId, null);
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
+import { Promocode } from '../main/entity/promocode.entity';
 import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -500,6 +501,18 @@ export class UserService {
       // this.logger.log('Last Activity was so far. Session counter +1');
       await this.userRepository.incrementSession(user);
     }
+  }
+
+  async activatePromocode(user: User, promocode: Promocode): Promise<void> {
+    const endDate = moment(user.subscriptionEndDate).isValid()
+      ? moment.utc(user.subscriptionEndDate)
+      : moment.utc();
+    const newEndDate = endDate.add(promocode.months, 'months').toDate();
+    await this.userRepository.activatePromocode(
+      user,
+      newEndDate,
+      promocode.text,
+    );
   }
 
   async processPurchase(

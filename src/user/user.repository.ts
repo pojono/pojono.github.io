@@ -153,6 +153,18 @@ export class UserRepository extends Repository<User> {
     await user.save();
   }
 
+  async activatePromocode(
+    user: User,
+    subscriptionEndDate: Date,
+    promocode: string,
+  ): Promise<void> {
+    user.subscriptionEndDate = subscriptionEndDate;
+    user.subscriptionLastValidation = subscriptionEndDate;
+    user.promocode = promocode;
+    user.promocodeDate = moment.utc().toDate();
+    await user.save();
+  }
+
   async updateSubscription(user: User, subscriptionDto): Promise<User> {
     user.subscriptionPlatform = subscriptionDto.appType;
     user.subscriptionEnvironment = subscriptionDto.environment;

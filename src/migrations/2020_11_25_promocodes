@@ -1,0 +1,21 @@
+CREATE TABLE "promocode_history"
+("id" SERIAL NOT NULL,
+"userId" integer NOT NULL,
+"promocodeId" integer NOT NULL,
+"datetime" TIMESTAMP NOT NULL,
+CONSTRAINT "PK_126de026e67396497240558aa4c" PRIMARY KEY ("id"))
+
+CREATE TABLE "promocode"
+("id" SERIAL NOT NULL,
+"text" character varying,
+"amountTotal" integer NOT NULL DEFAULT 0,
+"amountLeft" integer NOT NULL DEFAULT 0,
+"months" integer,
+"price" integer,
+"phone" character varying,
+"email" character varying,
+"method" character varying,
+"isCorporate" boolean,
+"creationDate" TIMESTAMP,
+"paymentDate" TIMESTAMP,
+CONSTRAINT "PK_181c2c413dea9b3c725820e4dde" PRIMARY KEY ("id"))

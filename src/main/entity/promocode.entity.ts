@@ -8,10 +8,10 @@ export class Promocode extends BaseEntity {
   @Column({ nullable: true })
   text: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false, default: 0 })
   amountTotal: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false, default: 0 })
   amountLeft: number;
 
   @Column({ nullable: true })
