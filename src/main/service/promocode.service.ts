@@ -55,8 +55,10 @@ export class PromocodeService {
   async buyPromocode(
     promocodeBuyRequestDto: PromocodeBuyRequestDto,
     requestId: string,
-  ): Promise<void> {
-    await this.promocodeRepository.createPromocode(promocodeBuyRequestDto);
+  ): Promise<Promocode> {
+    const promocode: Promocode = await this.promocodeRepository.createPromocode(
+      promocodeBuyRequestDto,
+    );
 
     const resetLink = 'test';
     const html: string = await HtmlRender.renderGiftEmail({
@@ -83,6 +85,8 @@ export class PromocodeService {
       ],
     };
     await emailTransport.send(emailData);
+
+    return promocode;
   }
 
   async decrementAmount(promocode: Promocode) {
