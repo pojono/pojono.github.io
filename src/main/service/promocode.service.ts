@@ -5,7 +5,7 @@ import { EmailTransport } from '../../email/email.transport';
 import { HtmlRender } from '../../email/html.render';
 import { PdfRender } from '../../email/pdf.render';
 import { ErrorIf } from '../../lib/error.if';
-import { OBJECT_NOT_FOUND, PROMOCODE_ALREADY_USED } from '../../lib/errors';
+import { PROMOCODE_ALREADY_USED, PROMOCODE_NOT_FOUND } from '../../lib/errors';
 import { User } from '../../user/user.entity';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
@@ -31,7 +31,7 @@ export class PromocodeService {
     const promocode: Promocode = await this.promocodeRepository.findByText(
       promocodeActivateRequestDto.promocode,
     );
-    ErrorIf.isEmpty(promocode, OBJECT_NOT_FOUND);
+    ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
 
     let user: User = await this.userService.getUserByPhone(
       promocodeActivateRequestDto.phone,

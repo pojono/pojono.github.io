@@ -66,3 +66,8 @@ export const PROMOCODE_ALREADY_USED: StandardRestApiError = StandardRestApiError
   1013,
   'Promocode already used',
 );
+
+export const PROMOCODE_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1014,
+  'Promocode not found',
+);
