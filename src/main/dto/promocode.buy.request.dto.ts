@@ -8,10 +8,12 @@ import {
   Min,
   IsNumber,
   IsBoolean,
+  IsOptional,
 } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class PromocodeBuyRequestDto {
+  @IsOptional()
   @IsString()
   @MinLength(6)
   @MaxLength(20)
@@ -20,7 +22,7 @@ export class PromocodeBuyRequestDto {
     example: '12345678',
     required: true,
   })
-  phone: string;
+  phone?: string;
 
   @IsEmail()
   @ApiModelProperty({

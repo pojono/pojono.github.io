@@ -8,12 +8,12 @@ import * as moment from 'moment';
 export class PromocodeRepository extends Repository<PromocodeHistory> {
   async createPromocode(data: PromocodeBuyRequestDto): Promise<Promocode> {
     const promocode = new Promocode();
-    promocode.text = data.text;
+    promocode.text = data.text ? data.text : null;
     promocode.amountTotal = data.amountTotal;
     promocode.amountLeft = data.amountTotal;
     promocode.months = data.months;
     promocode.price = data.price;
-    promocode.phone = data.phone;
+    promocode.phone = data.phone ? data.phone : null;
     promocode.email = data.email;
     promocode.method = data.method;
     promocode.isCorporate = data.isCorporate;
