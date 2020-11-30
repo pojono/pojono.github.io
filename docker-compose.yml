@@ -2,7 +2,7 @@ version: '3'
 
 services:
   api:
-    image: prostoapp_api:${TAG}
+    image: 708752839087.dkr.ecr.eu-west-1.amazonaws.com/prostoapp_api:${TAG}
     container_name: prostoapp_api
     restart: always
     environment:
