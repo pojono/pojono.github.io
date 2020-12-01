@@ -16,7 +16,7 @@ pipeline {
 
                      def branches = getBranches()
                      INPUT_PARAMS = input id: "Branch_name", message: "Select a tag", ok: "select",
-                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'staging', description: 'Config environment')]
+                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'staging\nproduction', description: 'Config environment')]
                      echo("${INPUT_PARAMS}")
                  }
             }
@@ -35,15 +35,17 @@ pipeline {
             }
         }
 
-        stage("start22") {
+
+        stage('write') {
             steps {
-                sh "ENV=${INPUT_PARAMS.ENV} TAG=${INPUT_PARAMS.IMAGE_NAME} docker-compose pull"
+                writeFile file: ".env", text: "ENV=${INPUT_PARAMS.ENV} \r\n TAG=${INPUT_PARAMS.IMAGE_NAME}"
+                sh "cat .env"
             }
         }
 
-        stage("start") {
+        stage('ansible') {
             steps {
-                sh "ENV=${INPUT_PARAMS.ENV} TAG=${INPUT_PARAMS.IMAGE_NAME} docker-compose up -d"
+                sh "cd ansible && ansible-playbook -vv -u ubuntu playbook.yml -i hosts --tags \"deploy,rest\" --extra-vars \"NODE_ENV=${INPUT_PARAMS.NODE_ENV}\""
             }
         }
 
