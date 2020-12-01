@@ -16,7 +16,7 @@ services:
       - traefik.enable=true
       - traefik.backend=prostoapp_api
       - traefik.docker.network=web
-      - traefik.frontend.rule=Host:staging.dev.prostoapp.com
+      - traefik.frontend.rule=Host:${ENV}.prostoapp.life
       - traefik.port=80
 
 networks:
