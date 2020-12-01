@@ -16,7 +16,7 @@ pipeline {
 
                      def branches = getBranches()
                      INPUT_PARAMS = input id: "Branch_name", message: "Select a tag", ok: "select",
-                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'staging\nproduction', description: 'Config environment')]
+                         parameters: [choice(name: "IMAGE_NAME", choices: branches, description: "Docker registry images"),choice(name: "BRANCH_NAME", choices: gitBranches, description: "Docker-compose branch"),choice(name: 'ENV', choices: 'production', description: 'Config environment')]
                      echo("${INPUT_PARAMS}")
                  }
             }
