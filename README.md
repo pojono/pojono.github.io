@@ -121,6 +121,4 @@ chmod +x terraform
 sudo mv terraform /usr/local/bin/
 terraform --version
 
-docker build -t prostoapp_api .
-docker stop prostoapp_api && docker rm prostoapp_api
-docker run --name prostoapp_api -p 3002:3001 prostoapp_api:latest
+docker build -t prostoapp_api . && docker stop prostoapp_api && docker rm prostoapp_api && docker run --name prostoapp_api -p 3002:3001 prostoapp_api:latest

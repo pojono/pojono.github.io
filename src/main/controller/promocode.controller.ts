@@ -3,14 +3,20 @@ import {
   Controller,
   Post,
   Query,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   ApiUseTags,
   ApiResponse,
   ApiOperation,
   ApiBearerAuth,
+  ApiConsumes,
+  ApiImplicitFile,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { GetRequestId } from '../../lib/get.request.id.decorator';
@@ -22,11 +28,38 @@ import { Promocode } from '../entity/promocode.entity';
 import { PostPromocodeActivateResponse } from '../response/post.promocode.activate.response';
 import { PostPromocodeBuyResponse } from '../response/post.promocode.buy.response';
 import { PromocodeService } from '../service/promocode.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('promocodes')
 @ApiUseTags('promocodes')
 export class PromocodeController {
   constructor(private promocodeService: PromocodeService) {}
+
+  @Post('/')
+  @ApiOperation({ title: 'Upload template certificate' })
+  @ApiConsumes('multipart/form-data')
+  @ApiImplicitFile({
+    name: 'file',
+    required: true,
+    description: 'Upload certificate template',
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadPhoto(
+    @GetUser() user: User,
+    @UploadedFile() file,
+    @Res() res: Response,
+  ): Promise<void> {
+    const fs = require('fs').promises;
+    const path = require('path');
+    const filepath: string = path.join(
+      __dirname,
+      '../../email/template/gift.certificate.ejs',
+    );
+    await fs.writeFile(filepath, file.buffer);
+    const data: Buffer = await this.promocodeService.generateCertificate();
+    res.attachment('certificate.pdf');
+    res.send(data);
+  }
 
   @Post('activate')
   @ApiResponse({ status: 200, type: PostPromocodeActivateResponse })

@@ -89,6 +89,13 @@ export class PromocodeService {
     return promocode;
   }
 
+  async generateCertificate(): Promise<Buffer> {
+    const pdfHtml: string = await HtmlRender.renderGiftCertificate({
+      resetLink: '',
+    });
+    return PdfRender.renderPdf(pdfHtml);
+  }
+
   async decrementAmount(promocode: Promocode) {
     ErrorIf.isTrue(promocode.amountLeft <= 0, PROMOCODE_ALREADY_USED);
     await this.promocodeRepository.decrementAmount(promocode);
