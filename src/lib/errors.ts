@@ -71,3 +71,8 @@ export const PROMOCODE_NOT_FOUND: StandardRestApiError = StandardRestApiError.cr
   1014,
   'Promocode not found',
 );
+
+export const PROMOCODE_PAYMENT_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1015,
+  'Promocode payment ot found',
+);

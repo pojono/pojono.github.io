@@ -5,7 +5,11 @@ import { EmailTransport } from '../../email/email.transport';
 import { HtmlRender } from '../../email/html.render';
 import { PdfRender } from '../../email/pdf.render';
 import { ErrorIf } from '../../lib/error.if';
-import { PROMOCODE_ALREADY_USED, PROMOCODE_NOT_FOUND } from '../../lib/errors';
+import {
+  PROMOCODE_ALREADY_USED,
+  PROMOCODE_NOT_FOUND,
+  PROMOCODE_PAYMENT_NOT_FOUND,
+} from '../../lib/errors';
 import { User } from '../../user/user.entity';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
@@ -99,6 +103,7 @@ export class PromocodeService {
       text: promocode.text,
       months: promocode.months,
     });
+    ErrorIf.isTrue(Math.random() > 0.5, PROMOCODE_PAYMENT_NOT_FOUND);
     return PdfRender.renderPdf(pdfHtml);
   }
 
