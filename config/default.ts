@@ -54,6 +54,6 @@ module.exports = {
     trial: ['DEFAULT_TRIAL_CODE1', 'DEFAULT_TRIAL_CODE2'],
   },
   email: {
-    source: 'noreplay@traxi-trailer.de',
+    source: 'noreply@prostoapp.ru',
   },
 };
