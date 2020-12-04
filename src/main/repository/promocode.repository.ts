@@ -5,7 +5,7 @@ import { PromocodeHistory } from '../entity/promocode.history.entity';
 import * as moment from 'moment';
 
 @EntityRepository(Promocode)
-export class PromocodeRepository extends Repository<PromocodeHistory> {
+export class PromocodeRepository extends Repository<Promocode> {
   async createPromocode(data: PromocodeBuyRequestDto): Promise<Promocode> {
     const promocode = new Promocode();
     promocode.text = data.text ? data.text : null;

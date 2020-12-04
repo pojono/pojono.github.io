@@ -1,11 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
-  Query,
   Res,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,14 +14,13 @@ import {
   ApiUseTags,
   ApiResponse,
   ApiOperation,
-  ApiBearerAuth,
   ApiConsumes,
   ApiImplicitFile,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { GetRequestId } from '../../lib/get.request.id.decorator';
 import { GetUser } from '../../user/get.user.decorator';
 import { User } from '../../user/user.entity';
+import { IdRequestDto } from '../dto/id.request.dto';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
 import { Promocode } from '../entity/promocode.entity';
@@ -48,6 +47,7 @@ export class PromocodeController {
     @GetUser() user: User,
     @UploadedFile() file,
     @Res() res: Response,
+    @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<void> {
     const fs = require('fs').promises;
     const path = require('path');
@@ -56,7 +56,9 @@ export class PromocodeController {
       '../../email/template/gift.certificate.ejs',
     );
     await fs.writeFile(filepath, file.buffer);
-    const data: Buffer = await this.promocodeService.generateCertificate();
+    const data: Buffer = await this.promocodeService.generateCertificate(
+      idRequestDto.id,
+    );
     res.attachment('certificate.pdf');
     res.send(data);
   }
@@ -91,5 +93,19 @@ export class PromocodeController {
       requestId,
     );
     return new PostPromocodeBuyResponse(requestId, promocode);
+  }
+
+  @Get('/:id/certificate')
+  @ApiOperation({ title: 'Скачать сертификат', deprecated: false })
+  async getLesson(
+    @GetRequestId() requestId,
+    @Param(ValidationPipe) idRequestDto: IdRequestDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: Buffer = await this.promocodeService.generateCertificate(
+      idRequestDto.id,
+    );
+    res.attachment('certificate.pdf');
+    res.send(data);
   }
 }

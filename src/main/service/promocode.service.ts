@@ -21,6 +21,8 @@ export class PromocodeService {
   constructor(
     @InjectRepository(PromocodeRepository)
     private promocodeRepository: PromocodeRepository,
+
+    @InjectRepository(PromocodeHistoryRepository)
     private promocodeHistoryRepository: PromocodeHistoryRepository,
     private userService: UserService,
   ) {}
@@ -66,7 +68,8 @@ export class PromocodeService {
     });
 
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
-      resetLink,
+      text: promocode.text,
+      months: promocode.months,
     });
     const content: Buffer = await PdfRender.renderPdf(pdfHtml);
 
@@ -89,9 +92,12 @@ export class PromocodeService {
     return promocode;
   }
 
-  async generateCertificate(): Promise<Buffer> {
+  async generateCertificate(id: number): Promise<Buffer> {
+    const promocode: Promocode = await this.promocodeRepository.findOne(id);
+    ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
-      resetLink: '',
+      text: promocode.text,
+      months: promocode.months,
     });
     return PdfRender.renderPdf(pdfHtml);
   }
