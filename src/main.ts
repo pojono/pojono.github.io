@@ -140,6 +140,7 @@ async function bootstrap() {
     ' #' +
     process.env.TAG;
   await Telegram.sendMessage(startMessage);
+  console.log('Swagger: http://localhost:3001/swagger'); // tslint:disable-line
 }
 
 (async () => {

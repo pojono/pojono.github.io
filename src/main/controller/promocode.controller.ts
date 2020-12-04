@@ -108,4 +108,27 @@ export class PromocodeController {
     res.attachment('certificate.pdf');
     res.send(data);
   }
+
+  @Get('/:id/certificate-download')
+  @ApiOperation({
+    title: 'Скачать сертификат другим методом',
+    deprecated: false,
+  })
+  async getCertificate(
+    @GetRequestId() requestId,
+    @Param(ValidationPipe) idRequestDto: IdRequestDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: Buffer = await this.promocodeService.generateCertificate(
+      idRequestDto.id,
+    );
+    res.status(200);
+    res.set({
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'application/pdf',
+      'Content-Length': data.length,
+      'Content-Disposition': 'attachment; filename=certificate.pdf',
+    });
+    res.send(data);
+  }
 }
