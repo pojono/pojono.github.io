@@ -9,6 +9,9 @@ module.exports = {
       userPoolId: 'eu-west-1_65Op52Obc',
     },
     bucketName: 'prosto-photo',
+    // accessKeyId: 'AKIA5V2FOLAQOHKKGA6A',
+    // secretAccessKey: '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',
+    // region: 'eu-central-1',
     accessKeyId: 'AKIA2KBHWCGXUEKU3YH2',
     secretAccessKey: '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',
     localSimulation: false,
@@ -30,7 +33,7 @@ module.exports = {
     */
     database: 'dev_ivan',
     synchronize: true,
-    migrationsRun: true,
+    migrationsRun: false,
     logging: true,
   },
   iap: {
