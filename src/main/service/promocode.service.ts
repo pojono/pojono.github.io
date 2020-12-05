@@ -104,8 +104,9 @@ export class PromocodeService {
     }
 
     if (promocodeBuyRequestDto.isCorporate) {
-      promocodeBuyRequestDto.text =
-        promocodeBuyRequestDto.text + randomInteger(1000, 9999);
+      promocodeBuyRequestDto.text = promocodeBuyRequestDto.text
+        ? promocodeBuyRequestDto.text + randomInteger(1000, 9999).toString()
+        : randomString(6);
     } else {
       promocodeBuyRequestDto.text = randomString(6);
     }
