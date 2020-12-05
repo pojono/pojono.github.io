@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -23,6 +24,7 @@ import { User } from '../../user/user.entity';
 import { IdRequestDto } from '../dto/id.request.dto';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
+import { PromocodeTextDto } from '../dto/promocode.text.dto';
 import { Promocode } from '../entity/promocode.entity';
 import { PostPromocodeActivateResponse } from '../response/post.promocode.activate.response';
 import { PostPromocodeBuyResponse } from '../response/post.promocode.buy.response';
@@ -101,6 +103,7 @@ export class PromocodeController {
     @GetRequestId() requestId,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
     @Res() res: Response,
+    @Query(ValidationPipe) promocodeTextDto: PromocodeTextDto,
   ): Promise<void> {
     const data: Buffer = await this.promocodeService.generateCertificate(
       idRequestDto.id,
@@ -109,6 +112,7 @@ export class PromocodeController {
     res.send(data);
   }
 
+  /*
   @Get('/:id/certificate-download')
   @ApiOperation({
     title: 'Скачать сертификат другим методом',
@@ -118,6 +122,7 @@ export class PromocodeController {
     @GetRequestId() requestId,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
     @Res() res: Response,
+    @Query(ValidationPipe) promocodeTextDto: PromocodeTextDto,
   ): Promise<void> {
     const data: Buffer = await this.promocodeService.generateCertificate(
       idRequestDto.id,
@@ -131,4 +136,5 @@ export class PromocodeController {
     });
     res.send(data);
   }
+  */
 }

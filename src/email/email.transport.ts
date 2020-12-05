@@ -24,7 +24,7 @@ export class EmailTransport {
 
     try {
       const info: SentMessageInfo = await transporter.sendMail({
-        from: config.get('email.source'),
+        from: `Prosto App <${config.get('email.source')}>`,
         to: emailData.recipientEmails,
         subject: emailData.subject,
         text: emailData.payload,

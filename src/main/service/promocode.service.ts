@@ -79,7 +79,7 @@ export class PromocodeService {
 
     const emailData: EmailSend = {
       recipientEmails: [promocodeBuyRequestDto.email],
-      subject: 'Поздравляю!',
+      subject: 'Подарочный сертификат на Prosto App',
       payload: 'Поздравительное письмо',
       html,
       requestId,
