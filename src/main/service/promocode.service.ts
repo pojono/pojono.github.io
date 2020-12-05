@@ -62,6 +62,12 @@ export class PromocodeService {
 
   async webhook(promocodeWebhookDto: PromocodeWebhookDto): Promise<void> {
     console.log(promocodeWebhookDto); // tslint:disable-line
+    const promocodeId: number = Number(promocodeWebhookDto.OrderId);
+    console.log(promocodeId); // tslint:disable-line
+    const promocode: Promocode = await this.promocodeRepository.findOne(
+      promocodeId,
+    );
+    console.log(promocode); // tslint:disable-line
   }
 
   async buyPromocode(
