@@ -4,8 +4,8 @@ import { ApiModelProperty } from '@nestjs/swagger';
 export class PromocodeTextDto {
   @IsString()
   @ApiModelProperty({
-    type: 'number',
-    example: 1,
+    type: 'string',
+    example: 'BLACKFRIDAY',
     required: true,
   })
   text: string;

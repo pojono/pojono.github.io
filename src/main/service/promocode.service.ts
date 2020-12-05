@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as crypto from 'crypto';
 import { EmailSend } from '../../email/email.send.interface';
 import { EmailTransport } from '../../email/email.transport';
 import { HtmlRender } from '../../email/html.render';
@@ -70,6 +71,18 @@ export class PromocodeService {
     const html: string = await HtmlRender.renderGiftEmail({
       resetLink,
     });
+
+    if (promocodeBuyRequestDto.isCorporate) {
+      promocodeBuyRequestDto.text = promocodeBuyRequestDto.text + '1234';
+    } else {
+      promocodeBuyRequestDto.text = crypto
+        .randomBytes(6)
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/\=/g, '_')
+        .toUpperCase();
+    }
 
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
       text: promocode.text,

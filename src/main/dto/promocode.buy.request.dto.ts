@@ -78,6 +78,7 @@ export class PromocodeBuyRequestDto {
   })
   method: string;
 
+  @IsOptional()
   @IsString()
   @ApiModelProperty({
     type: 'string',
