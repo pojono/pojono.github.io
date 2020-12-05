@@ -1,16 +1,17 @@
-import {
-  IsString,
-  MaxLength,
-  MinLength,
-  Length,
-  IsEmail,
-  Max,
-  Min,
-  IsNumber,
-  IsBoolean,
-  IsOptional,
-} from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  Max,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
+import { PaymentMethodEnum } from '../payment.method.enum';
 
 export class PromocodeBuyRequestDto {
   @IsOptional()
@@ -72,11 +73,12 @@ export class PromocodeBuyRequestDto {
 
   @IsString()
   @ApiModelProperty({
-    type: 'string',
-    example: 'card',
+    type: PaymentMethodEnum,
+    example: PaymentMethodEnum.CARD,
     required: true,
+    enum: [PaymentMethodEnum.CARD, PaymentMethodEnum.BILL],
   })
-  method: string;
+  method: PaymentMethodEnum;
 
   @IsOptional()
   @IsString()

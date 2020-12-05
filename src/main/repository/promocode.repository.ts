@@ -33,4 +33,9 @@ export class PromocodeRepository extends Repository<Promocode> {
     promocode.amountLeft = promocode.amountLeft - 1;
     await promocode.save();
   }
+
+  async confirmPayment(promocode: Promocode): Promise<void> {
+    promocode.paymentDate = moment.utc().toDate();
+    await promocode.save();
+  }
 }

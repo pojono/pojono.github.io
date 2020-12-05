@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as crypto from 'crypto';
 import { EmailSend } from '../../email/email.send.interface';
 import { EmailTransport } from '../../email/email.transport';
 import { HtmlRender } from '../../email/html.render';
@@ -11,14 +10,17 @@ import {
   PROMOCODE_NOT_FOUND,
   PROMOCODE_PAYMENT_NOT_FOUND,
 } from '../../lib/errors';
+import { PaymentStatus } from '../../lib/payment.status';
+import { generateSignature } from '../../lib/signature';
 import { User } from '../../user/user.entity';
+import { UserService } from '../../user/user.service';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
 import { PromocodeWebhookDto } from '../dto/promocode.webhook.dto';
 import { Promocode } from '../entity/promocode.entity';
+import { PaymentMethodEnum } from '../payment.method.enum';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
-import { UserService } from '../../user/user.service';
 
 const emailTransport = new EmailTransport();
 
@@ -61,13 +63,24 @@ export class PromocodeService {
   }
 
   async webhook(promocodeWebhookDto: PromocodeWebhookDto): Promise<void> {
-    console.log(promocodeWebhookDto); // tslint:disable-line
     const promocodeId: number = Number(promocodeWebhookDto.OrderId);
-    console.log(promocodeId); // tslint:disable-line
     const promocode: Promocode = await this.promocodeRepository.findOne(
       promocodeId,
     );
-    console.log(promocode); // tslint:disable-line
+
+    const payload = promocodeWebhookDto;
+    const password = 'cu2hvbn0ku9ng1he';
+    const checkToken = generateSignature({
+      payload,
+      password,
+    });
+
+    console.log('1 ' + checkToken); // tslint:disable-line
+    console.log('2 ' + promocodeWebhookDto.Token); // tslint:disable-line
+
+    if (promocodeWebhookDto.Status === PaymentStatus.CONFIRMED) {
+      await this.promocodeRepository.confirmPayment(promocode);
+    }
   }
 
   async buyPromocode(
@@ -126,7 +139,10 @@ export class PromocodeService {
         },
       ],
     };
-    await emailTransport.send(emailData);
+
+    if (promocodeBuyRequestDto.method === PaymentMethodEnum.CARD) {
+      await emailTransport.send(emailData);
+    }
 
     return promocode;
   }
