@@ -103,7 +103,8 @@ export class PromocodeService {
       text: promocode.text,
       months: promocode.months,
     });
-    ErrorIf.isTrue(Math.random() > 0.5, PROMOCODE_PAYMENT_NOT_FOUND);
+    ErrorIf.isExist(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
+    // ErrorIf.isTrue(Math.random() > 0.5, PROMOCODE_PAYMENT_NOT_FOUND);
     return PdfRender.renderPdf(pdfHtml);
   }
 
