@@ -68,17 +68,22 @@ export class PromocodeService {
       return Math.floor(rand);
     }
 
+    function randomString(length) {
+      const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += randomChars.charAt(
+          Math.floor(Math.random() * randomChars.length),
+        );
+      }
+      return result;
+    }
+
     if (promocodeBuyRequestDto.isCorporate) {
       promocodeBuyRequestDto.text =
         promocodeBuyRequestDto.text + randomInteger(1000, 9999);
     } else {
-      promocodeBuyRequestDto.text = crypto
-        .randomBytes(6)
-        .toString('base64')
-        .replace(/\+/g, 'A')
-        .replace(/\//g, 'B')
-        .replace(/\=/g, 'C')
-        .toUpperCase();
+      promocodeBuyRequestDto.text = randomString(6);
     }
 
     const promocode: Promocode = await this.promocodeRepository.createPromocode(
