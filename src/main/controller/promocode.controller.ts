@@ -99,6 +99,24 @@ export class PromocodeController {
     res.status(200).send('OK');
   }
 
+  @Post('check')
+  @ApiResponse({ status: 200 })
+  @ApiOperation({
+    title: 'Вебхук',
+    deprecated: false,
+  })
+  async webhookCheck(
+    @GetRequestId() requestId,
+    // @Body(ValidationPipe)
+    // promocodeWebhookDto: PromocodeWebhookDto,
+    @Res() res: Response,
+  ): Promise<any> {
+    // const response: any = await this.promocodeService.webhook(
+    //   promocodeWebhookDto,
+    // );
+    res.status(200).send('OK');
+  }
+
   @Post('buy')
   @ApiResponse({ status: 200, type: PostPromocodeBuyResponse })
   @ApiOperation({
