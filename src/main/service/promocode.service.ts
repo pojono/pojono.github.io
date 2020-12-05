@@ -21,6 +21,7 @@ import { Promocode } from '../entity/promocode.entity';
 import { PaymentMethodEnum } from '../payment.method.enum';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
+import * as config from 'config';
 
 const emailTransport = new EmailTransport();
 
@@ -126,25 +127,39 @@ export class PromocodeService {
     });
     const content: Buffer = await PdfRender.renderPdf(pdfHtml);
 
-    const emailData: EmailSend = {
-      recipientEmails: [promocodeBuyRequestDto.email],
-      subject: 'Подарочный сертификат на Prosto App',
-      payload: 'Поздравительное письмо',
-      html,
-      requestId,
-      userId: 0,
-      attachments: [
-        {
-          content,
-          filename: 'certificate.pdf',
-        },
-      ],
-    };
-
+    let emailData: EmailSend;
     if (promocodeBuyRequestDto.method === PaymentMethodEnum.CARD) {
-      await emailTransport.send(emailData);
+      emailData = {
+        recipientEmails: [promocodeBuyRequestDto.email],
+        subject: 'Подарочный сертификат на Prosto App',
+        payload: 'Поздравительное письмо',
+        html,
+        requestId,
+        userId: 0,
+        attachments: [
+          {
+            content,
+            filename: 'certificate.pdf',
+          },
+        ],
+      };
+    } else {
+      emailData = {
+        recipientEmails: [config.get('managerEmail')],
+        subject: 'Новая заявка на корпоративную подписку',
+        payload:
+          `Вам заявка на подписку c оплатой по счету на ${promocodeBuyRequestDto.months} месяцев.` +
+          `от ${promocodeBuyRequestDto.email} ${promocodeBuyRequestDto.phone}.` +
+          `Желаемый промокод: ${
+            promocodeBuyRequestDto.text
+              ? promocodeBuyRequestDto.text
+              : 'отсутствует'
+          }`,
+        requestId,
+        userId: 0,
+      };
     }
-
+    await emailTransport.send(emailData);
     return promocode;
   }
 

@@ -4,7 +4,7 @@ export interface EmailSend {
   recipientEmails: string[];
   subject: string;
   payload: string;
-  html: string;
+  html?: string;
   requestId: string;
   userId: number;
   attachments?: EmailAttachment[];

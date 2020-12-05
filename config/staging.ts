@@ -43,6 +43,7 @@ module.exports = {
     enable: true,
   },
   load_testing: false,
+  managerEmail: 'ekaterina.kurmanaeva@citronium.com',
   promocode: {
     discount: ['STAGING_DISCOUNT_CODE1', 'STAGING_DISCOUNT_CODE2'],
     trial: ['STAGING_TRIAL_CODE1', 'STAGING_TRIAL_CODE2'],

@@ -42,6 +42,7 @@ module.exports = {
     testMode: false,
     debugLogs: false,
   },
+  managerEmail: 'pr@prostoapp.ru',
   promocode: {
     discount: [
       /*
