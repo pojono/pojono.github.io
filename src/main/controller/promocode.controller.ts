@@ -25,6 +25,7 @@ import { IdRequestDto } from '../dto/id.request.dto';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
 import { PromocodeTextDto } from '../dto/promocode.text.dto';
+import { PromocodeWebhookDto } from '../dto/promocode.webhook.dto';
 import { Promocode } from '../entity/promocode.entity';
 import { PostPromocodeActivateResponse } from '../response/post.promocode.activate.response';
 import { PostPromocodeBuyResponse } from '../response/post.promocode.buy.response';
@@ -78,6 +79,24 @@ export class PromocodeController {
   ): Promise<PostPromocodeActivateResponse> {
     await this.promocodeService.activatePromocode(promocodeActivateRequestDto);
     return new PostPromocodeActivateResponse(requestId, null);
+  }
+
+  @Post('webhook')
+  @ApiResponse({ status: 200 })
+  @ApiOperation({
+    title: 'Вебхук',
+    deprecated: false,
+  })
+  async webhook(
+    @GetRequestId() requestId,
+    @Body(ValidationPipe)
+    promocodeWebhookDto: PromocodeWebhookDto,
+    @Res() res: Response,
+  ): Promise<any> {
+    const response: any = await this.promocodeService.webhook(
+      promocodeWebhookDto,
+    );
+    res.status(200).send('OK');
   }
 
   @Post('buy')

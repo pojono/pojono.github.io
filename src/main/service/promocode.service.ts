@@ -14,6 +14,7 @@ import {
 import { User } from '../../user/user.entity';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
+import { PromocodeWebhookDto } from '../dto/promocode.webhook.dto';
 import { Promocode } from '../entity/promocode.entity';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
@@ -57,6 +58,10 @@ export class PromocodeService {
     await this.decrementAmount(promocode);
     await this.userService.activatePromocode(user, promocode);
     // что-то поменять с квизами
+  }
+
+  async webhook(promocodeWebhookDto: PromocodeWebhookDto): Promise<void> {
+    console.log(promocodeWebhookDto); // tslint:disable-line
   }
 
   async buyPromocode(
