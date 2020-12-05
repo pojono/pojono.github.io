@@ -148,13 +148,14 @@ export class PromocodeService {
         recipientEmails: [config.get('managerEmail')],
         subject: 'Новая заявка на корпоративную подписку',
         payload:
-          `Вам заявка на подписку c оплатой по счету на ${promocodeBuyRequestDto.months} месяцев.` +
-          `от ${promocodeBuyRequestDto.email} ${promocodeBuyRequestDto.phone}.` +
+          `Вам заявка на подписку c оплатой по счету на ${promocodeBuyRequestDto.months} месяцев.\n` +
+          `От ${promocodeBuyRequestDto.email} ${promocodeBuyRequestDto.phone}.\n` +
           `Желаемый промокод: ${
             promocodeBuyRequestDto.text
               ? promocodeBuyRequestDto.text
               : 'отсутствует'
-          }`,
+          }` +
+          `\nКоличество подписок: ${promocodeBuyRequestDto.amountTotal}`,
         requestId,
         userId: 0,
       };
