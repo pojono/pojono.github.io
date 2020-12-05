@@ -80,6 +80,7 @@ export class PromocodeBuyRequestDto {
 
   @IsOptional()
   @IsString()
+  @Length(4, 16)
   @ApiModelProperty({
     type: 'string',
     example: 'mypromo',

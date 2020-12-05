@@ -63,6 +63,24 @@ export class PromocodeService {
     promocodeBuyRequestDto: PromocodeBuyRequestDto,
     requestId: string,
   ): Promise<Promocode> {
+    function randomInteger(min, max) {
+      const rand = min + Math.random() * (max + 1 - min);
+      return Math.floor(rand);
+    }
+
+    if (promocodeBuyRequestDto.isCorporate) {
+      promocodeBuyRequestDto.text =
+        promocodeBuyRequestDto.text + randomInteger(1000, 9999);
+    } else {
+      promocodeBuyRequestDto.text = crypto
+        .randomBytes(6)
+        .toString('base64')
+        .replace(/\+/g, 'A')
+        .replace(/\//g, 'B')
+        .replace(/\=/g, 'C')
+        .toUpperCase();
+    }
+
     const promocode: Promocode = await this.promocodeRepository.createPromocode(
       promocodeBuyRequestDto,
     );
@@ -71,18 +89,6 @@ export class PromocodeService {
     const html: string = await HtmlRender.renderGiftEmail({
       resetLink,
     });
-
-    if (promocodeBuyRequestDto.isCorporate) {
-      promocodeBuyRequestDto.text = promocodeBuyRequestDto.text + '1234';
-    } else {
-      promocodeBuyRequestDto.text = crypto
-        .randomBytes(6)
-        .toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/\=/g, '_')
-        .toUpperCase();
-    }
 
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
       text: promocode.text,
