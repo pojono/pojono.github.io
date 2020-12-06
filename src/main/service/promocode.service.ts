@@ -10,6 +10,7 @@ import {
   PROMOCODE_NOT_FOUND,
   PROMOCODE_PAYMENT_NOT_FOUND,
 } from '../../lib/errors';
+import { logger } from '../../lib/logger';
 import { PaymentStatus } from '../../lib/payment.status';
 import { generateSignature } from '../../lib/signature';
 import { User } from '../../user/user.entity';
@@ -76,6 +77,10 @@ export class PromocodeService {
       promocodeId,
     );
 
+    if (!promocode) {
+      logger(requestId).log('Promocode not found!'); // tslint:disable-line
+    }
+
     const payload = promocodeWebhookDto;
     const password: string = config.get('terminalPassword');
     const checkToken = generateSignature({
@@ -83,11 +88,11 @@ export class PromocodeService {
       password,
     });
 
-    console.log('1 ' + checkToken); // tslint:disable-line
-    console.log('2 ' + promocodeWebhookDto.Token); // tslint:disable-line
+    logger(requestId).log('1 ' + checkToken);
+    logger(requestId).log('2 ' + promocodeWebhookDto.Token); // tslint:disable-line
 
     if (checkToken !== promocodeWebhookDto.Token) {
-      console.log('Check failed!'); // tslint:disable-line
+      logger(requestId).log('Check failed!'); // tslint:disable-line
       return;
     }
 
