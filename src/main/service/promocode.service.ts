@@ -63,7 +63,10 @@ export class PromocodeService {
     // что-то поменять с квизами
   }
 
-  async webhook(promocodeWebhookDto: PromocodeWebhookDto): Promise<void> {
+  async webhook(
+    requestId: string,
+    promocodeWebhookDto: PromocodeWebhookDto,
+  ): Promise<void> {
     if (!promocodeWebhookDto.OrderId) {
       return;
     }
@@ -73,7 +76,7 @@ export class PromocodeService {
     );
 
     const payload = promocodeWebhookDto;
-    const password = 'cu2hvbn0ku9ng1he';
+    const password: string = config.get('terminalPassword');
     const checkToken = generateSignature({
       payload,
       password,
@@ -82,8 +85,34 @@ export class PromocodeService {
     console.log('1 ' + checkToken); // tslint:disable-line
     console.log('2 ' + promocodeWebhookDto.Token); // tslint:disable-line
 
-    if (promocodeWebhookDto.Status === PaymentStatus.CONFIRMED) {
+    if (promocode && promocodeWebhookDto.Status === PaymentStatus.CONFIRMED) {
       await this.promocodeRepository.confirmPayment(promocode);
+
+      const resetLink = 'test';
+      const html: string = await HtmlRender.renderGiftEmail({
+        resetLink,
+      });
+
+      const pdfHtml: string = await HtmlRender.renderGiftCertificate({
+        text: promocode.text,
+        months: promocode.months,
+      });
+      const content: Buffer = await PdfRender.renderPdf(pdfHtml);
+      const emailData: EmailSend = {
+        recipientEmails: [promocode.email],
+        subject: 'Подарочный сертификат на Prosto App',
+        payload: 'Поздравительное письмо',
+        html,
+        requestId,
+        userId: 0,
+        attachments: [
+          {
+            content,
+            filename: 'certificate.pdf',
+          },
+        ],
+      };
+      await emailTransport.send(emailData);
     }
   }
 
@@ -119,35 +148,8 @@ export class PromocodeService {
       promocodeBuyRequestDto,
     );
 
-    const resetLink = 'test';
-    const html: string = await HtmlRender.renderGiftEmail({
-      resetLink,
-    });
-
-    const pdfHtml: string = await HtmlRender.renderGiftCertificate({
-      text: promocode.text,
-      months: promocode.months,
-    });
-    const content: Buffer = await PdfRender.renderPdf(pdfHtml);
-
-    let emailData: EmailSend;
-    if (promocodeBuyRequestDto.method === PaymentMethodEnum.CARD) {
-      emailData = {
-        recipientEmails: [promocodeBuyRequestDto.email],
-        subject: 'Подарочный сертификат на Prosto App',
-        payload: 'Поздравительное письмо',
-        html,
-        requestId,
-        userId: 0,
-        attachments: [
-          {
-            content,
-            filename: 'certificate.pdf',
-          },
-        ],
-      };
-    } else {
-      emailData = {
+    if (promocodeBuyRequestDto.method === PaymentMethodEnum.BILL) {
+      const emailData: EmailSend = {
         recipientEmails: [config.get('managerEmail')],
         subject: 'Новая заявка на корпоративную подписку',
         payload:
@@ -162,8 +164,8 @@ export class PromocodeService {
         requestId,
         userId: 0,
       };
+      await emailTransport.send(emailData);
     }
-    await emailTransport.send(emailData);
     return promocode;
   }
 
@@ -174,8 +176,7 @@ export class PromocodeService {
       text: promocode.text,
       months: promocode.months,
     });
-    ErrorIf.isExist(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
-    // ErrorIf.isTrue(Math.random() > 0.5, PROMOCODE_PAYMENT_NOT_FOUND);
+    ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
     return PdfRender.renderPdf(pdfHtml);
   }
 

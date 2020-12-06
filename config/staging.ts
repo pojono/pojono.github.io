@@ -44,6 +44,7 @@ module.exports = {
   },
   load_testing: false,
   managerEmail: 'ekaterina.kurmanaeva@citronium.com',
+  terminalPassword: 'cu2hvbn0ku9ng1he',
   promocode: {
     discount: ['STAGING_DISCOUNT_CODE1', 'STAGING_DISCOUNT_CODE2'],
     trial: ['STAGING_TRIAL_CODE1', 'STAGING_TRIAL_CODE2'],
