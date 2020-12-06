@@ -64,6 +64,9 @@ export class PromocodeService {
   }
 
   async webhook(promocodeWebhookDto: PromocodeWebhookDto): Promise<void> {
+    if (!promocodeWebhookDto.OrderId) {
+      return;
+    }
     const promocodeId: number = Number(promocodeWebhookDto.OrderId);
     const promocode: Promocode = await this.promocodeRepository.findOne(
       promocodeId,

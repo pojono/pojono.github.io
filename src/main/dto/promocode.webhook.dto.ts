@@ -11,7 +11,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { PaymentStatus } from '../../lib/payment.status';
 
 export class PromocodeWebhookDto {
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -21,7 +21,7 @@ export class PromocodeWebhookDto {
   })
   TerminalKey: string;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -29,7 +29,7 @@ export class PromocodeWebhookDto {
   })
   OrderId: string;
 
-  @IsBoolean()
+  // @IsBoolean()
   @ApiModelProperty({
     type: 'boolean',
     example: true,
@@ -37,7 +37,7 @@ export class PromocodeWebhookDto {
   })
   Success: boolean;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -45,7 +45,7 @@ export class PromocodeWebhookDto {
   })
   Status: PaymentStatus;
 
-  @IsNumber()
+  // @IsNumber()
   @ApiModelProperty({
     type: 'number',
     example: '',
@@ -53,7 +53,7 @@ export class PromocodeWebhookDto {
   })
   PaymentId: number;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -61,7 +61,7 @@ export class PromocodeWebhookDto {
   })
   ErrorCode: string;
 
-  @IsNumber()
+  // @IsNumber()
   @ApiModelProperty({
     type: 'number',
     example: '',
@@ -78,7 +78,7 @@ export class PromocodeWebhookDto {
   })
   Rebilld?: number;
 
-  @IsNumber()
+  // @IsNumber()
   @ApiModelProperty({
     type: 'number',
     example: '',
@@ -86,7 +86,7 @@ export class PromocodeWebhookDto {
   })
   CardId: number;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -94,7 +94,7 @@ export class PromocodeWebhookDto {
   })
   Pan: string;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',
@@ -102,7 +102,7 @@ export class PromocodeWebhookDto {
   })
   ExpDate: string;
 
-  @IsString()
+  // @IsString()
   @ApiModelProperty({
     type: 'string',
     example: '',

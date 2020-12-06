@@ -93,9 +93,7 @@ export class PromocodeController {
     promocodeWebhookDto: PromocodeWebhookDto,
     @Res() res: Response,
   ): Promise<any> {
-    const response: any = await this.promocodeService.webhook(
-      promocodeWebhookDto,
-    );
+    await this.promocodeService.webhook(promocodeWebhookDto);
     res.status(200).send('OK');
   }
 
