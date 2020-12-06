@@ -86,6 +86,11 @@ export class PromocodeService {
     console.log('1 ' + checkToken); // tslint:disable-line
     console.log('2 ' + promocodeWebhookDto.Token); // tslint:disable-line
 
+    if (checkToken !== promocodeWebhookDto.Token) {
+      console.log('Check failed!'); // tslint:disable-line
+      return;
+    }
+
     if (promocode && promocodeWebhookDto.Status === PaymentStatus.CONFIRMED) {
       await this.promocodeRepository.confirmPayment(promocode);
 
