@@ -43,6 +43,7 @@ export class PromocodeService {
       promocodeActivateRequestDto.promocode,
     );
     ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
+    ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
 
     let user: User = await this.userService.getUserByPhone(
       promocodeActivateRequestDto.phone,
