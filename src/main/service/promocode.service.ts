@@ -196,6 +196,11 @@ export class PromocodeService {
               ? promocodeBuyRequestDto.discount.toString() + '%'
               : 'отсутствует'
           }\n` +
+          `Cкидка корпоративная: ${
+            promocodeBuyRequestDto.discountCorporation
+              ? promocodeBuyRequestDto.discountCorporation.toString() + '%'
+              : 'отсутствует'
+          }\n` +
           `Желаемый промокод: ${
             promocodeBuyRequestDto.text
               ? promocodeBuyRequestDto.text
@@ -210,9 +215,10 @@ export class PromocodeService {
     return promocode;
   }
 
-  async generateCertificate(id: number): Promise<Buffer> {
+  async generateCertificate(id: number, text: string): Promise<Buffer> {
     const promocode: Promocode = await this.promocodeRepository.findOne(id);
     ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
+    ErrorIf.isTrue(promocode.text !== text, PROMOCODE_NOT_FOUND);
     const monthsText: string = getMonthText(promocode.months);
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
       text: promocode.text,

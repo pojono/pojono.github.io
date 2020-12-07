@@ -74,6 +74,17 @@ export class PromocodeBuyRequestDto {
   })
   discount?: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  @ApiModelProperty({
+    type: 'number',
+    example: 52,
+    required: true,
+  })
+  discountCorporation?: number;
+
   @IsBoolean()
   @ApiModelProperty({
     type: 'boolean',

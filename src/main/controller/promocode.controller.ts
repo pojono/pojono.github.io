@@ -37,7 +37,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class PromocodeController {
   constructor(private promocodeService: PromocodeService) {}
 
-  @Post('/')
+  @Post('/:id')
   @ApiOperation({ title: 'Upload template certificate' })
   @ApiConsumes('multipart/form-data')
   @ApiImplicitFile({
@@ -127,6 +127,7 @@ export class PromocodeController {
   ): Promise<void> {
     const data: Buffer = await this.promocodeService.generateCertificate(
       idRequestDto.id,
+      promocodeTextDto.text,
     );
     res.attachment('certificate.pdf');
     res.send(data);
