@@ -2,7 +2,7 @@ import { IsNumberString } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class IdRequestDto {
-  @IsNumberString()
+  //@IsNumberString()
   @ApiModelProperty({
     type: 'number',
     example: 1,
