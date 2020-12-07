@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { Promocode } from '../main/entity/promocode.entity';
 import { User } from './user.entity';
 import * as moment from 'moment';
 
@@ -81,11 +82,13 @@ export class UserRepository extends Repository<User> {
     return await user.save();
   }
 
+  /*
   async updatePromocode(user: User, promocode: string): Promise<User> {
     user.promocode = promocode;
     user.promocodeDate = moment.utc().toDate();
     return user.save();
   }
+  */
 
   async updateRatingQuiz(
     user: User,
@@ -169,15 +172,22 @@ export class UserRepository extends Repository<User> {
     await user.save();
   }
 
+  async giftQuizFinished(user: User): Promise<void> {
+    user.giftQuizFinished = true;
+    await user.save();
+  }
+
   async activatePromocode(
     user: User,
     subscriptionEndDate: Date,
-    promocode: string,
+    promocode: Promocode,
   ): Promise<void> {
     user.subscriptionEndDate = subscriptionEndDate;
     user.subscriptionLastValidation = subscriptionEndDate;
-    user.promocode = promocode;
+    user.promocode = promocode.text;
+    user.promocodeId = promocode.id;
     user.promocodeDate = moment.utc().toDate();
+    user.giftQuizFinished = false;
     await user.save();
   }
 

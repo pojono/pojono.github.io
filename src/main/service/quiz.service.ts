@@ -1,25 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QuizRepository } from '../repository/quiz.repository';
-import { GetQuizResponseDto } from '../response/get.quiz.response';
-import { Quiz } from '../entity/quiz.entity';
 import { ErrorIf } from '../../lib/error.if';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
-import { MessageResponseDto } from '../response/dto/quiz/message.response';
-import { ChoiceResponseDto } from '../response/dto/quiz/choice.response';
-import { ChoiceForMultichoiceResponseDto } from '../response/dto/quiz/choice.for.multichoice.response';
-import { QuizMessageRepository } from '../repository/quiz.message.repository';
-import { QuizChoiceRepository } from '../repository/quiz.choice.repository';
-import { QuizMultichoiceRepository } from '../repository/quiz.multichoice.repository';
-import { PostQuizResponseDto } from '../response/post.quiz.response';
-import { QuizAnswerDto } from '../dto/quiz.answer.dto';
-import { User } from '../../user/user.entity';
-import { AnswerRepository } from '../repository/answer.repository';
-import { Answer } from '../entity/answer.entity';
-import { AnswerActionEnum } from '../answer.action.enum';
-import { UserService } from '../../user/user.service';
+import { getMonthText } from '../../lib/promocode.month.text';
 import { UserUpdateDto } from '../../user/dto/user.update.dto';
+import { User } from '../../user/user.entity';
+import { UserService } from '../../user/user.service';
+import { AnswerActionEnum } from '../answer.action.enum';
+import { QuizAnswerDto } from '../dto/quiz.answer.dto';
+import { Answer } from '../entity/answer.entity';
+import { Quiz } from '../entity/quiz.entity';
 import { EventDescriptionEnum } from '../event.description.enum';
+import { AnswerRepository } from '../repository/answer.repository';
+import { QuizChoiceRepository } from '../repository/quiz.choice.repository';
+import { QuizMessageRepository } from '../repository/quiz.message.repository';
+import { QuizMultichoiceRepository } from '../repository/quiz.multichoice.repository';
+import { QuizRepository } from '../repository/quiz.repository';
+import { ChoiceForMultichoiceResponseDto } from '../response/dto/quiz/choice.for.multichoice.response';
+import { ChoiceResponseDto } from '../response/dto/quiz/choice.response';
+import { MessageResponseDto } from '../response/dto/quiz/message.response';
+import { GetQuizResponseDto } from '../response/get.quiz.response';
+import { PostQuizResponseDto } from '../response/post.quiz.response';
+import { PromocodeService } from './promocode.service';
+import { Promocode } from '../entity/promocode.entity';
 
 @Injectable()
 export class QuizService {
@@ -40,6 +43,8 @@ export class QuizService {
     private answerRepository: AnswerRepository,
 
     private userService: UserService,
+
+    private promocodeService: PromocodeService,
   ) {}
 
   async getByEventDescription(
@@ -86,6 +91,27 @@ export class QuizService {
         : null;
       return message;
     });
+
+    if (
+      quiz.eventDescription === EventDescriptionEnum.GO_TO_GIFT_QUIZ &&
+      user.promocodeId
+    ) {
+      const promocode: Promocode = await this.promocodeService.getPromocodeById(
+        user.promocodeId,
+      );
+      if (promocode) {
+        const months = promocode.months;
+        const monthsText = getMonthText(months);
+        messages = messages.map(message => {
+          message.text = message.text
+            ? message.text
+                .split('%GIFT_MONTHS%')
+                .join(`${months} ${monthsText}`)
+            : null;
+          return message;
+        });
+      }
+    }
 
     const choice: ChoiceResponseDto[] = await this.quizChoiceRepository.findByQuizId(
       quizId,

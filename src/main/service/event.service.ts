@@ -25,6 +25,31 @@ export class EventService {
     private quizService: QuizService,
   ) {}
 
+  async homeNewsGift(user: User): Promise<number> {
+    const giftQuiz = await this.quizService.getByEventDescription(
+      EventDescriptionEnum.GO_TO_GIFT_QUIZ,
+    );
+    if (giftQuiz && !user.giftQuizFinished) {
+      await this.userService.giftQuizFinished(user);
+      return giftQuiz.id;
+    }
+
+    const latestNewsQuiz = await this.quizService.getByEventDescription(
+      EventDescriptionEnum.GO_TO_NEWS,
+    );
+    if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
+      await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+      return latestNewsQuiz.id;
+    }
+
+    const homeQuiz = await this.quizService.getByEventDescription(
+      EventDescriptionEnum.GO_TO_SUBSCRIPTION,
+    );
+    if (homeQuiz) {
+      return homeQuiz.id;
+    }
+  }
+
   async getEvent(
     user: User,
     eventRequestDto: EventRequestDto,
@@ -56,27 +81,12 @@ export class EventService {
     // ==> такого быть не должно. Но пока отправим 1
 
     if (event) {
-      const latestNewsQuiz = await this.quizService.getByEventDescription(
-        EventDescriptionEnum.GO_TO_NEWS,
-      );
-
       if (event.event === EventEnum.AUTHORIZATION_FINISHED) {
         if (!user.subscriptionIsActive() && user.firstQuizFinished) {
           const quiz = await this.quizService.getByEventDescription(
             EventDescriptionEnum.GO_TO_SUBSCRIPTION,
           );
           if (quiz) {
-            return quiz.id;
-          }
-        }
-        if (user.subscriptionIsActive() && user.firstQuizFinished) {
-          const quiz = await this.quizService.getByEventDescription(
-            EventDescriptionEnum.GO_TO_HOME,
-          );
-          if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
-            await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
-            return latestNewsQuiz.id;
-          } else if (quiz) {
             return quiz.id;
           }
         }
@@ -88,15 +98,16 @@ export class EventService {
             return quiz.id;
           }
         }
+        if (user.subscriptionIsActive() && user.firstQuizFinished) {
+          const quizId: number = await this.homeNewsGift(user);
+          if (quizId) {
+            return quizId;
+          }
+        }
         if (user.subscriptionIsActive() && !user.firstQuizFinished) {
-          const quiz = await this.quizService.getByEventDescription(
-            EventDescriptionEnum.GO_TO_HOME,
-          );
-          if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
-            await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
-            return latestNewsQuiz.id;
-          } else if (quiz) {
-            return quiz.id;
+          const quizId: number = await this.homeNewsGift(user);
+          if (quizId) {
+            return quizId;
           }
         }
       }

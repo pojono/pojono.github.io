@@ -9,4 +9,5 @@ export enum EventDescriptionEnum {
   GO_TO_NEWS = 'GO_TO_NEWS',
   GO_TO_NOT_REGISTERED_QUIZ = 'GO_TO_NOT_REGISTERED_QUIZ',
   GO_TO_AUTH = 'GO_TO_AUTH',
+  GO_TO_GIFT_QUIZ = 'GO_TO_GIFT_QUIZ',
 }

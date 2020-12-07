@@ -79,6 +79,11 @@ export class UserService {
     await this.userRepository.newsQuizFinished(user, quizId);
   }
 
+  async giftQuizFinished(user: User): Promise<void> {
+    await this.userRepository.giftQuizFinished(user);
+  }
+
+  /*
   async updatePromocode(
     requestId: string,
     user: User,
@@ -114,6 +119,7 @@ export class UserService {
       isDiscount,
     };
   }
+  */
 
   async signIn(
     requestId: number,
@@ -542,11 +548,7 @@ export class UserService {
       ? moment.utc(user.subscriptionEndDate)
       : moment.utc();
     const newEndDate = endDate.add(promocode.months, 'months').toDate();
-    await this.userRepository.activatePromocode(
-      user,
-      newEndDate,
-      promocode.text,
-    );
+    await this.userRepository.activatePromocode(user, newEndDate, promocode);
   }
 
   async processPurchase(

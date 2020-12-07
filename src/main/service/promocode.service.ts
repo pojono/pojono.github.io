@@ -245,4 +245,8 @@ export class PromocodeService {
     ErrorIf.isTrue(promocode.amountLeft <= 0, PROMOCODE_ALREADY_USED);
     await this.promocodeRepository.decrementAmount(promocode);
   }
+
+  async getPromocodeById(id: number): Promise<Promocode> {
+    return this.promocodeRepository.findOne(id);
+  }
 }
