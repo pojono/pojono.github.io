@@ -37,38 +37,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class PromocodeController {
   constructor(private promocodeService: PromocodeService) {}
 
-  @Post('/:id')
-  @ApiOperation({ title: 'Upload template certificate' })
-  @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({
-    name: 'file',
-    required: true,
-    description: 'Upload certificate template',
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  async certificateGeneration(
-    @GetUser() user: User,
-    @UploadedFile() file,
-    @Res() res: Response,
-    @Param(ValidationPipe) idRequestDto: IdRequestDto,
-  ): Promise<void> {
-    if (process.env.NODE_ENV === 'production') {
-      res.send();
-    }
-    const fs = require('fs').promises;
-    const path = require('path');
-    const filepath: string = path.join(
-      __dirname,
-      '../../email/template/gift.certificate.ejs',
-    );
-    await fs.writeFile(filepath, file.buffer);
-    const data: Buffer = await this.promocodeService.generateCertificateTest(
-      idRequestDto.id,
-    );
-    res.attachment('certificate.pdf');
-    res.send(data);
-  }
-
   @Post('activate')
   @ApiResponse({ status: 200, type: PostPromocodeActivateResponse })
   @ApiOperation({
@@ -115,6 +83,38 @@ export class PromocodeController {
       requestId,
     );
     return new PostPromocodeBuyResponse(requestId, promocode);
+  }
+
+  @Post('/:id')
+  @ApiOperation({ title: 'Upload template certificate' })
+  @ApiConsumes('multipart/form-data')
+  @ApiImplicitFile({
+    name: 'file',
+    required: true,
+    description: 'Upload certificate template',
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async certificateGeneration(
+    @GetUser() user: User,
+    @UploadedFile() file,
+    @Res() res: Response,
+    @Param(ValidationPipe) idRequestDto: IdRequestDto,
+  ): Promise<void> {
+    if (process.env.NODE_ENV === 'production') {
+      res.send();
+    }
+    const fs = require('fs').promises;
+    const path = require('path');
+    const filepath: string = path.join(
+      __dirname,
+      '../../email/template/gift.certificate.ejs',
+    );
+    await fs.writeFile(filepath, file.buffer);
+    const data: Buffer = await this.promocodeService.generateCertificateTest(
+      idRequestDto.id,
+    );
+    res.attachment('certificate.pdf');
+    res.send(data);
   }
 
   @Get('/:id/certificate')
