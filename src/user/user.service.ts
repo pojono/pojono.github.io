@@ -214,7 +214,7 @@ export class UserService {
     let tokenUser;
     if (token) {
       try {
-        await this.jwtService.verifyAsync(token);
+        // await this.jwtService.verifyAsync(token);
         const tokenData: any = await this.jwtService.decode(token);
         const tokenUserId = tokenData.id;
         tokenUser = await this.userRepository.getUserById(tokenUserId);
