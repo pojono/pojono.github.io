@@ -43,7 +43,7 @@ export class EventService {
     }
 
     const homeQuiz = await this.quizService.getByEventDescription(
-      EventDescriptionEnum.GO_TO_SUBSCRIPTION,
+      EventDescriptionEnum.GO_TO_HOME,
     );
     if (homeQuiz) {
       return homeQuiz.id;

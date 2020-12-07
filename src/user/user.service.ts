@@ -544,9 +544,16 @@ export class UserService {
   }
 
   async activatePromocode(user: User, promocode: Promocode): Promise<void> {
-    const endDate = moment(user.subscriptionEndDate).isValid()
-      ? moment.utc(user.subscriptionEndDate)
-      : moment.utc();
+    let endDate: moment.Moment;
+    if (
+      moment(user.subscriptionEndDate).isValid() &&
+      moment(user.subscriptionEndDate).isAfter(moment.utc())
+    ) {
+      endDate = moment(user.subscriptionEndDate);
+    } else {
+      endDate = moment.utc();
+    }
+
     const newEndDate = endDate.add(promocode.months, 'months').toDate();
     await this.userRepository.activatePromocode(user, newEndDate, promocode);
   }
