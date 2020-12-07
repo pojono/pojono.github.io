@@ -7,11 +7,16 @@ import { PdfRender } from '../../email/pdf.render';
 import { ErrorIf } from '../../lib/error.if';
 import {
   PROMOCODE_ALREADY_USED,
+  PROMOCODE_ALREADY_USED_BY_THIS_USER,
+  PROMOCODE_INCORRECT_SYMBOLS,
   PROMOCODE_NOT_FOUND,
   PROMOCODE_PAYMENT_NOT_FOUND,
 } from '../../lib/errors';
 import { logger } from '../../lib/logger';
 import { PaymentStatus } from '../../lib/payment.status';
+import { getMonthText } from '../../lib/promocode.month.text';
+import { promocodeSymbols } from '../../lib/promocode.symbols';
+import { randomInteger, randomString } from '../../lib/random.functions';
 import { generateSignature } from '../../lib/signature';
 import { User } from '../../user/user.entity';
 import { UserService } from '../../user/user.service';
@@ -19,6 +24,7 @@ import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.d
 import { PromocodeBuyRequestDto } from '../dto/promocode.buy.request.dto';
 import { PromocodeWebhookDto } from '../dto/promocode.webhook.dto';
 import { Promocode } from '../entity/promocode.entity';
+import { PromocodeHistory } from '../entity/promocode.history.entity';
 import { PaymentMethodEnum } from '../payment.method.enum';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
@@ -49,6 +55,15 @@ export class PromocodeService {
     let user: User = await this.userService.getUserByPhone(
       promocodeActivateRequestDto.phone,
     );
+
+    if (user) {
+      const promocodeHistory: PromocodeHistory = await this.promocodeHistoryRepository.getByUserIdAndPromocodeId(
+        promocode.id,
+        user.id,
+      );
+      ErrorIf.isExist(promocodeHistory, PROMOCODE_ALREADY_USED_BY_THIS_USER);
+    }
+
     if (!user) {
       user = await this.userService.createUserByPhone(
         promocodeActivateRequestDto.phone,
@@ -104,9 +119,12 @@ export class PromocodeService {
         resetLink,
       });
 
+      const monthsText: string = getMonthText(promocode.months);
+
       const pdfHtml: string = await HtmlRender.renderGiftCertificate({
         text: promocode.text,
         months: promocode.months,
+        monthsText,
       });
       const content: Buffer = await PdfRender.renderPdf(pdfHtml);
       const emailData: EmailSend = {
@@ -131,25 +149,18 @@ export class PromocodeService {
     promocodeBuyRequestDto: PromocodeBuyRequestDto,
     requestId: string,
   ): Promise<Promocode> {
-    function randomInteger(min, max) {
-      const rand = min + Math.random() * (max + 1 - min);
-      return Math.floor(rand);
-    }
-
-    function randomString(length) {
-      const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += randomChars.charAt(
-          Math.floor(Math.random() * randomChars.length),
-        );
-      }
-      return result;
-    }
-
     if (promocodeBuyRequestDto.isCorporate) {
+      if (promocodeBuyRequestDto.text) {
+        promocodeBuyRequestDto.text = promocodeBuyRequestDto.text.toUpperCase();
+        const isValidText = promocodeBuyRequestDto.text
+          .split('')
+          .every(letter => promocodeSymbols.includes(letter));
+        ErrorIf.isFalse(isValidText, PROMOCODE_INCORRECT_SYMBOLS);
+      }
+
       promocodeBuyRequestDto.text = promocodeBuyRequestDto.text
-        ? promocodeBuyRequestDto.text + randomInteger(1000, 9999).toString()
+        ? promocodeBuyRequestDto.text.toUpperCase() +
+          randomInteger(1000, 9999).toString()
         : randomString(6);
     } else {
       promocodeBuyRequestDto.text = randomString(6);
@@ -165,7 +176,26 @@ export class PromocodeService {
         subject: 'Новая заявка на корпоративную подписку',
         payload:
           `Вам заявка на подписку c оплатой по счету на ${promocodeBuyRequestDto.months} месяцев.\n` +
-          `От ${promocodeBuyRequestDto.email} ${promocodeBuyRequestDto.phone}.\n` +
+          `Email: ${
+            promocodeBuyRequestDto.email
+              ? promocodeBuyRequestDto.email
+              : 'отсутствует'
+          }\n` +
+          `Phone: ${
+            promocodeBuyRequestDto.phone
+              ? promocodeBuyRequestDto.phone
+              : 'отсутствует'
+          }\n` +
+          `Цена: ${
+            promocodeBuyRequestDto.price
+              ? promocodeBuyRequestDto.price
+              : 'отсутствует'
+          }\n` +
+          `Cкидка: ${
+            promocodeBuyRequestDto.discount
+              ? promocodeBuyRequestDto.discount.toString() + '%'
+              : 'отсутствует'
+          }\n` +
           `Желаемый промокод: ${
             promocodeBuyRequestDto.text
               ? promocodeBuyRequestDto.text
@@ -183,11 +213,25 @@ export class PromocodeService {
   async generateCertificate(id: number): Promise<Buffer> {
     const promocode: Promocode = await this.promocodeRepository.findOne(id);
     ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
+    const monthsText: string = getMonthText(promocode.months);
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
       text: promocode.text,
       months: promocode.months,
+      monthsText,
     });
     ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
+    return PdfRender.renderPdf(pdfHtml);
+  }
+
+  async generateCertificateTest(id: number): Promise<Buffer> {
+    const promocode: Promocode = await this.promocodeRepository.findOne(id);
+    ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
+    const monthsText: string = getMonthText(promocode.months);
+    const pdfHtml: string = await HtmlRender.renderGiftCertificate({
+      text: promocode.text,
+      months: promocode.months,
+      monthsText,
+    });
     return PdfRender.renderPdf(pdfHtml);
   }
 

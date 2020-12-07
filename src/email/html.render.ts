@@ -15,6 +15,7 @@ export class HtmlRender {
   static async renderGiftCertificate(data: {
     text: string;
     months: number;
+    monthsText: string;
   }): Promise<string> {
     return HtmlRender.renderHtml(giftCertificateTemplatePath, data);
   }

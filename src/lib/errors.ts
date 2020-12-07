@@ -76,3 +76,13 @@ export const PROMOCODE_PAYMENT_NOT_FOUND: StandardRestApiError = StandardRestApi
   1015,
   'Promocode payment not found',
 );
+
+export const PROMOCODE_INCORRECT_SYMBOLS: StandardRestApiError = StandardRestApiError.create(
+  1016,
+  'Promocode incorrect symbols',
+);
+
+export const PROMOCODE_ALREADY_USED_BY_THIS_USER: StandardRestApiError = StandardRestApiError.create(
+  1017,
+  'Promocode already used by this user',
+);

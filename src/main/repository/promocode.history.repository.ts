@@ -14,4 +14,16 @@ export class PromocodeHistoryRepository extends Repository<PromocodeHistory> {
     promocodeHistory.userId = data.userId;
     await promocodeHistory.save();
   }
+
+  async getByUserIdAndPromocodeId(
+    promocodeId: number,
+    userId: number,
+  ): Promise<PromocodeHistory> {
+    return PromocodeHistory.findOne({
+      where: {
+        promocodeId,
+        userId,
+      },
+    });
+  }
 }

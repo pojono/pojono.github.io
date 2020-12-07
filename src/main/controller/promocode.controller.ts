@@ -46,12 +46,15 @@ export class PromocodeController {
     description: 'Upload certificate template',
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadPhoto(
+  async certificateGeneration(
     @GetUser() user: User,
     @UploadedFile() file,
     @Res() res: Response,
     @Param(ValidationPipe) idRequestDto: IdRequestDto,
   ): Promise<void> {
+    if (process.env.NODE_ENV === 'production') {
+      res.send();
+    }
     const fs = require('fs').promises;
     const path = require('path');
     const filepath: string = path.join(
@@ -59,7 +62,7 @@ export class PromocodeController {
       '../../email/template/gift.certificate.ejs',
     );
     await fs.writeFile(filepath, file.buffer);
-    const data: Buffer = await this.promocodeService.generateCertificate(
+    const data: Buffer = await this.promocodeService.generateCertificateTest(
       idRequestDto.id,
     );
     res.attachment('certificate.pdf');
@@ -97,24 +100,6 @@ export class PromocodeController {
     res.status(200).send('OK');
   }
 
-  @Post('check')
-  @ApiResponse({ status: 200 })
-  @ApiOperation({
-    title: 'Вебхук',
-    deprecated: false,
-  })
-  async webhookCheck(
-    @GetRequestId() requestId,
-    // @Body(ValidationPipe)
-    // promocodeWebhookDto: PromocodeWebhookDto,
-    @Res() res: Response,
-  ): Promise<any> {
-    // const response: any = await this.promocodeService.webhook(
-    //   promocodeWebhookDto,
-    // );
-    res.status(200).send('OK');
-  }
-
   @Post('buy')
   @ApiResponse({ status: 200, type: PostPromocodeBuyResponse })
   @ApiOperation({
@@ -146,30 +131,4 @@ export class PromocodeController {
     res.attachment('certificate.pdf');
     res.send(data);
   }
-
-  /*
-  @Get('/:id/certificate-download')
-  @ApiOperation({
-    title: 'Скачать сертификат другим методом',
-    deprecated: false,
-  })
-  async getCertificate(
-    @GetRequestId() requestId,
-    @Param(ValidationPipe) idRequestDto: IdRequestDto,
-    @Res() res: Response,
-    @Query(ValidationPipe) promocodeTextDto: PromocodeTextDto,
-  ): Promise<void> {
-    const data: Buffer = await this.promocodeService.generateCertificate(
-      idRequestDto.id,
-    );
-    res.status(200);
-    res.set({
-      'Cache-Control': 'no-cache',
-      'Content-Type': 'application/pdf',
-      'Content-Length': data.length,
-      'Content-Disposition': 'attachment; filename=certificate.pdf',
-    });
-    res.send(data);
-  }
-  */
 }

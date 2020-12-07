@@ -63,6 +63,17 @@ export class PromocodeBuyRequestDto {
   })
   price: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  @ApiModelProperty({
+    type: 'number',
+    example: 52,
+    required: true,
+  })
+  discount?: number;
+
   @IsBoolean()
   @ApiModelProperty({
     type: 'boolean',
@@ -85,7 +96,7 @@ export class PromocodeBuyRequestDto {
   @Length(4, 16)
   @ApiModelProperty({
     type: 'string',
-    example: 'mypromo',
+    example: 'MYPROMOCODE',
     required: false,
   })
   text?: string;
