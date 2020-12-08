@@ -18,6 +18,7 @@ import { getMonthText } from '../../lib/promocode.month.text';
 import { promocodeSymbols } from '../../lib/promocode.symbols';
 import { randomInteger, randomString } from '../../lib/random.functions';
 import { generateSignature } from '../../lib/signature';
+import { Telegram } from '../../lib/telegram';
 import { User } from '../../user/user.entity';
 import { UserService } from '../../user/user.service';
 import { PromocodeActivateRequestDto } from '../dto/promocode.activate.request.dto';
@@ -77,13 +78,18 @@ export class PromocodeService {
 
     await this.decrementAmount(promocode);
     await this.userService.activatePromocode(user, promocode);
-    // что-то поменять с квизами
   }
 
   async webhook(
     requestId: string,
     promocodeWebhookDto: PromocodeWebhookDto,
   ): Promise<void> {
+    // TODO: improvements
+    await Telegram.sendMessage(
+      '🎁 Payment for certificate: ' + JSON.stringify(promocodeWebhookDto),
+      requestId,
+    );
+
     if (!promocodeWebhookDto.OrderId) {
       return;
     }
@@ -119,14 +125,7 @@ export class PromocodeService {
         resetLink,
       });
 
-      const monthsText: string = getMonthText(promocode.months);
-
-      const pdfHtml: string = await HtmlRender.renderGiftCertificate({
-        text: promocode.text,
-        months: promocode.months,
-        monthsText,
-      });
-      const content: Buffer = await PdfRender.renderPdf(pdfHtml);
+      const content: Buffer = await this.getCertificate(promocode);
       const emailData: EmailSend = {
         recipientEmails: [promocode.email],
         subject: 'Подарочный сертификат на Prosto App',
@@ -171,6 +170,7 @@ export class PromocodeService {
     );
 
     if (promocodeBuyRequestDto.method === PaymentMethodEnum.BILL) {
+      const content: Buffer = await this.getCertificate(promocode);
       const emailData: EmailSend = {
         recipientEmails: [config.get('managerEmail')],
         subject: 'Новая заявка на корпоративную подписку',
@@ -209,36 +209,38 @@ export class PromocodeService {
           `\nКоличество подписок: ${promocodeBuyRequestDto.amountTotal}`,
         requestId,
         userId: 0,
+        attachments: [
+          {
+            content,
+            filename: 'certificate.pdf',
+          },
+        ],
       };
       await emailTransport.send(emailData);
     }
     return promocode;
   }
 
-  async generateCertificate(id: number, text: string): Promise<Buffer> {
-    const promocode: Promocode = await this.promocodeRepository.findOne(id);
-    ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
-    ErrorIf.isTrue(promocode.text !== text, PROMOCODE_NOT_FOUND);
+  async getCertificate(promocode: Promocode): Promise<Buffer> {
     const monthsText: string = getMonthText(promocode.months);
     const pdfHtml: string = await HtmlRender.renderGiftCertificate({
       text: promocode.text,
       months: promocode.months,
       monthsText,
     });
-    ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
     return PdfRender.renderPdf(pdfHtml);
+  }
+
+  async generateCertificate(id: number, text: string): Promise<Buffer> {
+    const promocode: Promocode = await this.promocodeRepository.findOne(id);
+    ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
+    return this.getCertificate(promocode);
   }
 
   async generateCertificateTest(id: number): Promise<Buffer> {
     const promocode: Promocode = await this.promocodeRepository.findOne(id);
     ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
-    const monthsText: string = getMonthText(promocode.months);
-    const pdfHtml: string = await HtmlRender.renderGiftCertificate({
-      text: promocode.text,
-      months: promocode.months,
-      monthsText,
-    });
-    return PdfRender.renderPdf(pdfHtml);
+    return this.getCertificate(promocode);
   }
 
   async decrementAmount(promocode: Promocode) {
