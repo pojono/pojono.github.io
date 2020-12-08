@@ -510,6 +510,10 @@ export class UserService {
       .add(utcDiff * -1, 'minutes')
       .startOf('day');
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
+    
+    this.logger.log('todayDate: ' + todayDate);
+    this.logger.log('lastActivityDate: ' + lastActivityDate);
+    this.logger.log('strikeDiff: ' + strikeDiff);
 
     if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
