@@ -16,7 +16,7 @@ import { PaymentMethodEnum } from '../payment.method.enum';
 export class PromocodeBuyRequestDto {
   @IsOptional()
   @IsString()
-  @MinLength(6)
+  @MinLength(4)
   @MaxLength(20)
   @ApiModelProperty({
     type: 'string',
