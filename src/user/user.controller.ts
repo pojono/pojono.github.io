@@ -49,6 +49,18 @@ export class UserController {
 
   constructor(private userService: UserService) {}
 
+  @Post('/token')
+  @ApiResponse({ status: 201, type: SignInResponse })
+  @ApiOperation({
+    title: 'Регистрация нового аккаунта для доступа без номера телефона',
+  })
+  async getToken(@GetRequestId() requestId): Promise<SignInResponse> {
+    return new SignInResponse(
+      requestId,
+      await this.userService.getToken(requestId),
+    );
+  }
+
   @Post('/sms')
   @ApiResponse({ status: 201, type: SmsResponse })
   @ApiOperation({
@@ -97,6 +109,7 @@ export class UserController {
     @GetUser() user: User,
   ): Promise<MeResponse> {
     user.subscriptionLatestReceipt = '';
+    user.subscriptionValidationResponse = '';
     return new MeResponse(requestId, user);
   }
 
