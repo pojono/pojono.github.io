@@ -61,3 +61,28 @@ export const TOKEN_ERROR: StandardRestApiError = StandardRestApiError.create(
   1012,
   'Token error',
 );
+
+export const PROMOCODE_ALREADY_USED: StandardRestApiError = StandardRestApiError.create(
+  1013,
+  'Promocode already used',
+);
+
+export const PROMOCODE_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1014,
+  'Promocode not found',
+);
+
+export const PROMOCODE_PAYMENT_NOT_FOUND: StandardRestApiError = StandardRestApiError.create(
+  1015,
+  'Promocode payment not found',
+);
+
+export const PROMOCODE_INCORRECT_SYMBOLS: StandardRestApiError = StandardRestApiError.create(
+  1016,
+  'Promocode incorrect symbols',
+);
+
+export const PROMOCODE_ALREADY_USED_BY_THIS_USER: StandardRestApiError = StandardRestApiError.create(
+  1017,
+  'Promocode already used by this user',
+);

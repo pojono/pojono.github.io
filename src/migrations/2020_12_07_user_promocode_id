@@ -1,0 +1,2 @@
+ALTER TABLE "user" ADD "giftQuizFinished" boolean NOT NULL DEFAULT true;
+ALTER TABLE "user" ADD "promocodeId" integer;
