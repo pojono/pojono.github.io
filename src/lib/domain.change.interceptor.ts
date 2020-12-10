@@ -39,7 +39,9 @@ export class DomainChangeInterceptor implements NestInterceptor {
                     .join(changeTo),
                 )
               : value;
-          logger(requestId).log(JSON.stringify(response));
+          if (response) {
+            logger(requestId).log(JSON.stringify(response));
+          }
           return response;
         }),
       )
