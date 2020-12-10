@@ -23,6 +23,9 @@ module.exports = {
     secretAccessKey: 'qn/jFAcxIj4RLhHgLVgjNUem00js5L1q0T4ZZkON',
     localSimulation: false,
     region: 'eu-west-1',
+    // accessKeyId: 'AKIA5V2FOLAQOHKKGA6A',
+    // secretAccessKey: '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',
+    // region: 'eu-central-1',
     link: {
       photos: 'https://photos.prostoapp.com/',
     },
@@ -40,6 +43,8 @@ module.exports = {
     enable: true,
   },
   load_testing: false,
+  managerEmail: 'tester@citronium.com',
+  terminalPassword: 'cu2hvbn0ku9ng1he',
   promocode: {
     discount: ['STAGING_DISCOUNT_CODE1', 'STAGING_DISCOUNT_CODE2'],
     trial: ['STAGING_TRIAL_CODE1', 'STAGING_TRIAL_CODE2'],

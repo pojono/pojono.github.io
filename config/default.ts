@@ -53,4 +53,7 @@ module.exports = {
     discount: ['DEFAULT_DISCOUNT_CODE1', 'DEFAULT_DISCOUNT_CODE2'],
     trial: ['DEFAULT_TRIAL_CODE1', 'DEFAULT_TRIAL_CODE2'],
   },
+  email: {
+    source: 'noreply@prostoapp.ru',
+  },
 };

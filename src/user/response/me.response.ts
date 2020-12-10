@@ -24,8 +24,14 @@ class MeResponseDto {
   @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
   public readonly lastCode: Date;
 
+  @ApiModelProperty({ type: 'string', nullable: true })
+  smsCode: string;
+
   @ApiModelProperty({ type: 'number', nullable: true })
   public readonly latestCourseId: number;
+
+  @ApiModelProperty({ type: 'number', nullable: true })
+  latestLessonId: number;
 
   @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
   public readonly lastActivity: Date;
@@ -109,6 +115,24 @@ class MeResponseDto {
 
   @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
   firstQuizFinished: boolean;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  ratingQuizFinished: boolean;
+
+  @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
+  giftQuizFinished: boolean;
+
+  @ApiModelProperty({ type: 'string', nullable: true })
+  promocode: string;
+
+  @ApiModelProperty({ type: 'string', nullable: true, format: 'date-time' })
+  promocodeDate: Date;
+
+  @ApiModelProperty({ type: 'number', nullable: true })
+  promocodeId: number;
+
+  @ApiModelProperty({ type: 'number', nullable: true })
+  latestNewsQuizId: number;
 
   @ApiModelProperty({ type: 'boolean', nullable: false, default: false })
   isTestUser: boolean;

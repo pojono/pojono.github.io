@@ -1,0 +1,7 @@
+[vps]
+84.201.133.51
+
+[vps:vars]
+ansible_ssh_user=ubuntu
+ansible_ssh_pass=Lkjfseoija7948hskfhlsf
+docker_registry_pass=meireiPee2
