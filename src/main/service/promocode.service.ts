@@ -30,6 +30,7 @@ import { PaymentMethodEnum } from '../payment.method.enum';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
 import * as config from 'config';
+import { PromocodeWebhookRepository } from '../repository/promocode.webhook.repository';
 
 const emailTransport = new EmailTransport();
 
@@ -41,6 +42,10 @@ export class PromocodeService {
 
     @InjectRepository(PromocodeHistoryRepository)
     private promocodeHistoryRepository: PromocodeHistoryRepository,
+
+    @InjectRepository(PromocodeWebhookRepository)
+    private promocodeWebhookRepository: PromocodeWebhookRepository,
+
     private userService: UserService,
   ) {}
 
@@ -84,7 +89,6 @@ export class PromocodeService {
     requestId: string,
     promocodeWebhookDto: PromocodeWebhookDto,
   ): Promise<void> {
-    // TODO: improvements
     await Telegram.sendMessage(
       '🎁 Payment for certificate: ' + JSON.stringify(promocodeWebhookDto),
       requestId,
@@ -93,6 +97,12 @@ export class PromocodeService {
     if (!promocodeWebhookDto.OrderId) {
       return;
     }
+
+    await this.promocodeWebhookRepository.createPromocodeWebhook(
+      Number(promocodeWebhookDto.OrderId),
+      JSON.stringify(promocodeWebhookDto),
+    );
+
     const promocodeId: number = Number(promocodeWebhookDto.OrderId);
     const promocode: Promocode = await this.promocodeRepository.findOne(
       promocodeId,

@@ -9,6 +9,7 @@ import { RubricController } from './controller/rubric.controller';
 import { LessonController } from './controller/lesson.controller';
 import { PromocodeRepository } from './repository/promocode.repository';
 import { PromocodeHistoryRepository } from './repository/promocode.history.repository';
+import { PromocodeWebhookRepository } from './repository/promocode.webhook.repository';
 import { PromocodeService } from './service/promocode.service';
 import { RubricService } from './service/rubric.service';
 import { RubricRepository } from './repository/rubric.repository';
@@ -103,6 +104,7 @@ import { EventHistoryService } from './service/event.history.service';
       AnswerRepository,
       EventHistoryRepository,
       PromocodeHistoryRepository,
+      PromocodeWebhookRepository,
       PromocodeRepository,
     ]),
     JwtModule.register({
