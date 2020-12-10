@@ -27,18 +27,22 @@ export class DomainChangeInterceptor implements NestInterceptor {
 
     const shouldChange = host.includes(requestFrom);
 
-    return next.handle().pipe(
-      map(value => {
-        const response = shouldChange
-          ? JSON.parse(
-              JSON.stringify(value)
-                .split(changeFrom)
-                .join(changeTo),
-            )
-          : value;
-        logger(requestId).log(JSON.stringify(response));
-        return response;
-      }),
+    return (
+      next &&
+      next.handle().pipe(
+        map(value => {
+          const response =
+            shouldChange && value
+              ? JSON.parse(
+                  JSON.stringify(value)
+                    .split(changeFrom)
+                    .join(changeTo),
+                )
+              : value;
+          logger(requestId).log(JSON.stringify(response));
+          return response;
+        }),
+      )
     );
   }
 }
