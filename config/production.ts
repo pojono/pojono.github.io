@@ -42,7 +42,7 @@ module.exports = {
     testMode: false,
     debugLogs: false,
   },
-  managerEmail: 'pr@prostoapp.com',
+  managerEmail: 'pr@prostoapp.ru',
   terminalPassword: 'dsf0l7eoow3sawsn',
   domainChange: {
     requestFrom: 'prostoapp.life',
