@@ -45,6 +45,12 @@ module.exports = {
   load_testing: false,
   managerEmail: 'tester@citronium.com',
   terminalPassword: 'cu2hvbn0ku9ng1he',
+  domainChange: {
+    requestFrom: 'prostoapp.com',
+    changeFrom: '.prostoapp.com/',
+    changeTo: '.prostoapp.life/',
+  },
+  saveNewsViewStatus: false,
   promocode: {
     discount: ['STAGING_DISCOUNT_CODE1', 'STAGING_DISCOUNT_CODE2'],
     trial: ['STAGING_TRIAL_CODE1', 'STAGING_TRIAL_CODE2'],

@@ -44,6 +44,12 @@ module.exports = {
   },
   managerEmail: 'pr@prostoapp.com',
   terminalPassword: 'dsf0l7eoow3sawsn',
+  domainChange: {
+    requestFrom: 'prostoapp.life',
+    changeFrom: '.prostoapp.com/',
+    changeTo: '.prostoapp.life/',
+  },
+  saveNewsViewStatus: true,
   promocode: {
     discount: [
       /*

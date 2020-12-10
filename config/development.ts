@@ -44,4 +44,10 @@ module.exports = {
     discount: ['DEV_DISCOUNT_CODE1', 'DEV_DISCOUNT_CODE2'],
     trial: ['DEV_TRIAL_CODE1', 'DEV_TRIAL_CODE2'],
   },
+  domainChange: {
+    requestFrom: 'localhost:3001',
+    changeFrom: '.prostoapp.com/',
+    changeTo: '.prostoapp.life/',
+  },
+  saveNewsViewStatus: false,
 };

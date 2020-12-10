@@ -11,6 +11,7 @@ import { QuizService } from './quiz.service';
 import { EventDescriptionEnum } from '../event.description.enum';
 import { EventHistoryService } from './event.history.service';
 import { UserService } from '../../user/user.service';
+import * as config from 'config';
 // import { isTrue } from '../../lib/is.true';
 
 @Injectable()
@@ -38,7 +39,9 @@ export class EventService {
       EventDescriptionEnum.GO_TO_NEWS,
     );
     if (latestNewsQuiz && user.latestNewsQuizId !== latestNewsQuiz.id) {
-      await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+      if (config.get('saveNewsViewStatus')) {
+        await this.userService.newsQuizFinished(user, latestNewsQuiz.id);
+      }
       return latestNewsQuiz.id;
     }
 
