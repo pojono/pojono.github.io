@@ -1,0 +1,6 @@
+CREATE TABLE "promocode_webhook"
+("id" SERIAL NOT NULL,
+"promocodeId" integer,
+"webhook" character varying,
+"datetime" TIMESTAMP,
+CONSTRAINT "PK_de584aef049aa313bb80bdede8a" PRIMARY KEY ("id"));
