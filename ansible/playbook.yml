@@ -1,0 +1,38 @@
+- hosts: vps
+  tasks:
+    - name: Create a directory if it does not exist
+      tags:
+        - deploy
+      file:
+        path: /home/ubuntu/prostoapp_api_{{ NODE_ENV }}
+        state: directory
+        mode: '0755'
+
+    - name: copy docker-compose rest
+      tags:
+        - rest
+      copy:
+        src: ../docker-compose.yandex.yml
+        dest: /home/ubuntu/prostoapp_api_{{ NODE_ENV }}/docker-compose.yml
+
+    - name: copy .env
+      tags:
+        - deploy
+      copy:
+        src: ../.env
+        dest: /home/ubuntu/prostoapp_api_{{ NODE_ENV }}/.env
+
+    - name: Deploy | Pull images REST
+      tags:
+        - rest
+      shell: cd /home/ubuntu/prostoapp_api_{{ NODE_ENV }}/ && docker-compose pull
+
+    - name: Start rest
+      tags:
+        - rest
+      shell: cd /home/ubuntu/prostoapp_api_{{ NODE_ENV }}/ && docker-compose up -d
+
+    - name: Docker | Clean old images
+      tags:
+        - crm
+      shell: docker image prune -a -f

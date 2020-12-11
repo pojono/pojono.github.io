@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
+import { Promocode } from '../main/entity/promocode.entity';
 import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -78,6 +79,11 @@ export class UserService {
     await this.userRepository.newsQuizFinished(user, quizId);
   }
 
+  async giftQuizFinished(user: User): Promise<void> {
+    await this.userRepository.giftQuizFinished(user);
+  }
+
+  /*
   async updatePromocode(
     requestId: string,
     user: User,
@@ -113,6 +119,7 @@ export class UserService {
       isDiscount,
     };
   }
+  */
 
   async signIn(
     requestId: number,
@@ -503,6 +510,10 @@ export class UserService {
       .add(utcDiff * -1, 'minutes')
       .startOf('day');
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
+    
+    this.logger.log('todayDate: ' + todayDate);
+    this.logger.log('lastActivityDate: ' + lastActivityDate);
+    this.logger.log('strikeDiff: ' + strikeDiff);
 
     if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
@@ -534,6 +545,21 @@ export class UserService {
       // this.logger.log('Last Activity was so far. Session counter +1');
       await this.userRepository.incrementSession(user);
     }
+  }
+
+  async activatePromocode(user: User, promocode: Promocode): Promise<void> {
+    let endDate: moment.Moment;
+    if (
+      moment(user.subscriptionEndDate).isValid() &&
+      moment(user.subscriptionEndDate).isAfter(moment.utc())
+    ) {
+      endDate = moment(user.subscriptionEndDate);
+    } else {
+      endDate = moment.utc();
+    }
+
+    const newEndDate = endDate.add(promocode.months, 'months').toDate();
+    await this.userRepository.activatePromocode(user, newEndDate, promocode);
   }
 
   async processPurchase(

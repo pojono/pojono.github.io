@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MainController } from './controller/main.controller';
+import { PromocodeController } from './controller/promocode.controller';
 import { MainService } from './main.service';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CourseController } from './controller/course.controller';
 import { RubricController } from './controller/rubric.controller';
 import { LessonController } from './controller/lesson.controller';
+import { PromocodeRepository } from './repository/promocode.repository';
+import { PromocodeHistoryRepository } from './repository/promocode.history.repository';
+import { PromocodeService } from './service/promocode.service';
 import { RubricService } from './service/rubric.service';
 import { RubricRepository } from './repository/rubric.repository';
 import { CourseService } from './service/course.service';
@@ -98,6 +102,8 @@ import { EventHistoryService } from './service/event.history.service';
       OnboardingRepository,
       AnswerRepository,
       EventHistoryRepository,
+      PromocodeHistoryRepository,
+      PromocodeRepository,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || config.get('jwt.secret'),
@@ -117,6 +123,7 @@ import { EventHistoryService } from './service/event.history.service';
     EventController,
     QuizController,
     OnboardingController,
+    PromocodeController,
   ],
   providers: [
     MainService,
@@ -145,6 +152,7 @@ import { EventHistoryService } from './service/event.history.service';
     QuizService,
     OnboardingService,
     EventHistoryService,
+    PromocodeService,
   ],
 })
 export class MainModule {}
