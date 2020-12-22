@@ -10,6 +10,7 @@ import { LessonController } from './controller/lesson.controller';
 import { PromocodeRepository } from './repository/promocode.repository';
 import { PromocodeHistoryRepository } from './repository/promocode.history.repository';
 import { PromocodeWebhookRepository } from './repository/promocode.webhook.repository';
+import { StatisticStrikeHistoryRepository } from './repository/statistic.strike.history.repository';
 import { PromocodeService } from './service/promocode.service';
 import { RubricService } from './service/rubric.service';
 import { RubricRepository } from './repository/rubric.repository';
@@ -18,6 +19,7 @@ import { FastSupportService } from './service/fast.support.service';
 import { RubricToCourseService } from './service/rubric.to.course.service';
 import { RubricToFastSupportService } from './service/rubric.to.fast.support.service';
 import { RubricToVideoAdviceService } from './service/rubric.to.video.advice.service';
+import { StatisticStrikeHistoryService } from './service/statistic.strike.history.service';
 import { VideoAdviceService } from './service/video.advice.service';
 import { CourseRepository } from './repository/course.repository';
 import { FastSupportRepository } from './repository/fast.support.repository';
@@ -95,6 +97,7 @@ import { EventHistoryService } from './service/event.history.service';
       StatisticLessonRepository,
       StatisticTrackRepository,
       StatisticHistoryRepository,
+      StatisticStrikeHistoryRepository,
       EventRepository,
       QuizRepository,
       QuizMessageRepository,
@@ -150,6 +153,7 @@ import { EventHistoryService } from './service/event.history.service';
     StatisticCourseService,
     StatisticTrackService,
     StatisticHistoryService,
+    StatisticStrikeHistoryService,
     EventService,
     QuizService,
     OnboardingService,

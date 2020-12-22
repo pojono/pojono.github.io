@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ErrorIf } from '../lib/error.if';
 import { Promocode } from '../main/entity/promocode.entity';
+import { StatisticStrikeHistoryService } from '../main/service/statistic.strike.history.service';
 import { UserPromocodeDto } from './dto/user.promocode.dto';
 import { JwtPayload } from './jwt.payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -61,6 +62,7 @@ export class UserService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
     private jwtService: JwtService,
+    private statisticStrikeHistoryService: StatisticStrikeHistoryService,
   ) {}
 
   async getUserByPhone(phone: string): Promise<User | undefined> {
@@ -504,7 +506,11 @@ export class UserService {
     return this.userRepository.countMaxStrike();
   }
 
-  async updateStrike(user: User, utcDiff: number): Promise<void> {
+  async updateStrike(
+    user: User,
+    utcDiff: number,
+    trackId: number,
+  ): Promise<void> {
     const todayDate = moment
       .utc()
       .add(utcDiff * -1, 'minutes')
@@ -517,8 +523,22 @@ export class UserService {
 
     if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);
+      await this.statisticStrikeHistoryService.createStats(
+        user.id,
+        trackId,
+        user.currentStrike,
+        ++user.currentStrike,
+        utcDiff,
+      );
     } else if (strikeDiff > 1) {
       await this.userRepository.resetStrike(user);
+      await this.statisticStrikeHistoryService.createStats(
+        user.id,
+        trackId,
+        user.currentStrike,
+        1,
+        utcDiff,
+      );
     }
   }
 

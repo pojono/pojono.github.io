@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { StatisticStrikeHistory } from '../main/entity/statistic.strike.history.entity';
+import { StatisticStrikeHistoryService } from '../main/service/statistic.strike.history.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,10 +19,10 @@ import * as config from 'config';
         expiresIn: config.get('jwt.expiresIn'),
       },
     }),
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UserRepository, StatisticStrikeHistory]),
   ],
   controllers: [UserController],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService, JwtStrategy, StatisticStrikeHistoryService],
   exports: [JwtStrategy, PassportModule],
 })
 export class UserModule {}
