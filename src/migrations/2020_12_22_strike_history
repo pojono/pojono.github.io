@@ -1,0 +1,9 @@
+CREATE TABLE "statistic_strike_history"
+("id" SERIAL NOT NULL,
+"userId" integer NOT NULL,
+"trackId" integer NOT NULL,
+"from" integer NOT NULL,
+"to" integer NOT NULL,
+"utcDiff" integer NOT NULL DEFAULT 0,
+"datetime" TIMESTAMP NOT NULL,
+CONSTRAINT "PK_1e5de3ddfed06cfd880e02fd0c3" PRIMARY KEY ("id"))
