@@ -8,6 +8,7 @@ import { ErrorIf } from '../../lib/error.if';
 import {
   PROMOCODE_ALREADY_USED,
   PROMOCODE_ALREADY_USED_BY_THIS_USER,
+  PROMOCODE_BRUTEFORCE_ERROR,
   PROMOCODE_INCORRECT_SYMBOLS,
   PROMOCODE_MINIMUM_AMOUNT_ERROR,
   PROMOCODE_NOT_FOUND,
@@ -249,7 +250,9 @@ export class PromocodeService {
 
   async generateCertificate(id: number, text: string): Promise<Buffer> {
     const promocode: Promocode = await this.promocodeRepository.findOne(id);
+    ErrorIf.isEmpty(promocode, PROMOCODE_NOT_FOUND);
     ErrorIf.isEmpty(promocode.paymentDate, PROMOCODE_PAYMENT_NOT_FOUND);
+    ErrorIf.isTrue(promocode.text !== text, PROMOCODE_BRUTEFORCE_ERROR);
     return this.getCertificate(promocode);
   }
 

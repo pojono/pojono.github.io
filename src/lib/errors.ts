@@ -91,3 +91,8 @@ export const PROMOCODE_MINIMUM_AMOUNT_ERROR: StandardRestApiError = StandardRest
   1018,
   'Promocode minimum amount error',
 );
+
+export const PROMOCODE_BRUTEFORCE_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1019,
+  'Promocode bruteforce error',
+);
