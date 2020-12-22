@@ -76,13 +76,13 @@ export class PromocodeService {
       );
     }
 
+    await this.decrementAmount(promocode);
+    await this.userService.activatePromocode(user, promocode);
+
     await this.promocodeHistoryRepository.createPromocodeHistory({
       promocodeId: promocode.id,
       userId: user.id,
     });
-
-    await this.decrementAmount(promocode);
-    await this.userService.activatePromocode(user, promocode);
   }
 
   async webhook(
