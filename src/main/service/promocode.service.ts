@@ -9,6 +9,7 @@ import {
   PROMOCODE_ALREADY_USED,
   PROMOCODE_ALREADY_USED_BY_THIS_USER,
   PROMOCODE_INCORRECT_SYMBOLS,
+  PROMOCODE_MINIMUM_AMOUNT_ERROR,
   PROMOCODE_NOT_FOUND,
   PROMOCODE_PAYMENT_NOT_FOUND,
 } from '../../lib/errors';
@@ -159,6 +160,11 @@ export class PromocodeService {
     requestId: string,
   ): Promise<Promocode> {
     if (promocodeBuyRequestDto.isCorporate) {
+      ErrorIf.isTrue(
+        promocodeBuyRequestDto.amountTotal < 3,
+        PROMOCODE_MINIMUM_AMOUNT_ERROR,
+      );
+
       if (promocodeBuyRequestDto.text) {
         promocodeBuyRequestDto.text = promocodeBuyRequestDto.text.toUpperCase();
         const isValidText = promocodeBuyRequestDto.text
