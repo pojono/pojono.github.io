@@ -86,3 +86,8 @@ export const PROMOCODE_ALREADY_USED_BY_THIS_USER: StandardRestApiError = Standar
   1017,
   'Promocode already used by this user',
 );
+
+export const PROMOCODE_MINIMUM_AMOUNT_ERROR: StandardRestApiError = StandardRestApiError.create(
+  1018,
+  'Promocode minimum amount error',
+);

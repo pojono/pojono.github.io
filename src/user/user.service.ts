@@ -67,6 +67,10 @@ export class UserService {
     return this.userRepository.findOne({ where: { phone } });
   }
 
+  async getUserById(id: number): Promise<User> {
+    return this.userRepository.getFullUser(id);
+  }
+
   async editMyself(user: User, userUpdateDto: UserUpdateDto): Promise<User> {
     return this.userRepository.updateUser(user, userUpdateDto);
   }
@@ -510,10 +514,6 @@ export class UserService {
       .add(utcDiff * -1, 'minutes')
       .startOf('day');
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
-    
-    this.logger.log('todayDate: ' + todayDate);
-    this.logger.log('lastActivityDate: ' + lastActivityDate);
-    this.logger.log('strikeDiff: ' + strikeDiff);
 
     if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
       await this.userRepository.incrementStrike(user);

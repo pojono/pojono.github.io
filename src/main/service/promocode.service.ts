@@ -9,6 +9,7 @@ import {
   PROMOCODE_ALREADY_USED,
   PROMOCODE_ALREADY_USED_BY_THIS_USER,
   PROMOCODE_INCORRECT_SYMBOLS,
+  PROMOCODE_MINIMUM_AMOUNT_ERROR,
   PROMOCODE_NOT_FOUND,
   PROMOCODE_PAYMENT_NOT_FOUND,
 } from '../../lib/errors';
@@ -30,6 +31,7 @@ import { PaymentMethodEnum } from '../payment.method.enum';
 import { PromocodeHistoryRepository } from '../repository/promocode.history.repository';
 import { PromocodeRepository } from '../repository/promocode.repository';
 import * as config from 'config';
+import { PromocodeWebhookRepository } from '../repository/promocode.webhook.repository';
 
 const emailTransport = new EmailTransport();
 
@@ -41,6 +43,10 @@ export class PromocodeService {
 
     @InjectRepository(PromocodeHistoryRepository)
     private promocodeHistoryRepository: PromocodeHistoryRepository,
+
+    @InjectRepository(PromocodeWebhookRepository)
+    private promocodeWebhookRepository: PromocodeWebhookRepository,
+
     private userService: UserService,
   ) {}
 
@@ -71,20 +77,19 @@ export class PromocodeService {
       );
     }
 
+    await this.decrementAmount(promocode);
+    await this.userService.activatePromocode(user, promocode);
+
     await this.promocodeHistoryRepository.createPromocodeHistory({
       promocodeId: promocode.id,
       userId: user.id,
     });
-
-    await this.decrementAmount(promocode);
-    await this.userService.activatePromocode(user, promocode);
   }
 
   async webhook(
     requestId: string,
     promocodeWebhookDto: PromocodeWebhookDto,
   ): Promise<void> {
-    // TODO: improvements
     await Telegram.sendMessage(
       '🎁 Payment for certificate: ' + JSON.stringify(promocodeWebhookDto),
       requestId,
@@ -93,6 +98,12 @@ export class PromocodeService {
     if (!promocodeWebhookDto.OrderId) {
       return;
     }
+
+    await this.promocodeWebhookRepository.createPromocodeWebhook(
+      Number(promocodeWebhookDto.OrderId),
+      JSON.stringify(promocodeWebhookDto),
+    );
+
     const promocodeId: number = Number(promocodeWebhookDto.OrderId);
     const promocode: Promocode = await this.promocodeRepository.findOne(
       promocodeId,
@@ -149,6 +160,11 @@ export class PromocodeService {
     requestId: string,
   ): Promise<Promocode> {
     if (promocodeBuyRequestDto.isCorporate) {
+      ErrorIf.isTrue(
+        promocodeBuyRequestDto.amountTotal < 3,
+        PROMOCODE_MINIMUM_AMOUNT_ERROR,
+      );
+
       if (promocodeBuyRequestDto.text) {
         promocodeBuyRequestDto.text = promocodeBuyRequestDto.text.toUpperCase();
         const isValidText = promocodeBuyRequestDto.text

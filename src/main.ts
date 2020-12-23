@@ -50,6 +50,7 @@ process.on('unhandledRejection', async (err: any) => {
 });
 
 import { LoggerService } from '@nestjs/common';
+import { DomainChangeInterceptor } from './lib/domain.change.interceptor';
 
 export class MyLogger implements LoggerService {
   log(message: string, context: string) {
@@ -129,6 +130,7 @@ async function bootstrap() {
   const port: number = Number(process.env.PORT) || config.get('server.port');
   app.enableCors();
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new DomainChangeInterceptor());
 
   await app.listen(port);
 

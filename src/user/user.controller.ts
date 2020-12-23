@@ -108,9 +108,10 @@ export class UserController {
     @GetRequestId() requestId,
     @GetUser() user: User,
   ): Promise<MeResponse> {
-    user.subscriptionLatestReceipt = '';
-    user.subscriptionValidationResponse = '';
-    return new MeResponse(requestId, user);
+    const fullUser: User = await this.userService.getUserById(user.id);
+    fullUser.subscriptionLatestReceipt = '';
+    fullUser.subscriptionValidationResponse = '';
+    return new MeResponse(requestId, fullUser);
   }
 
   @Put('/me')

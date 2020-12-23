@@ -18,6 +18,18 @@ export class UserRepository extends Repository<User> {
     return User.findOne(userId);
   }
 
+  async getFullUser(userId: number): Promise<User> {
+    const query = this.createQueryBuilder('user');
+    query.leftJoinAndMapOne(
+      'user.promocode',
+      Promocode,
+      'promocode',
+      'promocode.id = user.promocodeId',
+    );
+    query.whereInIds([userId]);
+    return query.getOne();
+  }
+
   async attachPhoneToUser(user: User, phone: string): Promise<User> {
     user.phone = phone;
     return user.save();
