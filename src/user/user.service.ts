@@ -522,16 +522,15 @@ export class UserService {
     const strikeDiff = todayDate.diff(lastActivityDate, 'days');
 
     if (strikeDiff === 1 || strikeDiff === 2 || user.currentStrike === 0) {
-      await this.userRepository.incrementStrike(user);
       await this.statisticStrikeHistoryService.createStats(
         user.id,
         trackId,
         user.currentStrike,
-        ++user.currentStrike,
+        user.currentStrike + 1,
         utcDiff,
       );
+      await this.userRepository.incrementStrike(user);
     } else if (strikeDiff > 1) {
-      await this.userRepository.resetStrike(user);
       await this.statisticStrikeHistoryService.createStats(
         user.id,
         trackId,
@@ -539,6 +538,7 @@ export class UserService {
         1,
         utcDiff,
       );
+      await this.userRepository.resetStrike(user);
     }
   }
 
