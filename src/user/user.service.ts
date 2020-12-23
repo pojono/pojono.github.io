@@ -358,7 +358,7 @@ export class UserService {
         ) {
           if (response.messages[0].status === 'not enough balance') {
             await Telegram.sendMessage(
-              '💸 Not enough money for IQSMS',
+              '💸 Not enough money for SMS BOOM',
               requestId,
             );
           }
