@@ -68,7 +68,16 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<User> {
-    return this.userRepository.getFullUser(id);
+    const user: User = await this.userRepository.getFullUser(id);
+    if (
+      user &&
+      user.promocode &&
+      user.promocodeEndDate &&
+      moment.utc(user.promocodeEndDate).isBefore(moment.utc())
+    ) {
+      delete user.promocode;
+    }
+    return user;
   }
 
   async editMyself(user: User, userUpdateDto: UserUpdateDto): Promise<User> {
