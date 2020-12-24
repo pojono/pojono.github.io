@@ -113,6 +113,9 @@ export class User extends BaseEntity {
   promocodeDate: Date;
 
   @Column({ nullable: true })
+  promocodeEndDate: Date;
+
+  @Column({ nullable: true })
   promocodeId: number;
 
   @Column({ nullable: true })
