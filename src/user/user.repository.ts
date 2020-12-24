@@ -195,6 +195,7 @@ export class UserRepository extends Repository<User> {
     promocode: Promocode,
   ): Promise<void> {
     user.subscriptionEndDate = subscriptionEndDate;
+    user.promocodeEndDate = subscriptionEndDate;
     user.subscriptionLastValidation = subscriptionEndDate;
     user.promocode = promocode.text;
     user.promocodeId = promocode.id;
