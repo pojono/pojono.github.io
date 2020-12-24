@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../user/user.entity';
+import { StatisticStrikeHistoryService } from './statistic.strike.history.service';
 import { TrackService } from './track.service';
 import { Track } from '../entity/track.entity';
 import { OBJECT_NOT_FOUND } from '../../lib/errors';
@@ -101,7 +102,7 @@ export class StatisticService {
       }
     }
 
-    await this.userService.updateStrike(user, utcDiff);
+    await this.userService.updateStrike(user, utcDiff, track.id);
 
     await this.userService.updateSession(user);
 
