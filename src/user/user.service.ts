@@ -368,7 +368,7 @@ export class UserService {
         logger.error(err);
       }
       await Telegram.sendMessage(
-        '📱 Sms request via IQSMS +' + phone,
+        '📱 Sms request via SMSBOOM +' + phone,
         requestId,
       );
     }
