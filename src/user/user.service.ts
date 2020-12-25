@@ -189,7 +189,23 @@ export class UserService {
           '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
           requestId,
         );
-      } else if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
+      } else if (config.get('sms.useSmsBoom') && isRussianPhone(user.phone)) {
+        ErrorIf.isFalse(
+          signInRequestDto.code === user.smsCode,
+          INVALID_CREDENTIALS,
+        );
+        await Telegram.sendMessage(
+          '🔑 Authentication via SMSBOOM +' +
+            user.phone +
+            ' UserId: ' +
+            user.id,
+          requestId,
+        );
+      } else if (
+        !config.get('sms.useCognito') &&
+        !config.get('sms.useIqSms') &&
+        !config.get('sms.useSmsBoom')
+      ) {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
           INVALID_CREDENTIALS,
