@@ -3,6 +3,7 @@ module.exports = {
     useCognito: false, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
     useCognitoUserPool: false,
     useIqSms: false, // ONLY FOR RUSSIAN PHONES
+    useSmsBoom: false, // ONLY FOR RUSSIAN PHONES
   },
   aws: {
     cognito: {
@@ -40,6 +41,7 @@ module.exports = {
     enable: false,
   },
   managerEmail: 'ivan.chulkov@citronium.com',
+  terminalPassword: 'devpassword',
   promocode: {
     discount: ['DEV_DISCOUNT_CODE1', 'DEV_DISCOUNT_CODE2'],
     trial: ['DEV_TRIAL_CODE1', 'DEV_TRIAL_CODE2'],

@@ -42,7 +42,6 @@ const clientId = '1sm0t6a4ml5keiqtmvb3mnkqlf';
 const userPoolId = 'eu-west-1_Zpp22BnuX';
 
 const phonePlus = phone => '+' + phone;
-const logger = new Logger('UserService');
 
 import * as iap from 'in-app-purchase';
 import { JWT } from 'google-auth-library';
@@ -190,7 +189,23 @@ export class UserService {
           '🔑 Authentication via IQSMS +' + user.phone + ' UserId: ' + user.id,
           requestId,
         );
-      } else if (!config.get('sms.useCognito') && !config.get('sms.useIqSms')) {
+      } else if (config.get('sms.useSmsBoom') && isRussianPhone(user.phone)) {
+        ErrorIf.isFalse(
+          signInRequestDto.code === user.smsCode,
+          INVALID_CREDENTIALS,
+        );
+        await Telegram.sendMessage(
+          '🔑 Authentication via SMSBOOM +' +
+            user.phone +
+            ' UserId: ' +
+            user.id,
+          requestId,
+        );
+      } else if (
+        !config.get('sms.useCognito') &&
+        !config.get('sms.useIqSms') &&
+        !config.get('sms.useSmsBoom')
+      ) {
         ErrorIf.isFalse(
           signInRequestDto.code === config.get('sms.notRandom'),
           INVALID_CREDENTIALS,
@@ -225,6 +240,7 @@ export class UserService {
     requestId: string,
     smsRequestDto: SmsRequestDto,
   ): Promise<boolean> {
+    const logger = new Logger(requestId);
     const { token } = smsRequestDto;
     let tokenUser;
     if (token) {
@@ -336,6 +352,50 @@ export class UserService {
       }
       await Telegram.sendMessage(
         '📱 Sms request via IQSMS +' + phone,
+        requestId,
+      );
+    }
+
+    if (config.get('sms.useSmsBoom') && isRussianPhone(user.phone)) {
+      const url: string = 'http://api.sms-boom.ru/messages/v2/send/';
+      try {
+        const response = await rp({
+          url,
+          method: 'POST',
+          json: {
+            login: 'z1581587763535',
+            password: '450520',
+            sender: 'Uservice',
+            showBillingDetails: true,
+            messages: [
+              {
+                phone: user.phone,
+                clientId: 1,
+                text: `Код для Prosto: ${code}`,
+              },
+            ],
+          },
+        });
+        logger.log(JSON.stringify(response));
+        if (
+          response &&
+          response.messages &&
+          response.messages[0] &&
+          response.messages[0].status
+        ) {
+          if (response.messages[0].status === 'not enough balance') {
+            await Telegram.sendMessage(
+              '💸 Not enough money for SMS BOOM',
+              requestId,
+            );
+          }
+        }
+      } catch (err) {
+        logger.error('SMSERROR');
+        logger.error(err);
+      }
+      await Telegram.sendMessage(
+        '📱 Sms request via SMSBOOM +' + phone,
         requestId,
       );
     }
@@ -786,6 +846,7 @@ export class UserService {
   }
 
   async updateSubscriptionStatus(user: User): Promise<void> {
+    const logger = new Logger('updateSubscriptionStatus');
     try {
       if (user.subscriptionPlatform === AppTypeEnum.IOS) {
         await this.validatePurchase(
