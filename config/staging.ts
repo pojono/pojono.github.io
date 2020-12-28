@@ -13,7 +13,7 @@ module.exports = {
     useCognito: false, // CAN`T USE FOR RUSSIAN PHONES; ONLY IF useCognitoUserPool: true
     useCognitoUserPool: false,
     useIqSms: false, // ONLY FOR RUSSIAN PHONES
-    useSmsBoom: true, // ONLY FOR RUSSIAN PHONES
+    useSmsBoom: false, // ONLY FOR RUSSIAN PHONES
   },
   aws: {
     cognito: {
